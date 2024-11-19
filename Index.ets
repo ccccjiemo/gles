@@ -1992,4 +1992,9 @@ export namespace gles10 {
   export const GL_INT_SAMPLER_2D_MULTISAMPLE_ARRAY = 0x910C;
 
   export const GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY = 0x910D;
+
+  export const GL_FALSE = 0;
+
+  export const GL_TRUE = 1;
+
 }

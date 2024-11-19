@@ -65,6 +65,7 @@ static napi_value Init(napi_env env, napi_value exports) {
         {"glFramebufferRenderbuffer", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glFramebufferTexture2D", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glFrontFace", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
+        {"glGenVertexArrays", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glGenBuffers", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glGenerateMipmap", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glGenFramebuffers", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
@@ -158,7 +159,9 @@ static napi_value Init(napi_env env, napi_value exports) {
         {"glVertexAttrib4fv", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glVertexAttribPointer", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glViewport", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
-
+        {"glBindVertexArray", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"glBindVertexBuffer", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr}
+        
     };
     return exports;
 }

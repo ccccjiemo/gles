@@ -1183,6 +1183,9 @@ export function glFrontFace(mode: GLenum): void;
 
 export function glGenBuffers(n: number): Uint32Array;
 
+export function glGenVertexArrays(n: number): Uint32Array;
+
+
 export function glGenerateMipmap(target: GLenum): void;
 
 export function glGenFramebuffers(n: number): Uint32Array;
@@ -1346,7 +1349,7 @@ export function glUniform4iv(location: number, values: Uint32Array): void;
 export function glViewport(x: number, y: number, width: number, height: number): void;
 
 export function glVertexAttribPointer(index: number, size: number, type: GLenum, normalized: GLboolean, stride: number,
-  pointer: ArrayBuffer): void;
+  pointer: number): void;
 
 export function glUniformMatrix2fv(location: number, count: number, transpose: GLboolean, value: Float32Array): void;
 
@@ -1374,3 +1377,12 @@ export function glVertexAttrib3fv(index: number, v: Float32Array): void;
 
 export function glVertexAttrib4fv(index: number, v: Float32Array): void;
 
+export function glBindVertexArray(array: number): void;
+
+/***
+ * @param bindingindex GLuint
+ * @param buffer GLuint
+ * @param offset GLintptr
+ * @param stride GLsizei
+ */
+export function glBindVertexBuffer(bindingindex: number, buffer: number, offset: number, stride: number): void;

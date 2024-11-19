@@ -67,6 +67,7 @@ napi_value NapiGLFramebufferRenderbuffer(napi_env env, napi_callback_info info);
 napi_value NapiGLFramebufferTexture2D(napi_env env, napi_callback_info info);
 napi_value NapiGLFrontFace(napi_env env, napi_callback_info info);
 napi_value NapiGLGenBuffers(napi_env env, napi_callback_info info);
+napi_value NapiGLGenVertexArrays(napi_env env, napi_callback_info info);
 napi_value NapiGLGenerateMipmap(napi_env env, napi_callback_info info);
 napi_value NapiGLGenFramebuffers(napi_env env, napi_callback_info info);
 napi_value NapiGLGenRenderbuffers(napi_env env, napi_callback_info info);
@@ -159,6 +160,8 @@ napi_value NapiGLVertexAttrib4f(napi_env env, napi_callback_info info);
 napi_value NapiGLVertexAttrib4fv(napi_env env, napi_callback_info info);
 napi_value NapiGLVertexAttribPointer(napi_env env, napi_callback_info info);
 napi_value NapiGLViewport(napi_env env, napi_callback_info info);
+napi_value NapiGLBindVertexArray(napi_env env, napi_callback_info info);
+napi_value NapiGLBindVertexBuffer(napi_env env, napi_callback_info info);
 
 } // namespace GLES
 
