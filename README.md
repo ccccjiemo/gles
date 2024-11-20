@@ -17,7 +17,7 @@ ohpm install @jemoc/gles
 import { gles } from '@jemoc/gles';
 ```
 
-#### opengl定义的GLenum类型使用习惯
+#### 使用opengl定义的GLenum类型值
 ```typescript
 //使用枚举类型
 gles.glClear(gles.GLbitfield.GL_COLOR_BUFFER_BIT);
@@ -25,10 +25,8 @@ gles.glClear(gles.GLbitfield.GL_COLOR_BUFFER_BIT);
 gles.glClear(gles.GL_COLOR_BUFFER_BIT);
 ```
 
-
+#### 绘制三角形
 ```typescript
-
-
 let vertex_list = new Float32Array([
   -0.5, -0.5, 0.0,
   0.5, -0.5, 0.0,
@@ -38,8 +36,8 @@ let vertex_list = new Float32Array([
 //申请buffer
 let bufs = gles.glGenBuffers(1);
 let vbo = bufs[0];
-gles.glBindBuffer(gles10.GL_ARRAY_BUFFER, vbo);
-gles.glBufferData(gles10.GL_ARRAY_BUFFER, vertex_list, gles10.GL_STATIC_DRAW);
+gles.glBindBuffer(gles.GL_ARRAY_BUFFER, vbo);
+gles.glBufferData(gles.GL_ARRAY_BUFFER, vertex_list, gles.GL_STATIC_DRAW);
 
 
 let vertexShaderSource =
@@ -63,12 +61,12 @@ let fragmentShaderSource =
       }`;
 
 let program = gles.glCreateProgram();
-let vertexShader = gles.glCreateShader(gles10.GL_VERTEX_SHADER);
-let fragmentShader = gles.glCreateShader(gles10.GL_FRAGMENT_SHADER);
+let vertexShader = gles.glCreateShader(gles.GL_VERTEX_SHADER);
+let fragmentShader = gles.glCreateShader(gles.GL_FRAGMENT_SHADER);
 
 gles.glShaderSource(vertexShader, vertexShaderSource);
 gles.glCompileShader(vertexShader);
-let result = gles.glGetShaderiv(vertexShader, gles10.GL_COMPILE_STATUS);
+let result = gles.glGetShaderiv(vertexShader, gles.GL_COMPILE_STATUS);
 
 if(!result){
   let info = gles.glGetShaderInfoLog(vertexShader);
@@ -76,7 +74,7 @@ if(!result){
 
 gles.glShaderSource(fragmentShader, fragmentShaderSource);
 gles.glCompileShader(vertexShader);
-result = gles.glGetShaderiv(fragmentShader, gles10.GL_COMPILE_STATUS);
+result = gles.glGetShaderiv(fragmentShader, gles.GL_COMPILE_STATUS);
 
 if(!result){
   let info = gles.glGetShaderInfoLog(fragmentShader);
@@ -86,7 +84,7 @@ gles.glAttachShader(program, vertexShader);
 gles.glAttachShader(program, fragmentShader);
 gles.glLinkProgram(program);
 
-let status = gles.glGetProgramiv(program, gles10.GL_LINK_STATUS);
+let status = gles.glGetProgramiv(program, gles.GL_LINK_STATUS);
 if(!status){
   let info = gles.glGetProgramInfoLog(program);
 }
@@ -98,17 +96,16 @@ gles.glDeleteShader(fragmentShader);
 let vao_list = gles.glGenVertexArrays(1);
 let vao = vao_list[0];
 gles.glBindVertexArray(vao);
-gles.glBindBuffer(gles10.GL_ARRAY_BUFFER, vbo);
-gles.glBufferData(gles10.GL_ARRAY_BUFFER, vertex_list, gles10.GL_STATIC_DRAW);
+gles.glBindBuffer(gles.GL_ARRAY_BUFFER, vbo);
+gles.glBufferData(gles.GL_ARRAY_BUFFER, vertex_list, gles.GL_STATIC_DRAW);
 
-gles.glVertexAttribPointer(0, 3, gles10.GL_FLOAT, gles10.GL_FALSE, 12, 0);
+gles.glVertexAttribPointer(0, 3, gles.GL_FLOAT, gles.GL_FALSE, 12, 0);
 gles.glEnableVertexAttribArray(0);
 gles.glUseProgram(program);
 
-gles.glDrawArrays(gles10.GL_TRIANGLES, 0, 3);
+gles.glDrawArrays(gles.GL_TRIANGLES, 0, 3);
 
 egl.eglSwapBuffers(display, surface);
 
-![img.png](img.png)
-
 ```
+![image](img.png)
