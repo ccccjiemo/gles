@@ -1,18 +1,32 @@
-# gles
+## @jemoc/gles
+
+---
+
+### 下载安装
+
+```shell
+ohpm install @jemoc/gles
+```
+
+---
+
+### 基本用法
+
+#### 导入库
+```typescript
+import { gles } from '@jemoc/gles';
+```
+
+#### opengl定义的GLenum类型使用习惯
+```typescript
+//使用枚举类型
+gles.glClear(gles.GLbitfield.GL_COLOR_BUFFER_BIT);
+//直接使用
+gles.glClear(gles.GL_COLOR_BUFFER_BIT);
+```
+
 
 ```typescript
-import { egl, egl10 } from '@jemoc/egl';
-
-//获取window
-let window = getWindowFromSurfaceId(this.surfaceId);
-
-/**
- * egl init...
- * */
-  
-gles.glViewport(0, 0, 500, 500);
-gles.glClearColor(0.2, 0.3, 0.3, 1.0);
-gles.glClear(gles10.GL_COLOR_BUFFER_BIT);
 
 
 let vertex_list = new Float32Array([

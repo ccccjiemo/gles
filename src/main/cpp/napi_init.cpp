@@ -24,6 +24,7 @@ static napi_value Init(napi_env env, napi_value exports) {
         {"glBlendEquationSeparate", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glBlendFunc", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glBlendFuncSeparate", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
+        {"glBlendFuncSeparatei", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glBufferData", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glBufferSubData", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glBeginTransformFeedback", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
@@ -160,8 +161,11 @@ static napi_value Init(napi_env env, napi_value exports) {
         {"glVertexAttribPointer", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glViewport", nullptr, nullptr, nullptr, nullptr, nullptr, napi_static, nullptr},
         {"glBindVertexArray", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"glBindVertexBuffer", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr}
-        
+        {"glBindVertexBuffer", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"glGetInteger64v", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"glGetBufferParameteri64v", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default,
+         nullptr},
+
     };
     return exports;
 }

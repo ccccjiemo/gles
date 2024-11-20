@@ -69,13 +69,17 @@ GLchar *getGLchar(napi_env env, napi_value value) {
 }
 
 void getArray(napi_env env, napi_value value, void **array, size_t *size) {
-    napi_typedarray_type type;
-    size_t byte_offset;
-    napi_value input_buffer;
+    /*    napi_typedarray_type type;
+        size_t byte_offset;
+        napi_value input_buffer;*/
+    bool result = false;
+    napi_is_arraybuffer(env, value, &result);
 
-    napi_get_typedarray_info(env, value, &type, size, array, &input_buffer, &byte_offset);
+    if (!result)
+        return;
+    napi_get_arraybuffer_info(env, value, array, size);
+    // napi_get_typedarray_info(env, value, &type, size, array, &input_buffer, &byte_offset);
 }
-
 
 
 napi_value createNapiInt32(napi_env env, int32_t value) {

@@ -6,11 +6,8 @@
 
 #include "GLES.h"
 #include "common/utils.h"
-#include <GLES3/gl3.h>
-#include <GLES2/gl2ext.h>
-#include <GLES2/gl2.h>
-#include <GLES2/gl2platform.h>
 #include <GLES3/gl32.h>
+#include <GLES2/gl2ext.h>
 #include <napi/native_api.h>
 
 namespace GLES {
@@ -50,6 +47,7 @@ void Export(napi_env env, napi_value exports) {
         {"glEndQuery", nullptr, NapiGLEndQuery, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glBlendFunc", nullptr, NapiGLBlendFunc, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glBlendFuncSeparate", nullptr, NapiGLBlendFuncSeparate, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"glBlendFuncSeparatei", nullptr, NapiGLBlendFuncSeparatei, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glBufferData", nullptr, NapiGLBufferData, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glBufferSubData", nullptr, NapiGLBufferSubData, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glCheckFramebufferStatus", nullptr, NapiGLCheckFramebufferStatus, nullptr, nullptr, nullptr, napi_default,
@@ -107,11 +105,14 @@ void Export(napi_env env, napi_value exports) {
         {"glGetBooleanv", nullptr, NapiGLGetBooleanv, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glGetBufferParameteriv", nullptr, NapiGLGetBufferParameteriv, nullptr, nullptr, nullptr, napi_default,
          nullptr},
+        {"glGetBufferParameteri64v", nullptr, NapiGLGetBufferParameteri64v, nullptr, nullptr, nullptr, napi_default,
+         nullptr},
         {"glGetError", nullptr, NapiGLGetError, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glGetFloatv", nullptr, NapiGLGetFloatv, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glGetFramebufferAttachmentParameteriv", nullptr, NapiGLGetFramebufferAttachmentParameteriv, nullptr, nullptr,
          nullptr, napi_default, nullptr},
         {"glGetIntegerv", nullptr, NapiGLGetIntegerv, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"glGetInteger64v", nullptr, NapiGLGetInteger64v, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glGetProgramiv", nullptr, NapiGLGetProgramiv, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glGetProgramInfoLog", nullptr, NapiGLGetProgramInfoLog, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glGetRenderbufferParameteriv", nullptr, NapiGLGetRenderbufferParameteriv, nullptr, nullptr, nullptr,
@@ -196,18 +197,16 @@ void Export(napi_env env, napi_value exports) {
         {"glViewport", nullptr, NapiGLViewport, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glBindVertexArray", nullptr, NapiGLBindVertexArray, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glBindVertexBuffer", nullptr, NapiGLBindVertexBuffer, nullptr, nullptr, nullptr, napi_default, nullptr},
-    
+
     };
-    
+
     napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc);
-    
 }
 
 napi_value NapiGLActiveShaderProgram(napi_env env, napi_callback_info info) {
     size_t argc = 2;
     napi_value argv[2];
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-
     GLuint pipeline = getGLuint(env, argv[0]);
     GLuint program = getGLuint(env, argv[1]);
 
@@ -267,17 +266,17 @@ napi_value NapiGLBindVertexArray(napi_env env, napi_callback_info info) {
     size_t argc = 1;
     napi_value argv[1];
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-    
+
     GLuint array = getGLuint(env, argv[0]);
     glBindVertexArray(array);
     return nullptr;
 }
 
-napi_value NapiGLBindVertexBuffer(napi_env env, napi_callback_info info){
+napi_value NapiGLBindVertexBuffer(napi_env env, napi_callback_info info) {
     size_t argc = 4;
     napi_value argv[4];
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-    
+
     GLuint bindingindex = getGLuint(env, argv[0]);
     GLuint buffer = getGLuint(env, argv[1]);
     GLintptr offset = 0;
@@ -286,7 +285,6 @@ napi_value NapiGLBindVertexBuffer(napi_env env, napi_callback_info info){
     glBindVertexBuffer(bindingindex, buffer, offset, stride);
     return nullptr;
 }
-
 
 
 napi_value NapiGLBindFramebuffer(napi_env env, napi_callback_info info) {
@@ -400,14 +398,30 @@ napi_value NapiGLBlendFuncSeparate(napi_env env, napi_callback_info info) {
     return nullptr;
 }
 
+napi_value NapiGLBlendFuncSeparatei(napi_env env, napi_callback_info info) {
+    size_t argc = 5;
+    napi_value argv[5];
+    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+
+    GLuint buf = getGLuint(env, argv[0]);
+    GLenum sfactorRGB = getGLenum(env, argv[1]);
+    GLenum dfactorRGB = getGLenum(env, argv[2]);
+    GLenum sfactorAlpha = getGLenum(env, argv[3]);
+    GLenum dfactorAlpha = getGLenum(env, argv[4]);
+
+    glBlendFuncSeparatei(buf, sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
+    return nullptr;
+}
+
+
 napi_value NapiGLBufferData(napi_env env, napi_callback_info info) {
     size_t argc = 3;
     napi_value argv[3];
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
 
     GLenum target = getGLenum(env, argv[0]);
-    size_t size;
-    void *data;
+    size_t size = 0;
+    void *data = nullptr;
     getArray(env, argv[1], &data, &size);
     GLenum usage = getGLenum(env, argv[2]);
 
@@ -429,7 +443,6 @@ napi_value NapiGLBufferSubData(napi_env env, napi_callback_info info) {
     getArray(env, argv[2], &data, &size);
 
     glBufferSubData(target, offset, size, data);
-
     return nullptr;
 }
 
@@ -451,6 +464,7 @@ napi_value NapiGLClear(napi_env env, napi_callback_info info) {
 
     GLbitfield mask = getUint32(env, argv[0]);
     glClear(mask);
+
     return nullptr;
 }
 
@@ -867,13 +881,13 @@ napi_value NapiGLGenVertexArrays(napi_env env, napi_callback_info info) {
     size_t argc = 1;
     napi_value argv[1];
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-    
+
     GLsizei n = getInt32(env, argv[0]);
-    void* data = nullptr;
+    void *data = nullptr;
     napi_value buffer = nullptr;
     createGLuintArray(env, &buffer, &data, n);
     glGenVertexArrays(n, (GLuint *)data);
-   return buffer; 
+    return buffer;
 }
 
 
@@ -1025,16 +1039,7 @@ napi_value NapiGLGetAttribLocation(napi_env env, napi_callback_info info) {
     GLuint location = glGetAttribLocation(program, name);
     return createNapiInt32(env, location);
 }
-napi_value NapiGLGetBooleanv(napi_env env, napi_callback_info info) {
-    size_t argc = 1;
-    napi_value argv[1];
-    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-    GLenum pname = getGLenum(env, argv[0]);
-    GLboolean data = 0;
-    glGetBooleanv(pname, &data);
 
-    return createNapiInt32(env, data);
-}
 
 napi_value NapiGLGetBufferParameteriv(napi_env env, napi_callback_info info) {
     size_t argc = 2;
@@ -1047,17 +1052,82 @@ napi_value NapiGLGetBufferParameteriv(napi_env env, napi_callback_info info) {
     return createNapiInt32(env, params);
 }
 
+napi_value NapiGLGetBufferParameteri64v(napi_env env, napi_callback_info info) {
+    size_t argc = 2;
+    napi_value argv[2];
+    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+    GLenum target = getGLenum(env, argv[0]);
+    GLenum pname = getGLenum(env, argv[1]);
+    GLint64 params = 0;
+    glGetBufferParameteri64v(target, pname, &params);
+    napi_value result = nullptr;
+    napi_create_int64(env, params, &result);
+    return result;
+}
+
 napi_value NapiGLGetError(napi_env env, napi_callback_info info) { return createNapiInt32(env, glGetError()); }
 
 napi_value NapiGLGetFloatv(napi_env env, napi_callback_info info) {
-    size_t argc = 1;
-    napi_value argv[1];
+    size_t argc = 2;
+    napi_value argv[2];
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
     GLenum pname = getGLenum(env, argv[0]);
-    GLfloat data = 0;
-    glGetFloatv(pname, &data);
-    napi_value result;
-    napi_create_double(env, data, &result);
+    GLuint size = getGLuint(env, argv[1]);
+    void *data = nullptr;
+    napi_value result = nullptr;
+    napi_value arraybuffer = nullptr;
+    napi_create_arraybuffer(env, sizeof(GLfloat) * size, &data, &arraybuffer);
+    napi_create_typedarray(env, napi_float32_array, size, arraybuffer, 0, &result);
+    glGetFloatv(pname, (GLfloat *)data);
+    return result;
+}
+
+napi_value NapiGLGetBooleanv(napi_env env, napi_callback_info info) {
+    size_t argc = 2;
+    napi_value argv[2];
+    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+    GLenum pname = getGLenum(env, argv[0]);
+    GLsizei size = getInt32(env, argv[1]);
+    napi_value result = nullptr;
+    void *data = nullptr;
+    napi_create_arraybuffer(env, size, &data, &result);
+    glGetBooleanv(pname, (GLboolean *)data);
+    return result;
+}
+
+napi_value NapiGLGetIntegerv(napi_env env, napi_callback_info info) {
+    size_t argc = 2;
+    napi_value argv[2];
+    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+    GLenum pname = getGLenum(env, argv[0]);
+    GLsizei size = getInt32(env, argv[1]);
+
+    void *data = nullptr;
+    napi_value result = nullptr;
+    napi_value arraybuffer = nullptr;
+
+    napi_create_arraybuffer(env, size * sizeof(GLint), &data, &arraybuffer);
+    napi_create_typedarray(env, napi_int32_array, size, arraybuffer, 0, &result);
+
+    glGetIntegerv(pname, (GLint *)data);
+    return result;
+}
+
+napi_value NapiGLGetInteger64v(napi_env env, napi_callback_info info) {
+    size_t argc = 2;
+    napi_value argv[2];
+    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+    GLenum pname = getGLenum(env, argv[0]);
+    GLsizei size = getInt32(env, argv[1]);
+
+    void *data = nullptr;
+    napi_value result = nullptr;
+    napi_value arraybuffer = nullptr;
+
+    napi_create_arraybuffer(env, size * sizeof(GLint64), &data, &arraybuffer);
+    napi_create_typedarray(env, napi_bigint64_array, size, arraybuffer, 0, &result);
+
+    glGetInteger64v(pname, (GLint64 *)data);
     return result;
 }
 
@@ -1073,15 +1143,6 @@ napi_value NapiGLGetFramebufferAttachmentParameteriv(napi_env env, napi_callback
     return createNapiInt32(env, params);
 }
 
-napi_value NapiGLGetIntegerv(napi_env env, napi_callback_info info) {
-    size_t argc = 1;
-    napi_value argv[1];
-    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-    GLenum pname = getGLenum(env, argv[0]);
-    GLint data = 0;
-    glGetIntegerv(pname, &data);
-    return createNapiInt32(env, data);
-}
 
 napi_value NapiGLGetProgramiv(napi_env env, napi_callback_info info) {
     size_t argc = 2;
@@ -1277,7 +1338,7 @@ napi_value NapiGLGetVertexAttribfv(napi_env env, napi_callback_info info) {
     void *data = nullptr;
     napi_value arraybuffer = nullptr;
     napi_value result = nullptr;
-    size_t n = GL_CURRENT_VERTEX_ATTRIB == pname ? 4 : 1;
+    size_t n = GL_TEXTURE_BORDER_COLOR == pname ? 4 : 1;
     napi_create_arraybuffer(env, sizeof(GLfloat) * n, &data, &arraybuffer);
     napi_create_typedarray(env, napi_float32_array, n, arraybuffer, 0, &result);
 
@@ -1293,7 +1354,7 @@ napi_value NapiGLGetVertexAttribiv(napi_env env, napi_callback_info info) {
     void *data = nullptr;
     napi_value result = nullptr;
     napi_value arraybuffer = nullptr;
-    size_t n = GL_CURRENT_VERTEX_ATTRIB == pname ? 4 : 1;
+    size_t n = GL_TEXTURE_BORDER_COLOR == pname ? 4 : 1;
     napi_create_arraybuffer(env, sizeof(GLfloat) * n, &data, &arraybuffer);
     napi_create_typedarray(env, napi_int32_array, n, arraybuffer, 0, &result);
 
@@ -2078,7 +2139,7 @@ napi_value NapiGLVertexAttribPointer(napi_env env, napi_callback_info info) {
     GLboolean normalized = getInt32(env, argv[3]);
     GLsizei stride = getInt32(env, argv[4]);
     GLint pointer = getInt32(env, argv[5]);
-    glVertexAttribPointer(index, size, type, normalized, stride, (void*)pointer);
+    glVertexAttribPointer(index, size, type, normalized, stride, (void *)pointer);
     return nullptr;
 }
 napi_value NapiGLViewport(napi_env env, napi_callback_info info) {
@@ -2132,25 +2193,4 @@ napi_value NapiGLEndTransformFeedback(napi_env env, napi_callback_info info) {
 }
 
 
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+} // namespace GLES

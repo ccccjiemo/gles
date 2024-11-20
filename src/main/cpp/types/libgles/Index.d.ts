@@ -1097,6 +1097,9 @@ export function glBlendFunc(sfactor: GLenum, dfactor: GLenum): void;
 export function glBlendFuncSeparate(sfactorRGB: GLenum, dfactorRGB: GLenum, sfactorAlpha: GLenum,
   dfactorAlpha: GLenum): void;
 
+export const glBlendFuncSeparatei: (buffer: number, sfactorRGB: GLenum, dfactorRGB: GLenum, sfactorAlpha: GLenum,
+  dfactorAlpha: GLenum) => void
+
 export function glBufferData(target: GLenum, data: ArrayBuffer, usage: GLenum): void;
 
 export function glBufferSubData(target: GLenum, offset: number, data: ArrayBuffer): void;
@@ -1202,13 +1205,20 @@ export function glGetAttachedShaders(program: number): Uint32Array;
 
 export function glGetAttribLocation(program: number, name: string): number;
 
-export function glGetBooleanv(pname: GLenum): GLboolean;
 
-export function glGetBufferParameteriv(target: GLenum, pname: GLenum): number;
+export function glGetBufferParameteriv(target: GLenum, value: GLenum): number;
+
+export function glGetBufferParameteri64v(target: GLenum, value: GLenum): number;
 
 export function glGetError(): GLenum;
 
-export function glGetFloatv(pname: GLenum): number;
+export function glGetFloatv(pname: GLenum, size: number): Float32Array;
+
+export function glGetBooleanv(pname: GLenum, size: number): ArrayBuffer;
+
+export function glGetIntegerv(pname: GLenum, size: number): Int32Array;
+
+export function glGetInteger64v(pname: GLenum, size: number): BigInt64Array;
 
 export function glGetFramebufferAttachmentParameteriv(target: GLenum, attachment: GLenum,
   pname: GLenum): number;
