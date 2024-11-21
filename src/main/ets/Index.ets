@@ -903,17 +903,29 @@ export namespace gles {
 
   export const glCullFace: (mode: FaceMode) => void = GLESBase.glCullFace;
 
-  export const glDeleteBuffers: (buffers: Uint32Array) => void = GLESBase.glDeleteBuffers;
+  export const glDeleteBuffers: (buffers: number[]) => void = (buffers: number[]) => {
+    GLESBase.glDeleteBuffers(new Uint32Array(buffers));
+  }
 
-  export const glDeleteFramebuffers: (buffers: Uint32Array) => void = GLESBase.glDeleteFramebuffers;
+  export const glDeleteVertexArrays: (arrays: number[]) => void = (arrays: number[]) => {
+    GLESBase.glDeleteVertexArrays(new Uint32Array(arrays));
+  }
+
+  export const glDeleteFramebuffers: (buffers: number[]) => void = (buffers: number[]) => {
+    GLESBase.glDeleteFramebuffers(new Uint32Array(buffers));
+  }
 
   export const glDeleteProgram: (program: number) => void = GLESBase.glDeleteProgram;
 
-  export const glDeleteRenderbuffers: (buffers: Uint32Array) => void = GLESBase.glDeleteRenderbuffers;
+  export const glDeleteRenderbuffers: (buffers: number[]) => void = (buffers: number[]) => {
+    GLESBase.glDeleteRenderbuffers(new Uint32Array(buffers));
+  }
 
   export const glDeleteShader: (program: number) => void = GLESBase.glDeleteShader;
 
-  export const glDeleteTextures: (buffers: Uint32Array) => void = GLESBase.glDeleteTextures;
+  export const glDeleteTextures: (textures: number[]) => void = (textures: number[]) => {
+    GLESBase.glDeleteTextures(new Uint32Array(textures));
+  }
 
   export const glDepthFunc: (func: Func) => void = GLESBase.glDepthFunc;
 
@@ -1120,51 +1132,72 @@ export namespace gles {
   export const glTexParameterf: (target: TextureTarget, pname: TexParamName, param: number) => void =
     GLESBase.glTexParameterf;
 
-  export const glTexParameterfv: (target: TextureTarget, pname: TexParamName, params: Float32Array) => void =
-    GLESBase.glTexParameterfv;
+  export const glTexParameterfv: (target: TextureTarget, pname: TexParamName, params: number[]) => void =
+    (target, pname, params) => {
+      GLESBase.glTexParameterfv(target, pname, new Float32Array(params));
+    }
 
   export const glTexParameteri: (target: TextureTarget, pname: TexParamName, param: number) => void =
     GLESBase.glTexParameteri;
 
-  export const glTexParameteriv: (target: TextureTarget, pname: TexParamName, params: Int32Array) => void =
-    GLESBase.glTexParameteriv;
+  export const glTexParameteriv: (target: TextureTarget, pname: TexParamName, params: number[]) => void =
+    (target, pname, params) => {
+      GLESBase.glTexParameteriv(target, pname, new Int32Array(params));
+    }
 
   export const glTexSubImage2D: (target: TextureTarget, level: number, xoffset: number, yoffset: number, width: number,
-    height: number, format: InternalFormat, type: IndicesType, pixels: ArrayBufferLike) => void = GLESBase.glTexSubImage2D;
+    height: number, format: InternalFormat, type: IndicesType, pixels: ArrayBufferLike) => void =
+    GLESBase.glTexSubImage2D;
 
   export const glUniform1f: (location: number, v0: number) => void = GLESBase.glUniform1f;
 
-  export const glUniform1fv: (location: number, values: Float32Array) => void = GLESBase.glUniform1fv;
+  export const glUniform1fv: (location: number, values: number[]) => void = (l, v) => {
+    GLESBase.glUniform1fv(l, new Float32Array(v));
+  }
 
   export const glUniform1i: (location: number, v0: number) => void = GLESBase.glUniform1i;
 
-  export const glUniform1iv: (location: number, values: Uint32Array) => void = GLESBase.glUniform1iv;
+  export const glUniform1iv: (location: number, values: number[]) => void = (l, v) => {
+    GLESBase.glUniform1iv(l, new Uint32Array(v));
+  }
 
   export const glUniform2f: (location: number, v0: number, v1: number) => void = GLESBase.glUniform2f;
 
-  export const glUniform2fv: (location: number, values: Float32Array) => void = GLESBase.glUniform2fv;
+  export const glUniform2fv: (location: number, values: number[]) => void = (l, v) => {
+    GLESBase.glUniform2fv(l, new Float32Array(v));
+  }
 
   export const glUniform2i: (location: number, v0: number, v1: number) => void = GLESBase.glUniform2i;
 
-  export const glUniform2iv: (location: number, values: Uint32Array) => void = GLESBase.glUniform2iv;
+  export const glUniform2iv: (location: number, values: number[]) => void = (location, values) => {
+    GLESBase.glUniform2iv(location, new Uint32Array(values));
+  }
 
   export const glUniform3f: (location: number, v0: number, v1: number, v2: number) => void = GLESBase.glUniform3f;
 
-  export const glUniform3fv: (location: number, values: Float32Array) => void = GLESBase.glUniform3fv;
+  export const glUniform3fv: (location: number, values: number[]) => void = (location, values) => {
+    GLESBase.glUniform3fv(location, new Float32Array(values));
+  }
 
   export const glUniform3i: (location: number, v0: number, v1: number, v2: number) => void = GLESBase.glUniform3i;
 
-  export const glUniform3iv: (location: number, values: Uint32Array) => void = GLESBase.glUniform3iv;
+  export const glUniform3iv: (location: number, values: number[]) => void = (location, values) => {
+    GLESBase.glUniform3iv(location, new Uint32Array(values));
+  }
 
   export const glUniform4f: (location: number, v0: number, v1: number, v2: number, v3: number) => void =
     GLESBase.glUniform4f;
 
-  export const glUniform4fv: (location: number, values: Float32Array) => void = GLESBase.glUniform4fv;
+  export const glUniform4fv: (location: number, values: number[]) => void = (location: number, values: number[]) => {
+    GLESBase.glUniform4fv(location, new Float32Array(values));
+  }
 
   export const glUniform4i: (location: number, v0: number, v1: number, v2: number, v3: number) => void =
     GLESBase.glUniform4i;
 
-  export const glUniform4iv: (location: number, values: Uint32Array) => void = GLESBase.glUniform4iv;
+  export const glUniform4iv: (location: number, values: number[]) => void = (location: number, values: number[]) => {
+    GLESBase.glUniform4iv(location, new Uint32Array(values));
+  }
 
   export const glViewport: (x: number, y: number, width: number, height: number) => void = GLESBase.glViewport;
 
@@ -1173,13 +1206,21 @@ export namespace gles {
     pointer: number) => void = GLESBase.glVertexAttribPointer;
 
   export const glUniformMatrix2fv: (location: number, count: number, transpose: GLboolean,
-    value: Float32Array) => void = GLESBase.glUniformMatrix2fv;
+    value: number[]) => void = (l, c, t, v) => {
+    GLESBase.glUniformMatrix2fv(l, c, t, new Float32Array(v));
+  }
 
   export const glUniformMatrix3fv: (location: number, count: number, transpose: GLboolean,
-    value: Float32Array) => void = GLESBase.glUniformMatrix3fv;
+    value: number[]) => void = (l, c, t, v) => {
+    GLESBase.glUniformMatrix3fv(l, c, t, new Float32Array(v));
+  }
+
 
   export const glUniformMatrix4fv: (location: number, count: number, transpose: GLboolean,
-    value: Float32Array) => void = GLESBase.glUniformMatrix4fv;
+    value: number[]) => void = (l, c, t, v) => {
+    GLESBase.glUniformMatrix4fv(l, c, t, new Float32Array(v));
+  }
+
 
   export const glUseProgram: (program: number) => void = GLESBase.glUseProgram;
 
@@ -1194,13 +1235,21 @@ export namespace gles {
   export const glVertexAttrib4f: (index: number, x: number, y: number, z: number, w: number) => void =
     GLESBase.glVertexAttrib4f;
 
-  export const glVertexAttrib1fv: (index: number, v: Float32Array) => void = GLESBase.glVertexAttrib1fv;
+  export const glVertexAttrib1fv: (index: number, v: number[]) => void = (i, v) => {
+    GLESBase.glVertexAttrib1fv(i, new Float32Array(v));
+  }
 
-  export const glVertexAttrib2fv: (index: number, v: Float32Array) => void = GLESBase.glVertexAttrib2fv;
+  export const glVertexAttrib2fv: (index: number, v: number[]) => void = (i, v) => {
+    GLESBase.glVertexAttrib2fv(i, new Float32Array(v));
+  }
 
-  export const glVertexAttrib3fv: (index: number, v: Float32Array) => void = GLESBase.glVertexAttrib3fv;
+  export const glVertexAttrib3fv: (index: number, v: number[]) => void = (i, v) => {
+    GLESBase.glVertexAttrib3fv(i, new Float32Array(v));
+  }
 
-  export const glVertexAttrib4fv: (index: number, v: Float32Array) => void = GLESBase.glVertexAttrib4fv;
+  export const glVertexAttrib4fv: (index: number, v: number[]) => void = (i, v) => {
+    GLESBase.glVertexAttrib3fv(i, new Float32Array(v));
+  }
 
   export const glBindVertexArray: (array: number) => void = GLESBase.glBindVertexArray;
 

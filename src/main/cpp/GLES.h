@@ -47,6 +47,7 @@ napi_value NapiGLCreateProgram(napi_env env, napi_callback_info info);
 napi_value NapiGLCreateShader(napi_env env, napi_callback_info info);
 napi_value NapiGLCullFace(napi_env env, napi_callback_info info);
 napi_value NapiGLDeleteBuffers(napi_env env, napi_callback_info info);
+napi_value NapiGLDeleteVertexArrays(napi_env env, napi_callback_info info);
 napi_value NapiGLDeleteFramebuffers(napi_env env, napi_callback_info info);
 napi_value NapiGLDeleteProgram(napi_env env, napi_callback_info info);
 napi_value NapiGLDeleteRenderbuffers(napi_env env, napi_callback_info info);

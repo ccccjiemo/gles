@@ -68,6 +68,7 @@ void Export(napi_env env, napi_value exports) {
         {"glCreateShader", nullptr, NapiGLCreateShader, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glCullFace", nullptr, NapiGLCullFace, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glDeleteBuffers", nullptr, NapiGLDeleteBuffers, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"glDeleteVertexArrays", nullptr, NapiGLDeleteVertexArrays, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glDeleteFramebuffers", nullptr, NapiGLDeleteFramebuffers, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glDeleteProgram", nullptr, NapiGLDeleteProgram, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glDeleteRenderbuffers", nullptr, NapiGLDeleteRenderbuffers, nullptr, nullptr, nullptr, napi_default, nullptr},
@@ -634,7 +635,21 @@ napi_value NapiGLDeleteBuffers(napi_env env, napi_callback_info info) {
     void *data = nullptr;
     size_t size = 0;
     getArray(env, argv[0], &data, &size);
-    glDeleteBuffers(size, (GLuint *)data);
+    glDeleteBuffers(size / sizeof(GLuint), (GLuint *)data);
+
+    return nullptr;
+}
+
+napi_value NapiGLDeleteVertexArrays(napi_env env, napi_callback_info info) {
+    size_t argc = 1;
+    napi_value argv[1];
+
+    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+
+    void *data = nullptr;
+    size_t size = 0;
+    getArray(env, argv[0], &data, &size);
+    glDeleteVertexArrays(size / sizeof(GLuint), (GLuint *)data);
 
     return nullptr;
 }
@@ -647,7 +662,7 @@ napi_value NapiGLDeleteFramebuffers(napi_env env, napi_callback_info info) {
     void *data = nullptr;
     size_t size = 0;
     getArray(env, argv[0], &data, &size);
-    glDeleteFramebuffers(size, (GLuint *)data);
+    glDeleteFramebuffers(size / sizeof(GLuint), (GLuint *)data);
 
     return nullptr;
 }
@@ -671,7 +686,7 @@ napi_value NapiGLDeleteRenderbuffers(napi_env env, napi_callback_info info) {
     void *data = nullptr;
     size_t size = 0;
     getArray(env, argv[0], &data, &size);
-    glDeleteRenderbuffers(size, (GLuint *)data);
+    glDeleteRenderbuffers(size/ sizeof(GLuint), (GLuint *)data);
 
     return nullptr;
 }
@@ -694,7 +709,7 @@ napi_value NapiGLDeleteTextures(napi_env env, napi_callback_info info) {
     void *data = nullptr;
     size_t size = 0;
     getArray(env, argv[0], &data, &size);
-    glDeleteTextures(size, (GLuint *)data);
+    glDeleteTextures(size / sizeof(GLuint), (GLuint *)data);
     return nullptr;
 }
 

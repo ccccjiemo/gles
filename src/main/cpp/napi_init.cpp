@@ -163,8 +163,9 @@ static napi_value Init(napi_env env, napi_value exports) {
         {"glBindVertexArray", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glBindVertexBuffer", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glGetInteger64v", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"glGetBufferParameteri64v", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default,
-         nullptr},
+        {"glGetBufferParameteri64v", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"glDeleteVertexArrays", nullptr, nullptr, nullptr, nullptr, nullptr, napi_default, nullptr},
+        
 
     };
     return exports;

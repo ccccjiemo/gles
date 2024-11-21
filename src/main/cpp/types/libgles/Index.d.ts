@@ -1396,3 +1396,5 @@ export function glBindVertexArray(array: number): void;
  * @param stride GLsizei
  */
 export function glBindVertexBuffer(bindingindex: number, buffer: number, offset: number, stride: number): void;
+
+export function glDeleteVertexArrays(arrays: Uint32Array): void;

@@ -73,12 +73,22 @@ void getArray(napi_env env, napi_value value, void **array, size_t *size) {
         size_t byte_offset;
         napi_value input_buffer;*/
     bool result = false;
+    napi_is_typedarray(env, value, &result);
+
+    if (result) {
+        napi_get_typedarray_info(env, value, nullptr, size, array, nullptr, nullptr);
+        return;
+    }
+
     napi_is_arraybuffer(env, value, &result);
 
-    if (!result)
+    if (result) {
+        napi_get_arraybuffer_info(env, value, array, size);
         return;
-    napi_get_arraybuffer_info(env, value, array, size);
-    // napi_get_typedarray_info(env, value, &type, size, array, &input_buffer, &byte_offset);
+    }
+
+    array = nullptr;
+    size = 0;
 }
 
 
