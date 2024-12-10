@@ -1,13 +1,18 @@
-## [0.0.1] - 2024-11-19
+## [0.1.0] - 2024-12-05
 
-### Info
+- 整理文件，添加type
 
-进行基本测试
+---
+
+## [0.0.3] - 2024-11-21
+
+### Fixed
+
+- 修复glDelete等方法传入参数获取数组大小错误
 
 ### Added
 
-- gles模块包含opengl基本方法
-- gles10模块包含opengl常量
+- 增加缺失的glDeleteVertexArrays方法
 
 ---
 
@@ -21,16 +26,15 @@
 
 - 修复arkTs侧传入ArrayBufferLike时，native侧读取错误的问题
 
-
 ---
 
-## [0.0.3] - 2024-11-21
+## [0.0.1] - 2024-11-19
 
-### Fixed
+### Info
 
-- 修复glDelete等方法传入参数获取数组大小错误
+进行基本测试
 
 ### Added
-- 增加缺失的glDeleteVertexArrays方法
 
-
+- gles模块包含opengl基本方法
+- gles10模块包含opengl常量
