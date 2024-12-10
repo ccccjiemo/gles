@@ -1060,7 +1060,7 @@ declare enum GLenum_Query {
 }*/
 
 
-declare function glActiveShaderProgram(pipeline: number, program: number): void;
+export function glActiveShaderProgram(pipeline: number, program: number): void;
 
 export function glActiveTexture(texture: GLenum): void;
 

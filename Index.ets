@@ -1,1 +1,1 @@
-export { gles } from './src/main/ets/Index'
+export * as gles from './src/main/ets/Index'

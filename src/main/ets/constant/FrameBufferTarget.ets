@@ -1,0 +1,5 @@
+export enum FrameBufferTarget {
+  GL_DRAW_FRAMEBUFFER = 0x8CA9,
+  GL_READ_FRAMEBUFFER = 0x8CA8,
+  GL_FRAMEBUFFER = 0x8D40
+}
