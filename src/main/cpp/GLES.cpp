@@ -419,7 +419,6 @@ napi_value NapiGLBufferData(napi_env env, napi_callback_info info) {
     size_t argc = 3;
     napi_value argv[3];
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-
     GLenum target = getGLenum(env, argv[0]);
     size_t size = 0;
     void *data = nullptr;
@@ -686,7 +685,7 @@ napi_value NapiGLDeleteRenderbuffers(napi_env env, napi_callback_info info) {
     void *data = nullptr;
     size_t size = 0;
     getArray(env, argv[0], &data, &size);
-    glDeleteRenderbuffers(size/ sizeof(GLuint), (GLuint *)data);
+    glDeleteRenderbuffers(size / sizeof(GLuint), (GLuint *)data);
 
     return nullptr;
 }
@@ -1165,7 +1164,7 @@ napi_value NapiGLGetProgramiv(napi_env env, napi_callback_info info) {
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
     GLuint program = getGLuint(env, argv[0]);
     GLenum pname = getGLenum(env, argv[1]);
-    GLint params = 0;
+    GLint params = 1;
     glGetProgramiv(program, pname, &params);
     return createNapiInt32(env, params);
 }
@@ -1176,9 +1175,9 @@ napi_value NapiGLGetProgramInfoLog(napi_env env, napi_callback_info info) {
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
 
     GLuint program = getGLuint(env, argv[0]);
-    GLsizei bufSize = 0;
+    GLint bufSize = 0;
 
-    glGetProgramInfoLog(program, bufSize, &bufSize, nullptr);
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufSize);
     char *infoLog = new char[bufSize + 1];
     glGetProgramInfoLog(program, bufSize + 1, &bufSize, infoLog);
 
@@ -1216,13 +1215,13 @@ napi_value NapiGLGetShaderInfoLog(napi_env env, napi_callback_info info) {
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
 
     GLuint shader = getGLuint(env, argv[0]);
-    GLsizei bufSize = 0;
-    glGetShaderInfoLog(shader, bufSize, &bufSize, nullptr);
-    char *infoLog = new char[bufSize + 1];
-    glGetShaderInfoLog(shader, bufSize + 1, &bufSize, infoLog);
+    GLint size = 0;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &size);
+    char *infoLog = new char[size + 1];
+    glGetShaderInfoLog(shader, size + 1, &size, infoLog);
 
     napi_value result = nullptr;
-    napi_create_string_utf8(env, infoLog, bufSize, &result);
+    napi_create_string_utf8(env, infoLog, size, &result);
     delete[] infoLog;
     return result;
 }
@@ -1730,7 +1729,11 @@ napi_value NapiGLTexImage2D(napi_env env, napi_callback_info info) {
     GLenum type = getGLenum(env, argv[7]);
 
     void *data = nullptr;
-    napi_get_arraybuffer_info(env, argv[8], &data, nullptr);
+    bool r = false;
+    napi_is_arraybuffer(env, argv[8], &r);
+    if (r) {
+        napi_get_arraybuffer_info(env, argv[8], &data, nullptr);
+    }
 
     glTexImage2D(target, level, internalformat, width, height, border, format, type, data);
     return nullptr;
@@ -2195,10 +2198,8 @@ napi_value NapiGLBeginTransformFeedback(napi_env env, napi_callback_info info) {
     size_t argc = 1;
     napi_value argv[1];
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-
     GLenum primitiveMode = getGLenum(env, argv[0]);
     glBeginTransformFeedback(primitiveMode);
-
     return nullptr;
 }
 
@@ -2206,6 +2207,57 @@ napi_value NapiGLEndTransformFeedback(napi_env env, napi_callback_info info) {
     glEndTransformFeedback();
     return nullptr;
 }
+
+napi_value NapiGLVertexAttribFormat(napi_env env, napi_callback_info info) {
+    size_t argc = 5;
+    napi_value argv[5];
+    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+    GLuint attribindex = 0;
+    GLint size = 0;
+    GLenum type = 0;
+    int normalized = 0;
+    GLuint relativeoffset = 0;
+    napi_get_value_uint32(env, argv[0], &attribindex);
+    napi_get_value_int32(env, argv[1], &size);
+    napi_get_value_uint32(env, argv[2], &type);
+    napi_get_value_int32(env, argv[3], &normalized);
+    napi_get_value_uint32(env, argv[4], &relativeoffset);
+    glVertexAttribFormat(attribindex, size, type, normalized, relativeoffset);
+
+    return nullptr;
+}
+
+napi_value NapiGLVertexAttribIFormat(napi_env env, napi_callback_info info) {
+    size_t argc = 4;
+    napi_value argv[4];
+    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+    GLuint attribindex = 0;
+    GLint size = 0;
+    GLenum type = 0;
+    GLuint relativeoffset = 0;
+    napi_get_value_uint32(env, argv[0], &attribindex);
+    napi_get_value_int32(env, argv[1], &size);
+    napi_get_value_uint32(env, argv[2], &type);
+    napi_get_value_uint32(env, argv[3], &relativeoffset);
+    glVertexAttribIFormat(attribindex, size, type, relativeoffset);
+    return nullptr;
+}
+
+napi_value NapiGLVertexAttribBinding(napi_env env, napi_callback_info info) {
+    size_t argc = 2;
+    napi_value argv[2];
+    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+    GLuint attribindex = 0;
+    GLuint bindingindex = 0;
+    napi_get_value_uint32(env, argv[0], &attribindex);
+    napi_get_value_uint32(env, argv[1], &bindingindex);
+    glVertexAttribBinding(attribindex, bindingindex);
+    return nullptr;
+}
+
+// napi_value NapiGLMapBufferRange(napi_env env, napi_callback_info info) {
+//     glMapBufferRange(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access)
+// }
 
 
 } // namespace GLES

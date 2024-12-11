@@ -1,7 +1,7 @@
 {
   "name": "@jemoc/gles",
-  "version": "0.1.0",
-  "description": "基于api12, opengl es 3.2简单封装",
+  "version": "0.2.0",
+  "description": "基于api12, opengl es 3.2封装",
   "main": "Index.ets",
   "types": "type/Index.d.ts",
   "keywords": [

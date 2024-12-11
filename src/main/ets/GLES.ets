@@ -104,10 +104,10 @@ export const glBlendFuncSeparatei: (buffer: number, sfactorRGB: BlendingFactors,
   sfactorAlpha: BlendingFactors,
   dfactorAlpha: BlendingFactors) => void = GLESBase.glBlendFuncSeparatei;
 
-export const glBufferData: (target: BufferType, data: ArrayBufferLike, usage: BufferUsage) => void =
+export const glBufferData: (target: BufferType, data: ArrayLike<number>, usage: BufferUsage) => void =
   GLESBase.glBufferData;
 
-export const glBufferSubData: (target: BufferType, offset: number, data: ArrayBufferLike) => void =
+export const glBufferSubData: (target: BufferType, offset: number, data: ArrayLike<number>) => void =
   GLESBase.glBufferSubData;
 
 export const glCheckFramebufferStatus: (target: FrameBufferTarget) => FrameBufferStatus =
@@ -148,27 +148,27 @@ export const glCreateShader: (type: ShaderType) => number = GLESBase.glCreateSha
 
 export const glCullFace: (mode: FaceMode) => void = GLESBase.glCullFace;
 
-export const glDeleteBuffers: (buffers: number[]) => void = (buffers: number[]) => {
+export const glDeleteBuffers: (...buffers: number[]) => void = (...buffers: number[]) => {
   GLESBase.glDeleteBuffers(new Uint32Array(buffers));
 }
 
-export const glDeleteVertexArrays: (arrays: number[]) => void = (arrays: number[]) => {
+export const glDeleteVertexArrays: (...arrays: number[]) => void = (...arrays: number[]) => {
   GLESBase.glDeleteVertexArrays(new Uint32Array(arrays));
 }
 
-export const glDeleteFramebuffers: (buffers: number[]) => void = (buffers: number[]) => {
+export const glDeleteFramebuffers: (...buffers: number[]) => void = (...buffers: number[]) => {
   GLESBase.glDeleteFramebuffers(new Uint32Array(buffers));
 }
 
 export const glDeleteProgram: (program: number) => void = GLESBase.glDeleteProgram;
 
-export const glDeleteRenderbuffers: (buffers: number[]) => void = (buffers: number[]) => {
+export const glDeleteRenderbuffers: (...buffers: number[]) => void = (...buffers: number[]) => {
   GLESBase.glDeleteRenderbuffers(new Uint32Array(buffers));
 }
 
 export const glDeleteShader: (shader: number) => void = GLESBase.glDeleteShader;
 
-export const glDeleteTextures: (textures: number[]) => void = (textures: number[]) => {
+export const glDeleteTextures: (...textures: number[]) => void = (...textures: number[]) => {
   GLESBase.glDeleteTextures(new Uint32Array(textures));
 }
 
@@ -186,7 +186,7 @@ export const glDisableVertexAttribArray: (index: number) => void = GLESBase.glDi
 
 export const glDrawArrays: (mode: DrawMode, first: number, count: number) => void = GLESBase.glDrawArrays;
 
-export const glDrawElements: (mode: DrawMode, count: number, type: IndicesType, indices: ArrayBufferLike) => void =
+export const glDrawElements: (mode: DrawMode, count: number, type: IndicesType, indices: ArrayLike<number>) => void =
   GLESBase.glDrawElements;
 
 export const glEnable: (cap: GLCapability) => void = GLESBase.glEnable;
@@ -370,7 +370,7 @@ export const glStencilOpSeparate: (face: FaceMode, sfail: TestFail, dpfail: Test
 
 export const glTexImage2D: (target: TextureTarget, level: number, internalformat: number, width: number,
   height: number,
-  border: number, format: InternalFormat, type: IndicesType, pixels: ArrayBufferLike) => void = GLESBase.glTexImage2D;
+  border: number, format: InternalFormat, type: IndicesType, pixels?: ArrayBufferLike) => void = GLESBase.glTexImage2D;
 
 export const glTexParameterf: (target: TextureTarget, pname: TexParamName, param: number) => void =
   GLESBase.glTexParameterf;
@@ -497,4 +497,12 @@ export const glBindVertexArray: (array: number) => void = GLESBase.glBindVertexA
 export const glBindVertexBuffer: (bindingindex: number, buffer: number, offset: number, stride: number) => void =
   GLESBase.glBindVertexBuffer;
 
+export const glVertexAttribFormat: (attribindex: number, size: number, type: IndicesType, normalized: number,
+  relativeoffset: number) => void = GLESBase.glVertexAttribFormat;
 
+export const glVertexAttribIFormat: (attribindex: number, size: number, type: IndicesType,
+  relativeoffset: number) => void =
+  GLESBase.glVertexAttribIFormat;
+
+export const glVertexAttribBinding: (attribindex: number, bindingindex: number) => void =
+  GLESBase.glVertexAttribBinding;

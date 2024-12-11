@@ -1,4 +1,4 @@
-export namespace egl {
+export namespace gles {
   export type GLboolean = 0 | 1;
 
   export interface GLActiveAttrib {
@@ -762,6 +762,12 @@ export namespace egl {
     GL_TRANSFORM_FEEDBACK_VARYING_MA
   }
 
+  export enum BufferAccessMode {
+    GL_READ_ONLY = 0x88B8,
+    GL_WRITE_ONLY = 0x88B9,
+    GL_READ_WRITE = 0x88BA,
+  }
+
   export function glActiveShaderProgram(pipeline: number, program: number): void;
 
   export function glActiveTexture(texture: GLTexture): void;
@@ -822,7 +828,8 @@ export namespace egl {
   export function glCompileShader(shader: number): void;
 
   export function glCompressedTexImage2D(target: TexImage2DTarget, level: number,
-    internalformat: CompressedInternalFormat, width: number, height: number, border: number, data: ArrayBufferLike): void;
+    internalformat: CompressedInternalFormat, width: number, height: number, border: number,
+    data: ArrayBufferLike): void;
 
   export function glCompressedTexSubImage2D(target: TexImage2DTarget, level: number, xoffset: number, yoffset: number,
     width: number, height: number, format: CompressedInternalFormat, data: ArrayBufferLike): void;
@@ -1093,6 +1100,32 @@ export namespace egl {
 
   export function glBindVertexBuffer(bindingindex: number, buffer: number, offset: number, stride: number): void;
 
+  /**
+   * @since 0.2.0
+   * @param attribindex
+   * @param size
+   * @param type
+   * @param normalized
+   * @param relativeoffset
+   */
+  export function glVertexAttribFormat(attribindex: number, size: number, type: IndicesType, normalized: GLboolean,
+    relativeoffset: number): void;
+
+  /**
+   * @since 0.2.0
+   * @param attribindex
+   * @param size
+   * @param type
+   * @param relativeoffset
+   */
+  export function glVertexAttribIFormat(attribindex: number, size: number, type: IndicesType, relativeoffset: number)
+
+  /**
+   * @since 0.2.0
+   * @param attribindex
+   * @param bindingindex
+   */
+  export function glVertexAttribBinding(attribindex: number, bindingindex: number): void;
 
   export const GL_DEPTH_BUFFER_BIT = 0x00000100;
 
@@ -3096,9 +3129,266 @@ export namespace egl {
 
   export const GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY = 0x910D;
 
+  /**
+   * @since 0.2.0
+   * @description Buffer 可用作vbo、ibo等
+   */
+  export class Buffer {
+    constructor(target: BufferType)
+
+    /**
+     * @returns buffer handle
+     */
+    get id(): number
+
+    /**
+     * @returns buffer type
+     */
+    get bufferType(): BufferType
+
+    /**
+     * 绑定buffer
+     */
+    bind(): void
+
+    /**
+     * 解绑buffer
+     */
+    unbind(): void
+
+    /**
+     * @param data such as Uint8Array、Uint32Array
+     * @param usage {BufferUsage}
+     */
+    setData(data: ArrayLike<number>, usage: BufferUsage): void
+
+    /**
+     * update buffer
+     * @param data
+     * @param offset
+     */
+    setSubData(data: ArrayLike<number>, offset: number): void;
+
+    getParameter(pname: BufferParamName): number
+
+    getParameter64(pname: BufferParamName): number
+
+    delete(): void
+  }
+
+  /**
+   * @since 0.2.0
+   * @description opengl program
+   */
+  export class Program {
+    constructor()
+
+    /**
+     * program handle
+     */
+    get id(): number
+
+    /**
+     * 获取program连接信息
+     */
+    get infoLog(): string
+
+    /**
+     * 获取已激活的attribute数量
+     */
+    get activeAttributes(): number
+
+    /**
+     * 获取已激活的uniform数量
+     */
+    get activeUniforms(): number
+
+    get activeAttributeMaxLength(): number
+
+    get activeUniformMaxLength(): number
+
+    /**
+     * 使用program
+     */
+    bind(): void;
+
+    /**
+     * 解绑program
+     */
+    unbind(): void
+
+    /**
+     * 编译shader和连接program
+     */
+    attach(...args: Shader[]): boolean
+
+    detach(...args: Shader[]): void;
+
+    setUniformf<T extends vec>(name: string, vec: T): void
+
+    setUniformf(name: string, v0: number): void
+
+    setUniformf(name: string, v0: number, v1: number): void
+
+    setUniformf(name: string, v0: number, v1: number, v2: number): void
+
+    setUniformf(name: string, v0: number, v1: number, v2: number, v3: number): void
+
+    getUniformLocation(name: string): number
+
+    delete(): boolean
+  }
+
+  /**
+   * @since 0.2.0
+   * opengl shader封装
+   */
+  export class Shader {
+    constructor(type: ShaderType)
+
+    /**
+     * 通过uri获取文件并载入着色器对象中
+     */
+    static fromUri(type: ShaderType, uri: string, encoding?: string): Shader
+
+    /**
+     * 生成一个着色器并载入source
+     */
+    static fromString(type: ShaderType, source: string): Shader
+
+    /**
+     * 获取shader handle
+     */
+    get id(): number
+
+    /**
+     * 着色器编译结果
+     */
+    get infoLog(): string
+
+    /**
+     * 是否编译成功
+     */
+    get isCompiled(): boolean
+
+    /**
+     * 编译着色器
+     */
+    compile(): boolean
+
+    /**
+     * 删除着色器
+     */
+    delete(): boolean
+  }
+
+  interface vec {}
+
+  export class vec2 implements vec {
+    constructor(scalar: number)
+
+    constructor(x: number, y: number)
+
+    get x(): number
+
+    get y(): number
+  }
+
+  export class vec3 implements vec {
+    constructor(scalar: number)
+
+    constructor(x: number, y: number, z: number)
+
+    get x(): number
+
+    get y(): number
+
+    get z(): number
+  }
+
+  export class vec4 implements vec {
+    constructor(scalar: number)
+
+    constructor(x: number, y: number, z: number, w: number)
+
+    get x(): number
+
+    get y(): number
+
+    get z(): number
+
+    get w(): number
+  }
+
+  export interface Image2DOption {
+    level?: number;
+    internalFormat?: InternalFormat;
+    width?: number;
+    height?: number;
+    border?: number;
+    format?: InternalFormat;
+    type?: IndicesType;
+    data?: ArrayBuffer;
+  }
+
+  /**
+   * @since 0.2.0
+   */
+  export class Texture {
+    constructor(type: TextureTarget)
+
+    /**
+     * texture handle
+     */
+    get id(): number
+
+    /**
+     * texture type
+     */
+    get textureType(): TextureTarget
+
+    setParameter(name: TexParamName, value: number): Texture
+
+    image2D(option?: Image2DOption): void;
+
+    generateMipMap(): void
+
+    bindActive(target?: number): void
+
+    delete(): void
+  }
+
+
+  export class VertexArray {
+    constructor()
+
+    get id(): number
+
+    bind()
+
+    unbind()
+
+    enable(attributeIndex: number)
+
+    disable(attributeIndex: number)
+
+    drawArrays(mode: DrawMode, first: number, count: number)
+
+    drawElements(mode: DrawMode, count: number, indices: Uint8Array | Uint16Array | Uint32Array)
+
+    setBuffer(buffer: Buffer, index: number, size: number, type: IndicesType, normalized: boolean, stride: number,
+      pointer: number)
+
+    /**
+     * @deprecated
+     * VertexArrayBinding
+     */
+    binding(vertexIndex: number)
+
+    delete(): void
+  }
+
 
 }
-
-
 
 

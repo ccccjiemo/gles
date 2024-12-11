@@ -79,3 +79,5 @@ export * from './TextureTarget'
 export * from './VertexAttribParamName'
 
 export * from './QueryTarget'
+
+export * from './BufferAccessMode'

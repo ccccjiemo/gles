@@ -1,3 +1,12 @@
+## [0.2.0] 2024-12-12
+
+- 封装Buffer、VertexBuffer、VertexArray、Texture、Program、shader等方法
+- 增加glVertexAttribFormat、glVertexAttribIFormat
+- 不提供glMapBufferRange（暂时）
+- 后续可能会继续增加glVertexAttribBinding等封装，继续优化方法的调用，增加向量和矩阵的操作
+
+---
+
 ## [0.1.0] - 2024-12-05
 
 - 整理文件，添加type

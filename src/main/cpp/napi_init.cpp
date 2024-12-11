@@ -203,6 +203,13 @@ static napi_value Init(napi_env env, napi_value exports) {
         {"glViewport", nullptr, GLES::NapiGLViewport, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glBindVertexArray", nullptr, GLES::NapiGLBindVertexArray, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"glBindVertexBuffer", nullptr, GLES::NapiGLBindVertexBuffer, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"glVertexAttribFormat", nullptr, GLES::NapiGLVertexAttribFormat, nullptr, nullptr, nullptr, napi_default,
+         nullptr},
+        {"glVertexAttribIFormat", nullptr, GLES::NapiGLVertexAttribIFormat, nullptr, nullptr, nullptr, napi_default,
+         nullptr},
+        {"glVertexAttribBinding", nullptr, GLES::NapiGLVertexAttribBinding, nullptr, nullptr, nullptr, napi_default,
+         nullptr},
+
     };
 
     napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc);

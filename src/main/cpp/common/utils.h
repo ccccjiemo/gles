@@ -110,4 +110,8 @@ void createGLuintArray(napi_env env, napi_value *array_buffer, void **data, size
     napi_create_typedarray(env, napi_uint32_array, len, buffers, 0, array_buffer);
 }
 
+void transformData(napi_env env, napi_value value, GLenum type, int size) {
+    
+}
+
 #endif // GLTEST_UTILS_H

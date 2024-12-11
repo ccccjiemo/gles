@@ -80,7 +80,7 @@ napi_value NapiGLGetAttachedShaders(napi_env env, napi_callback_info info);
 napi_value NapiGLGetAttribLocation(napi_env env, napi_callback_info info);
 napi_value NapiGLGetBooleanv(napi_env env, napi_callback_info info);
 napi_value NapiGLGetBufferParameteriv(napi_env env, napi_callback_info info);
-napi_value NapiGLGetBufferParameteri64v(napi_env env, napi_callback_info info) ;
+napi_value NapiGLGetBufferParameteri64v(napi_env env, napi_callback_info info);
 napi_value NapiGLGetError(napi_env env, napi_callback_info info);
 napi_value NapiGLGetFloatv(napi_env env, napi_callback_info info);
 napi_value NapiGLGetFramebufferAttachmentParameteriv(napi_env env, napi_callback_info info);
@@ -166,6 +166,11 @@ napi_value NapiGLVertexAttribPointer(napi_env env, napi_callback_info info);
 napi_value NapiGLViewport(napi_env env, napi_callback_info info);
 napi_value NapiGLBindVertexArray(napi_env env, napi_callback_info info);
 napi_value NapiGLBindVertexBuffer(napi_env env, napi_callback_info info);
+// napi_value NapiGLMapBufferRange(napi_env env, napi_callback_info info);
+napi_value NapiGLVertexAttribFormat(napi_env env, napi_callback_info info);
+napi_value NapiGLVertexAttribIFormat(napi_env env, napi_callback_info info);
+napi_value NapiGLVertexAttribBinding(napi_env env, napi_callback_info info);
+
 
 } // namespace GLES
 
