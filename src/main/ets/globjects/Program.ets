@@ -1,4 +1,4 @@
-import { glAttachShader, glGetProgramInfoLog } from 'libgles.so';
+import { glAttachShader, glGetError, glGetProgramInfoLog } from 'libgles.so';
 import { GL_INFO_LOG_LENGTH, GL_TRUE, ProgramParamName, ShaderType } from '../constant/Index';
 import {
   glCreateProgram,
@@ -69,8 +69,15 @@ export class Program {
           return false;
         }
       }
-      glAttachShader(this._programId, shader.id);
     }
+
+
+    glAttachShader(this._programId, ...args.map(it => it.id));
+
+
+
+
+
     glLinkProgram(this._programId);
     if (GL_TRUE == glGetProgramiv(this._programId, ProgramParamName.GL_LINK_STATUS)) {
       this._infoLog = '';
@@ -83,10 +90,14 @@ export class Program {
   }
 
   detach(...args: Shader[]) {
-    this.bind();
 
     for (let i = 0; i < args.length; i++) {
+      let err = glGetError();
       glDetachShader(this._programId, args[i].id);
+      err = glGetError();
+      args[i].delete();
+      err = glGetError();
+      console.log('1')
     }
   }
 

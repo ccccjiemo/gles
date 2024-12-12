@@ -227,13 +227,21 @@ napi_value NapiGLActiveTexture(napi_env env, napi_callback_info info) {
 
 napi_value NapiGLAttachShader(napi_env env, napi_callback_info info) {
     size_t argc = 2;
-    napi_value argv[2];
+    napi_get_cb_info(env, info, &argc, nullptr, nullptr, nullptr);
+
+    if (argc == 1)
+        return nullptr;
+
+    napi_value *argv = new napi_value[argc];
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
 
     GLuint program = getGLuint(env, argv[0]);
-    GLuint shader = getGLuint(env, argv[1]);
 
-    glAttachShader(program, shader);
+    for (int i = 1; i < argc; i++) {
+        GLuint shader = getGLuint(env, argv[i]);
+        glAttachShader(program, shader);
+    }
+
     return nullptr;
 }
 
@@ -1633,6 +1641,7 @@ napi_value NapiGLScissor(napi_env env, napi_callback_info info) {
 }
 napi_value NapiGLShaderBinary(napi_env env, napi_callback_info info) { 
 //     glShaderBinary(GLsizei count, const GLuint *shaders, GLenum binaryFormat, const void *binary, GLsizei length)
+
     return nullptr;
 }
 napi_value NapiGLShaderSource(napi_env env, napi_callback_info info) {
@@ -1643,9 +1652,10 @@ napi_value NapiGLShaderSource(napi_env env, napi_callback_info info) {
     char *source = nullptr;
     size_t size = 0;
     napi_get_value_string_utf8(env, argv[1], nullptr, size, &size);
-    source = new char[size + 1];
+    source = new char[size + 1]{'\0'};
+    GLint length = size + 1;
     napi_get_value_string_utf8(env, argv[1], source, size + 1, &size);
-    glShaderSource(shader, 1, &source, nullptr);
+    glShaderSource(shader, 1, &source, &length);
     return nullptr;
 }
 napi_value NapiGLStencilFunc(napi_env env, napi_callback_info info) {

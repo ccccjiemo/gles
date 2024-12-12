@@ -18,7 +18,7 @@ export function glActiveShaderProgram(pipeline: number, program: number): void;
 
 export function glActiveTexture(texture: GLenum): void;
 
-export function glAttachShader(program: number, shader: number): void;
+export function glAttachShader(program: number, ...shader: number[]): void;
 
 export function glBeginQuery(target: GLenum, id: number): void;
 

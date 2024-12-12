@@ -1,3 +1,7 @@
+## [0.2.1] 2024-12-12
+- 修复glShaderSource写入错误
+- 更改glAttachShader (program: number, shader: number) => void 改成 (program: number, ...shader: number[]) => void;
+
 ## [0.2.0] 2024-12-12
 
 - 封装Buffer、VertexBuffer、VertexArray、Texture、Program、shader等方法

@@ -59,7 +59,7 @@ export const glActiveShaderProgram: (pipeline: number, program: number) => void 
 
 export const glActiveTexture: (texture: GLTexture) => void = GLESBase.glActiveTexture;
 
-export const glAttachShader: (program: number, shader: number) => void = GLESBase.glAttachShader;
+export const glAttachShader: (program: number, ...shader: number[]) => void = GLESBase.glAttachShader;
 
 export const glBeginQuery: (target: QueryTarget, id: number) => void = GLESBase.glBeginQuery;
 

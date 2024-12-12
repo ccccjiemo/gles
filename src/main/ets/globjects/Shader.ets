@@ -8,6 +8,7 @@ import {
 } from "../GLES";
 import { fileIo as fs } from "@kit.CoreFileKit";
 import { ShaderParamName, ShaderType, GL_TRUE } from "../constant/Index";
+import { glGetError } from "libgles.so";
 
 export class Shader {
   private _id: number;
@@ -30,6 +31,7 @@ export class Shader {
   static fromString(type: ShaderType, source: string): Shader {
     let shader = new Shader(type);
     shader.setShaderSource(source);
+    shader.compile();
     return shader;
   }
 
@@ -72,6 +74,7 @@ export class Shader {
 
   delete(): boolean {
     glDeleteShader(this._id);
+    let err = glGetError();
     return glGetShaderiv(this._id, ShaderParamName.GL_DELETE_STATUS) == GL_TRUE;
   }
 }
