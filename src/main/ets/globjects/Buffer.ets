@@ -13,9 +13,9 @@ export class Buffer {
   private _id: number;
   private _type: BufferType;
 
-  constructor(target: BufferType) {
+  constructor(target?: BufferType) {
     this._id = glGenBuffers(1)[0];
-    this._type = target;
+    this._type = target ?? BufferType.GL_ARRAY_BUFFER;
   }
 
   get id() {

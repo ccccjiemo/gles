@@ -6,7 +6,8 @@ import {
   glTexImage2D,
   glGenerateMipmap,
   glActiveTexture,
-  glDeleteTextures
+  glDeleteTextures,
+  glTexSubImage2D
 } from "../GLES";
 
 interface Image2DOption {
@@ -17,17 +18,21 @@ interface Image2DOption {
   border?: number;
   format?: InternalFormat;
   type?: IndicesType;
-  data?: ArrayBuffer;
+  data?: ArrayLike<number>;
+}
+
+interface UpdateImage2DOption extends Image2DOption {
+  xoffset?: number,
+  yoffset?: number,
 }
 
 export class Texture {
   private _id: number;
   private _type: TextureTarget;
 
-  constructor(type: TextureTarget) {
-    this._type = type;
+  constructor(type?: TextureTarget) {
+    this._type = type ?? TextureTarget.GL_TEXTURE_2D;
     this._id = glGenTextures(1)[0];
-    glBindTexture(type, this._id);
   }
 
   get id(): number {
@@ -39,11 +44,13 @@ export class Texture {
   }
 
   setParameter(name: TexParamName, value: number): Texture {
+    this.bind();
     glTexParameteri(this._type, name, value);
     return this;
   }
 
   image2D(option?: Image2DOption): void {
+    this.bind();
     glTexImage2D(
       this._type,
       option?.level ?? 0,
@@ -53,11 +60,35 @@ export class Texture {
       option?.border ?? 0,
       option?.format ?? InternalFormat.GL_RGBA,
       option?.type ?? IndicesType.GL_UNSIGNED_BYTE,
-      option?.data ?? undefined
+      option?.data
     )
   }
 
+  updateImage2D(option: UpdateImage2DOption) {
+    this.bind();
+    glTexSubImage2D(
+      this._type,
+      option.level ?? 0,
+      option.xoffset ?? 0,
+      option.yoffset ?? 0,
+      option.width ?? 0,
+      option.height ?? 0,
+      option.format ?? InternalFormat.GL_RGBA,
+      option.type ?? IndicesType.GL_UNSIGNED_BYTE,
+      option.data
+    )
+  }
+
+  bind() {
+    glBindTexture(this._type, this._id);
+  }
+
+  unbind() {
+    glBindTexture(this._type, 0);
+  }
+
   generateMipMap() {
+    this.bind();
     glGenerateMipmap(MipmapTarget.GL_TEXTURE_2D);
   }
 

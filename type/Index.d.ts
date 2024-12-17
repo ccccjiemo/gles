@@ -717,7 +717,8 @@ export namespace gles {
     GL_TEXTURE_CUBE_MAP_ARRAY = 0x9009,
     GL_TEXTURE_BUFFER = 0x8C2A,
     GL_TEXTURE_2D_MULTISAMPLE = 0x9100,
-    GL_TEXTURE_2D_MULTISAMPLE_ARRAY = 0x9102
+    GL_TEXTURE_2D_MULTISAMPLE_ARRAY = 0x9102,
+    GL_TEXTURE_EXTERNAL_OES = 0x8D65
   }
 
   export enum VertexAttribParamName {
@@ -3134,7 +3135,7 @@ export namespace gles {
    * @description Buffer 可用作vbo、ibo等
    */
   export class Buffer {
-    constructor(target: BufferType)
+    constructor(target?: BufferType)
 
     /**
      * @returns buffer handle
@@ -3234,6 +3235,18 @@ export namespace gles {
 
     setUniformf(name: string, v0: number, v1: number, v2: number, v3: number): void
 
+    setUniformi<T extends ivec>(name: string, ivec: T): void
+
+    setUniformi(name: string, v0: number): void
+
+    setUniformi(name: string, v0: number, v1: number): void
+
+    setUniformi(name: string, v0: number, v1: number, v2: number): void
+
+    setUniformi(name: string, v0: number, v1: number, v2: number, v3: number): void
+
+    setUniformi<T extends ivec>(name: string, value: T | number, v1?: number, v2?: number, v3?: number): void
+
     getUniformLocation(name: string): number
 
     delete(): boolean
@@ -3284,6 +3297,8 @@ export namespace gles {
 
   interface vec {}
 
+  interface ivec {}
+
   export class vec2 implements vec {
     constructor(scalar: number)
 
@@ -3331,11 +3346,16 @@ export namespace gles {
     data?: ArrayBuffer;
   }
 
+  export interface UpdateImage2DOption extends Image2DOption {
+    xoffset?: number,
+    yoffset?: number,
+  }
+
   /**
    * @since 0.2.0
    */
   export class Texture {
-    constructor(type: TextureTarget)
+    constructor(type?: TextureTarget)
 
     /**
      * texture handle
@@ -3351,11 +3371,16 @@ export namespace gles {
 
     image2D(option?: Image2DOption): void;
 
+    updateImage2D(option: UpdateImage2DOption)
+
+
     generateMipMap(): void
 
     bindActive(target?: number): void
 
     delete(): void
+
+    bind(): void
   }
 
 
@@ -3388,6 +3413,77 @@ export namespace gles {
     delete(): void
   }
 
+  /**
+   * @since 0.2.2
+   * */
+  export class NativeImage {
+    constructor()
+
+    constructor(texture: Texture)
+
+    constructor(texture_id: number)
+
+    get surfaceId(): string
+
+    /**是否有可用帧*/
+    get isAvailable(): boolean
+
+    get textureId(): number
+
+    /**将NativeImage实例附加到当前OpenGL ES上下文, 且该OpenGL ES纹理会绑定到
+     GL_TEXTURE_EXTERNAL_OES, 并通过NativeImage进行更新*/
+    attachContext(texture_id: number): OHNativeErrorCode
+
+    /**NativeImage实例从当前OpenGL ES上下文分离*/
+    detachContext(): OHNativeErrorCode
+
+    /**
+     * 更新纹理
+     */
+    updateSurfaceImage(): OHNativeErrorCode
+  }
+
+
+  export enum OHNativeErrorCode {
+    /** @error succeed */
+    NATIVE_ERROR_OK = 0,
+    /** @error input invalid parameter */
+    NATIVE_ERROR_INVALID_ARGUMENTS = 40001000,
+    /** @error unauthorized operation */
+    NATIVE_ERROR_NO_PERMISSION = 40301000,
+    /** @error no idle buffer is available */
+    NATIVE_ERROR_NO_BUFFER = 40601000,
+    /** @error the consumer side doesn't exist */
+    NATIVE_ERROR_NO_CONSUMER = 41202000,
+    /** @error uninitialized */
+    NATIVE_ERROR_NOT_INIT = 41203000,
+    /** @error the consumer is connected */
+    NATIVE_ERROR_CONSUMER_CONNECTED = 41206000,
+    /** @error the buffer status did not meet expectations */
+    NATIVE_ERROR_BUFFER_STATE_INVALID = 41207000,
+    /** @error buffer is already in the cache queue */
+    NATIVE_ERROR_BUFFER_IN_CACHE = 41208000,
+    /** @error the buffer queue is full */
+    NATIVE_ERROR_BUFFER_QUEUE_FULL = 41209000,
+    /** @error buffer is not in the cache queue */
+    NATIVE_ERROR_BUFFER_NOT_IN_CACHE = 41210000,
+    /** @error the consumer is disconnected */
+    NATIVE_ERROR_CONSUMER_DISCONNECTED = 41211000,
+    /** @error the consumer not register listener */
+    NATIVE_ERROR_CONSUMER_NO_LISTENER_REGISTERED = 41212000,
+    /** @error the current device or platform does not support it */
+    NATIVE_ERROR_UNSUPPORTED = 50102000,
+    /** @error unknown error, please check log */
+    NATIVE_ERROR_UNKNOWN = 50002000,
+    /** @error hdi interface error */
+    NATIVE_ERROR_HDI_ERROR = 50007000,
+    /** @error ipc send failed */
+    NATIVE_ERROR_BINDER_ERROR = 50401000,
+    /** @error the egl environment is abnormal */
+    NATIVE_ERROR_EGL_STATE_UNKNOWN = 60001000,
+    /** @error egl interface invocation failed */
+    NATIVE_ERROR_EGL_API_FAILED = 60002000,
+  }
 
 }
 

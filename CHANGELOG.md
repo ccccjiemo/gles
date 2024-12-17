@@ -1,3 +1,8 @@
+## [0.2.2] 2024-12-17
+- 新增NativeImage实现同层渲染
+- 增加GL_TEXTURE_EXTERNAL_OES常量
+- Program中增加ivec支持，支持glUniformi*方法
+---
 ## [0.2.1] 2024-12-12
 - 修复glShaderSource写入错误
 - 更改glAttachShader (program: number, shader: number) => void 改成 (program: number, ...shader: number[]) => void;

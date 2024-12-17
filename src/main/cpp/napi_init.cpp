@@ -1,4 +1,5 @@
-#include "GLES.h"
+#include "gles/GLES.h"
+#include "nativeimage/NativeImage.h"
 #include "napi/native_api.h"
 
 
@@ -209,6 +210,13 @@ static napi_value Init(napi_env env, napi_value exports) {
          nullptr},
         {"glVertexAttribBinding", nullptr, GLES::NapiGLVertexAttribBinding, nullptr, nullptr, nullptr, napi_default,
          nullptr},
+
+            {"bindNativeImage_", nullptr, NativeImage::NapiBindNativeImage, nullptr, nullptr, nullptr, napi_default,
+         nullptr},
+        {"updateSurfaceImage_", nullptr, NativeImage::NapiUpdateSurfaceImage, nullptr, nullptr, nullptr, napi_default,
+         nullptr},
+        {"attachContext_", nullptr, NativeImage::NapiAttachContext, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"detachContext_", nullptr, NativeImage::NapiDetachContext, nullptr, nullptr, nullptr, napi_default, nullptr}
 
     };
 

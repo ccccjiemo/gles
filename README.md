@@ -22,18 +22,61 @@ import { gles } from '@jemoc/gles';
 
 ```typescript
 //使用枚举类型
-gles.glClear(gles.GLbitfield.GL_COLOR_BUFFER_BIT);
+gles.GLbitfield.GL_COLOR_BUFFER_BIT
 //直接使用
-gles.glClear(gles.GL_COLOR_BUFFER_BIT);
+gles.GL_COLOR_BUFFER_BIT
 ```
 
+---
+
+#### 0.2.2 新增NativeImage支持
+
+##### NativeImage需要egl环境支持。可以实现渲染视频帧/同层渲染等需求。复杂NativeWindow操作，需要自己实现napi功能。详细查询[OH_NativeImage](https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V13/_o_h___native_image-V13#oh_nativeimage-1)
+
+```typescript
+let nativeImage = new gles.NativeImage(); //创建NativeImage，可以使用在try catch中执行。创建失败会抛出错误
+let surfaceId = nativeImage.surfaceId; //创建surfaceId成功后可以获取surfaceId  
+
+
+//以下在egl上下文环境并执行了eglMakeCurrent
+
+//创建GL_TEXTURE_EXTERNAL_OES纹理
+let texture = new gles.Texture(gles.GL_TEXTURE_EXTERNAL_OES);
+texture
+  .setParameter(gles.GL_TEXTURE_WRAP_S, gles.GL_REPEAT)
+  .setParameter(gles.GL_TEXTURE_WRAP_T, gles.GL_REPEAT)
+  .setParameter(gles.GL_TEXTURE_MIN_FILTER, gles.GL_LINEAR)
+  .setParameter(gles.GL_TEXTURE_MAG_FILTER, gles.GL_LINEAR)
+let error = nativeImage.attachContext(texture.id);
+
+//由于缓存env属于危险操作，目前提供的NativeImage不支持设置帧回调，判断是否有可用帧更新，请用以下方法判断
+//实现原理Native层劫持ArrayBuffer内存地址，当有可用帧更新会改写其中内容(线程不安全)。但在js这种单线程下应该是安全的（如有其他问题请告知）。
+//NativeImage对象会随gc自动释放  
+if (nativeImage.isAvailable) {
+  nativeImage.updateSurfaceImage();
+}
+
+```
+
+FragmentShader中需要加上以下代码
+
+```shell
+#extension GL_OES_EGL_image_external : require
+```
+
+需要arkTS侧使用egl，可以安装@jemoc/egl
+
+---
+
 #### 绘制三角形
+
 ##### 定义shader和顶点数组
+
 ```typescript
 let vertex_list = new Float32Array([
   -0.5, -0.5, 0.0,
   0.5, -0.5, 0.0,
-  0.0, 0.5, 0.0, 
+  0.0, 0.5, 0.0,
 ]);
 
 let vertexShaderSource =
@@ -57,7 +100,9 @@ let fragmentShaderSource =
           fragColor = v_color;
       }`;
 ```
+
 ##### 使用封装方法
+
 ```typescript
 let buffer = new gles.Buffer(gles.GL_ARRAY_BUFFER);
 buffer.setData(vertex_list, gles.GL_STATIC_DRAW);
@@ -79,7 +124,9 @@ vao.drawArrays(gl.GL_TRIANGLES, 0, 3)
 
 
 ```
+
 ##### 原始方法
+
 ```typescript
 
 //申请buffer
@@ -137,6 +184,8 @@ gles.glDrawArrays(gles.GL_TRIANGLES, 0, 3);
 
 
 ```
+
+#### 在模拟器中绘制三角形结果
 
 ![image](img.png)
 

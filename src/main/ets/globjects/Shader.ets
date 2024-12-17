@@ -58,17 +58,9 @@ export class Shader {
   compile(): boolean {
     let result: boolean = false;
     glCompileShader(this._id);
-    let r = glGetShaderiv(this._id, ShaderParamName.GL_COMPILE_STATUS)
-    let infoLen = glGetShaderiv(this._id, ShaderParamName.GL_INFO_LOG_LENGTH);
-    let len = glGetShaderiv(this._id, ShaderParamName.GL_SHADER_SOURCE_LENGTH);
-    if (GL_TRUE == glGetShaderiv(this._id, ShaderParamName.GL_COMPILE_STATUS)) {
-      this._infoLog = '';
-      result = true;
-    } else {
-      this._infoLog = glGetShaderInfoLog(this._id);
-      result = false;
-    }
-    this._isCompiled = result;
+    let status = glGetShaderiv(this._id, ShaderParamName.GL_COMPILE_STATUS);
+    this._infoLog = glGetShaderInfoLog(this._id);
+    this._isCompiled = status == GL_TRUE ? true : false;
     return result;
   }
 

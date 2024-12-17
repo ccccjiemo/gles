@@ -8,11 +8,12 @@ import {
   glGetUniformLocation,
   glUniform1f,
   glDeleteProgram,
-  glDetachShader
+  glDetachShader,
+  glUniform1i
 } from '../GLES'
 import { Shader } from './Shader';
 import { HashMap } from '@kit.ArkTS';
-import { vec, vec2, vec3, vec4 } from '../glm/vec';
+import { ivec, ivec2, ivec3, ivec4, vec, vec2, vec3, vec4 } from '../glm/vec';
 
 export class Program {
   private _programId: number;
@@ -61,7 +62,6 @@ export class Program {
   }
 
   attach(...args: Shader[]): boolean {
-    this.bind();
     for (let i = 0; i < args.length; i++) {
       let shader = args[i];
       if (!shader.isCompiled) {
@@ -70,23 +70,11 @@ export class Program {
         }
       }
     }
-
-
     glAttachShader(this._programId, ...args.map(it => it.id));
-
-
-
-
-
     glLinkProgram(this._programId);
-    if (GL_TRUE == glGetProgramiv(this._programId, ProgramParamName.GL_LINK_STATUS)) {
-      this._infoLog = '';
-      return true;
-    }
-
-
+    let status = glGetProgramiv(this._programId, ProgramParamName.GL_LINK_STATUS);
     this._infoLog = glGetProgramInfoLog(this._programId);
-    return false;
+    return status == GL_TRUE;
   }
 
   detach(...args: Shader[]) {
@@ -136,10 +124,46 @@ export class Program {
     } else {
       this.bind();
 
-      value.setUniform(location);
+      value.setUniformf(location);
     }
+  }
 
+  setUniformi<T extends ivec>(name: string, ivec: T): void
 
+  setUniformi(name: string, v0: number): void
+
+  setUniformi(name: string, v0: number, v1: number): void
+
+  setUniformi(name: string, v0: number, v1: number, v2: number): void
+
+  setUniformi(name: string, v0: number, v1: number, v2: number, v3: number): void
+
+  setUniformi<T extends ivec>(name: string, value: T | number, v1?: number, v2?: number, v3?: number): void {
+    let location = this.getUniformLocation(name);
+    if (typeof value == 'number') {
+      switch (arguments.length) {
+        case 2:
+          this.bind();
+
+          glUniform1i(location, value);
+          break;
+        case 3:
+          this.setUniformi(name, new ivec2(value, v1!));
+          break;
+        case 4:
+          this.setUniformi(name, new ivec3(value, v1!, v2!));
+          break;
+        case 5:
+          this.setUniformi(name, new ivec4(value, v1!, v2!, v3!));
+          break;
+        default:
+          throw Error('argument out of range');
+      }
+    } else {
+      this.bind();
+
+      value.setUniformi(location);
+    }
   }
 
   getUniformLocation(name: string): number {

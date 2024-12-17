@@ -55,6 +55,8 @@ export interface GLPrecision {
 }
 
 
+
+
 export const glActiveShaderProgram: (pipeline: number, program: number) => void = GLESBase.glActiveShaderProgram;
 
 export const glActiveTexture: (texture: GLTexture) => void = GLESBase.glActiveTexture;
@@ -370,7 +372,7 @@ export const glStencilOpSeparate: (face: FaceMode, sfail: TestFail, dpfail: Test
 
 export const glTexImage2D: (target: TextureTarget, level: number, internalformat: number, width: number,
   height: number,
-  border: number, format: InternalFormat, type: IndicesType, pixels?: ArrayBufferLike) => void = GLESBase.glTexImage2D;
+  border: number, format: InternalFormat, type: IndicesType, pixels?: ArrayLike<number>) => void = GLESBase.glTexImage2D;
 
 export const glTexParameterf: (target: TextureTarget, pname: TexParamName, param: number) => void =
   GLESBase.glTexParameterf;
@@ -389,7 +391,7 @@ export const glTexParameteriv: (target: TextureTarget, pname: TexParamName, para
   }
 
 export const glTexSubImage2D: (target: TextureTarget, level: number, xoffset: number, yoffset: number, width: number,
-  height: number, format: InternalFormat, type: IndicesType, pixels: ArrayBufferLike) => void =
+  height: number, format: InternalFormat, type: IndicesType, pixels?: ArrayLike<number>) => void =
   GLESBase.glTexSubImage2D;
 
 export const glUniform1f: (location: number, v0: number) => void = GLESBase.glUniform1f;

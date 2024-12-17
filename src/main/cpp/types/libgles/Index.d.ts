@@ -265,7 +265,7 @@ export function glStencilOp(fail: GLenum, zfail: GLenum, zpass: GLenum): void;
 export function glStencilOpSeparate(face: GLenum, sfail: GLenum, dpfail: GLenum, dppass: GLenum): void;
 
 export function glTexImage2D(target: GLenum, level: number, internalformat: number, width: number, height: number,
-  border: number, format: GLenum, type: GLenum, pixels?: ArrayBuffer): void;
+  border: number, format: GLenum, type: GLenum, pixels?: ArrayLike<number>): void;
 
 export function glTexParameterf(target: GLenum, pname: GLenum, param: number): void;
 
@@ -276,7 +276,7 @@ export function glTexParameteri(target: GLenum, pname: GLenum, param: number): v
 export function glTexParameteriv(target: GLenum, pname: GLenum, params: Int32Array): void;
 
 export function glTexSubImage2D(target: GLenum, level: number, xoffset: number, yoffset: number, width: number,
-  height: number, format: GLenum, type: GLenum, pixels: ArrayBuffer): void;
+  height: number, format: GLenum, type: GLenum, pixels?: ArrayLike<number>): void;
 
 export function glUniform1f(location: number, v0: number): void;
 
@@ -359,3 +359,12 @@ export function glVertexAttribFormat(attribindex: number, size: number, type: nu
 export function glVertexAttribIFormat(attribindex: number, size: number, type: number, relativeoffset: number)
 
 export function glVertexAttribBinding(attribindex: number, bindingindex: number): void;
+
+export function bindNativeImage_(target: object, texture_id: number, flag: Uint8Array): string;
+
+export function detachContext_(target: object): number;
+
+export function attachContext_(target: object, texture_id): number;
+
+export function updateSurfaceImage_(target: object): number;
+

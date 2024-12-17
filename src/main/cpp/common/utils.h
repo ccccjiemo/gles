@@ -12,7 +12,7 @@
 #include <js_native_api.h>
 
 
-unsigned int getUint32(napi_env env, napi_value value) {
+static unsigned int getUint32(napi_env env, napi_value value) {
     napi_valuetype type;
     napi_typeof(env, value, &type);
 
@@ -24,7 +24,7 @@ unsigned int getUint32(napi_env env, napi_value value) {
     return result;
 }
 
-int getInt32(napi_env env, napi_value value) {
+static int getInt32(napi_env env, napi_value value) {
     napi_valuetype type;
     napi_typeof(env, value, &type);
 
@@ -37,11 +37,11 @@ int getInt32(napi_env env, napi_value value) {
 }
 
 
-GLenum getGLenum(napi_env env, napi_value value) { return getUint32(env, value); }
+static GLenum getGLenum(napi_env env, napi_value value) { return getUint32(env, value); }
 
-GLuint getGLuint(napi_env env, napi_value value) { return getUint32(env, value); }
+static GLuint getGLuint(napi_env env, napi_value value) { return getUint32(env, value); }
 
-GLfloat getGLfloat(napi_env env, napi_value value) {
+static GLfloat getGLfloat(napi_env env, napi_value value) {
     napi_valuetype type;
     napi_typeof(env, value, &type);
 
@@ -53,7 +53,7 @@ GLfloat getGLfloat(napi_env env, napi_value value) {
     return result;
 }
 
-GLchar *getGLchar(napi_env env, napi_value value) {
+static GLchar *getGLchar(napi_env env, napi_value value) {
     napi_valuetype type;
     napi_typeof(env, value, &type);
 
@@ -68,7 +68,7 @@ GLchar *getGLchar(napi_env env, napi_value value) {
     return str;
 }
 
-void getArray(napi_env env, napi_value value, void **array, size_t *size) {
+static void getArray(napi_env env, napi_value value, void **array, size_t *size) {
     /*    napi_typedarray_type type;
         size_t byte_offset;
         napi_value input_buffer;*/
@@ -92,25 +92,25 @@ void getArray(napi_env env, napi_value value, void **array, size_t *size) {
 }
 
 
-napi_value createNapiInt32(napi_env env, int32_t value) {
+static napi_value createNapiInt32(napi_env env, int32_t value) {
     napi_value result = nullptr;
     napi_create_int32(env, value, &result);
     return result;
 }
 
-napi_value createNapiFloat(napi_env env, float value) {
+static napi_value createNapiFloat(napi_env env, float value) {
     napi_value result = nullptr;
     napi_create_double(env, value, &result);
     return result;
 }
 
-void createGLuintArray(napi_env env, napi_value *array_buffer, void **data, size_t len) {
+static void createGLuintArray(napi_env env, napi_value *array_buffer, void **data, size_t len) {
     napi_value buffers = nullptr;
     napi_create_arraybuffer(env, sizeof(GLuint) * len, data, &buffers);
     napi_create_typedarray(env, napi_uint32_array, len, buffers, 0, array_buffer);
 }
 
-void transformData(napi_env env, napi_value value, GLenum type, int size) {
+static void transformData(napi_env env, napi_value value, GLenum type, int size) {
     
 }
 
