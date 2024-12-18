@@ -1,4 +1,4 @@
-import { attachContext_, bindNativeImage_, detachContext_, updateSurfaceImage_ } from 'libgles.so';
+import { attachContext_, bindNativeImage_, destroyNativeImage_, detachContext_, updateSurfaceImage_ } from 'libgles.so';
 import { Texture } from './globjects/Texture';
 
 export class NativeImage {
@@ -50,6 +50,13 @@ export class NativeImage {
     this._flag[0] = 0;
     let error = updateSurfaceImage_(this);
     return error;
+  }
+
+  destroy():void {
+    if(this._surfaceId == '') return;
+    destroyNativeImage_(this);
+    this._surfaceId = '';
+    this._texture_id = -1;
   }
 }
 

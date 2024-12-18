@@ -16,6 +16,7 @@ napi_value NapiAttachContext(napi_env env, napi_callback_info info);
 napi_value NapiDetachContext(napi_env env, napi_callback_info info);
 napi_value NapiUpdateSurfaceImage(napi_env env, napi_callback_info info);
 napi_value NapiBindNativeImage(napi_env env, napi_callback_info info);
+napi_value NapiDestroyNativeImage(napi_env env, napi_callback_info info);
 } // namespace NativeImage
 
 #endif // GLTEST_NATIVEIMAGE_H

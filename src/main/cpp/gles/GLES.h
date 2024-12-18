@@ -10,7 +10,6 @@
 
 
 namespace GLES {
-void Export(napi_env env, napi_value exports);
 napi_value NapiGLActiveShaderProgram(napi_env env, napi_callback_info info);
 napi_value NapiGLActiveTexture(napi_env env, napi_callback_info info);
 napi_value NapiGLAttachShader(napi_env env, napi_callback_info info);

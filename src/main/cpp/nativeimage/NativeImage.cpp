@@ -15,6 +15,7 @@
 
 namespace NativeImage {
 
+
 // napi_value NapiConstructor(napi_env env, napi_callback_info info) {
 //     size_t argc = 1;
 //     napi_value argv[1] = {nullptr};
@@ -42,6 +43,8 @@ namespace NativeImage {
 
 void NapiDispose(napi_env env, void *finalize_data, void *finalize_hint) {
     OH_NativeImage *image = (OH_NativeImage *)finalize_data;
+    if (image == nullptr)
+        return;
     OH_NativeImage_UnsetOnFrameAvailableListener(image);
     OH_NativeImage_Destroy(&image);
     image = nullptr;
@@ -55,8 +58,10 @@ napi_value NapiAttachContext(napi_env env, napi_callback_info info) {
     uint32_t textureId = 0;
     void *image = nullptr;
     napi_unwrap(env, argv[0], &image);
-    if (nullptr == image)
+    if (image == nullptr) {
+        napi_throw_error(env, "NativeImage::AttachContext", "invalid operation");
         return nullptr;
+    }
     napi_get_value_uint32(env, argv[1], &textureId);
     int32_t error = OH_NativeImage_AttachContext((OH_NativeImage *)image, textureId);
     return createNapiInt32(env, error);
@@ -67,6 +72,10 @@ napi_value NapiDetachContext(napi_env env, napi_callback_info info) {
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
     void *image = nullptr;
     napi_unwrap(env, argv[0], &image);
+    if (image == nullptr) {
+        napi_throw_error(env, "NativeImage::DetachContext", "invalid operation");
+        return nullptr;
+    }
     int32_t error = OH_NativeImage_DetachContext((OH_NativeImage *)image);
     napi_value result = nullptr;
     napi_create_int32(env, error, &result);
@@ -120,10 +129,37 @@ napi_value NapiUpdateSurfaceImage(napi_env env, napi_callback_info info) {
     void *image = nullptr;
     napi_unwrap(env, argv[0], &image);
 
- 
+    if (image == nullptr) {
+        napi_throw_error(env, "NativeImage::UpdateSurfaceImage", "invalid operation");
+        return nullptr;
+    }
+
+
     int error = OH_NativeImage_UpdateSurfaceImage((OH_NativeImage *)image);
-   float matrix[16] = {0};
+    float matrix[16] = {0};
     OH_NativeImage_GetTransformMatrix((OH_NativeImage *)image, matrix);
     return createNapiInt32(env, error);
+}
+
+napi_value NapiDestroyNativeImage(napi_env env, napi_callback_info info) {
+    size_t argc = 1;
+    napi_value argv[1];
+    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+
+    void *image = nullptr;
+    napi_remove_wrap(env, argv[0], &image);
+
+
+    if (image == nullptr) {
+        napi_throw_error(env, "NativeImage::DestroyNativeImage", "invalid operation");
+        return nullptr;
+    }
+
+    auto img = (OH_NativeImage *)image;
+    OH_NativeImage_UnsetOnFrameAvailableListener(img);
+    OH_NativeImage_Destroy(&img);
+    image = nullptr;
+
+    return nullptr;
 }
 } // namespace NativeImage

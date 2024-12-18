@@ -368,3 +368,4 @@ export function attachContext_(target: object, texture_id): number;
 
 export function updateSurfaceImage_(target: object): number;
 
+export function destroyNativeImage_(target: object): void;

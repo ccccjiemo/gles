@@ -3441,6 +3441,8 @@ export namespace gles {
      * 更新纹理
      */
     updateSurfaceImage(): OHNativeErrorCode
+
+    destroy(): void
   }
 
 

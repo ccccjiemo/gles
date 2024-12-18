@@ -216,7 +216,8 @@ static napi_value Init(napi_env env, napi_value exports) {
         {"updateSurfaceImage_", nullptr, NativeImage::NapiUpdateSurfaceImage, nullptr, nullptr, nullptr, napi_default,
          nullptr},
         {"attachContext_", nullptr, NativeImage::NapiAttachContext, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"detachContext_", nullptr, NativeImage::NapiDetachContext, nullptr, nullptr, nullptr, napi_default, nullptr}
+        {"detachContext_", nullptr, NativeImage::NapiDetachContext, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"destroyNativeImage_", nullptr, NativeImage::NapiDestroyNativeImage, nullptr, nullptr, nullptr, napi_default, nullptr}
 
     };
 
