@@ -10,6 +10,7 @@
 #include <native_image/native_image.h>
 #include <native_window/external_window.h>
 #include "NativeImage.h"
+#include "atomic/Atomic.h"
 #include "common/utils.h"
 
 
@@ -90,18 +91,16 @@ napi_value NapiBindNativeImage(napi_env env, napi_callback_info info) {
     GLuint texture = 0;
     napi_get_value_uint32(env, argv[1], &texture);
 
-    void *array = nullptr;
-    size_t size = 0;
-    getArray(env, argv[2], &array, &size);
+    std::atomic_int *flag = Atomic::GetAtomicInt(env, argv[2]);
 
     OH_NativeImage *image = OH_NativeImage_Create(texture, GL_TEXTURE_EXTERNAL_OES);
 
 //     OH_NativeImage *image = OH_ConsumerSurface_Create();
     OH_OnFrameAvailableListener listener;
-    listener.context = array;
+    listener.context = flag;
     listener.onFrameAvailable = [](void *context) {
-        unsigned char *arr = (unsigned char *)context;
-        arr[0] = 1;
+        std::atomic_int *flag = (std::atomic_int *)context;
+        flag->fetch_add(1);
     };
 
     int error = OH_NativeImage_SetOnFrameAvailableListener(image, listener);
@@ -148,17 +147,6 @@ napi_value NapiDestroyNativeImage(napi_env env, napi_callback_info info) {
 
     void *image = nullptr;
     napi_remove_wrap(env, argv[0], &image);
-
-
-    if (image == nullptr) {
-        napi_throw_error(env, "NativeImage::DestroyNativeImage", "invalid operation");
-        return nullptr;
-    }
-
-    auto img = (OH_NativeImage *)image;
-    OH_NativeImage_UnsetOnFrameAvailableListener(img);
-    OH_NativeImage_Destroy(&img);
-    image = nullptr;
 
     return nullptr;
 }

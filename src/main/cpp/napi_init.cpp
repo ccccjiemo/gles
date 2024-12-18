@@ -1,3 +1,4 @@
+#include "atomic/Atomic.h"
 #include "gles/GLES.h"
 #include "nativeimage/NativeImage.h"
 #include "napi/native_api.h"
@@ -217,7 +218,16 @@ static napi_value Init(napi_env env, napi_value exports) {
          nullptr},
         {"attachContext_", nullptr, NativeImage::NapiAttachContext, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"detachContext_", nullptr, NativeImage::NapiDetachContext, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"destroyNativeImage_", nullptr, NativeImage::NapiDestroyNativeImage, nullptr, nullptr, nullptr, napi_default, nullptr}
+        {"destroyNativeImage_", nullptr, NativeImage::NapiDestroyNativeImage, nullptr, nullptr, nullptr, napi_default, nullptr},
+        
+          // Atomic
+        {"createAtomicBool_", nullptr, Atomic::NapiCreateAtomicBool, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"getAtomicBoolValue_", nullptr, Atomic::NapiGetBoolValue, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"setAtomicBoolValue_", nullptr, Atomic::NapiSetBoolValue, nullptr, nullptr, nullptr, napi_default, nullptr},
+
+        {"createAtomicInt_", nullptr, Atomic::NapiCreateAtomicInt, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"subAtomicIntValue_", nullptr, Atomic::NapiAtomicIntSub, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"getAtomicIntValue_", nullptr, Atomic::NapiGetIntValue, nullptr, nullptr, nullptr, napi_default, nullptr},
 
     };
 

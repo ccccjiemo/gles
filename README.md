@@ -32,7 +32,7 @@ gles.GL_COLOR_BUFFER_BIT
 #### 0.2.2 新增NativeImage支持
 
 ##### NativeImage需要egl环境支持。可以实现渲染视频帧/同层渲染等需求。复杂NativeWindow操作，需要自己实现napi功能。详细查询[OH_NativeImage](https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V13/_o_h___native_image-V13#oh_nativeimage-1)
-
+NativeImage需求请升级到0.2.3版本。
 ```typescript
 let nativeImage = new gles.NativeImage(); //创建NativeImage，可以使用在try catch中执行。创建失败会抛出错误
 let surfaceId = nativeImage.surfaceId; //创建surfaceId成功后可以获取surfaceId  
@@ -50,7 +50,7 @@ texture
 let error = nativeImage.attachContext(texture.id);
 
 //由于缓存env属于危险操作，目前提供的NativeImage不支持设置帧回调，判断是否有可用帧更新，请用以下方法判断
-//实现原理Native层劫持ArrayBuffer内存地址，当有可用帧更新会改写其中内容(线程不安全)。但在js这种单线程下应该是安全的（如有其他问题请告知）。
+//0.2.3版本可用帧判断改用原子操作
 //NativeImage对象会随gc自动释放  
 if (nativeImage.isAvailable) {
   nativeImage.updateSurfaceImage();

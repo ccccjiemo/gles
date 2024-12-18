@@ -1,3 +1,8 @@
+## [0.2.3] 2024-12-18
+- NativeImage可用帧改用原子操作
+- NativeImage增加destroy方法
+
+---
 ## [0.2.2] 2024-12-17
 - 新增NativeImage实现同层渲染
 - 增加GL_TEXTURE_EXTERNAL_OES常量

@@ -1,8 +1,9 @@
 import { attachContext_, bindNativeImage_, destroyNativeImage_, detachContext_, updateSurfaceImage_ } from 'libgles.so';
+import { AtomicInt } from './atomic/AtomicInt';
 import { Texture } from './globjects/Texture';
 
 export class NativeImage {
-  private _flag: Uint8Array;
+  private _flag: AtomicInt;
   private _surfaceId: string;
   private _texture_id: number;
 
@@ -13,7 +14,7 @@ export class NativeImage {
   constructor(texture_id: number)
 
   constructor(value?: number | Texture) {
-    this._flag = new Uint8Array(1);
+    this._flag = new AtomicInt(0);
     if (typeof value == 'undefined') {
       this._texture_id = -1;
     } else {
@@ -30,7 +31,7 @@ export class NativeImage {
   }
 
   get isAvailable(): boolean {
-    return this._flag[0] == 1;
+    return this._flag.value != 0;
   }
 
   get textureId(): number {
@@ -47,13 +48,15 @@ export class NativeImage {
   }
 
   updateSurfaceImage(): OHNativeErrorCode {
-    this._flag[0] = 0;
+    this._flag.sub(1);
     let error = updateSurfaceImage_(this);
     return error;
   }
 
-  destroy():void {
-    if(this._surfaceId == '') return;
+  destroy(): void {
+    if (this._surfaceId == '') {
+      return;
+    }
     destroyNativeImage_(this);
     this._surfaceId = '';
     this._texture_id = -1;

@@ -360,7 +360,7 @@ export function glVertexAttribIFormat(attribindex: number, size: number, type: n
 
 export function glVertexAttribBinding(attribindex: number, bindingindex: number): void;
 
-export function bindNativeImage_(target: object, texture_id: number, flag: Uint8Array): string;
+export function bindNativeImage_(target: object, texture_id: number, flag: object): string;
 
 export function detachContext_(target: object): number;
 
@@ -369,3 +369,18 @@ export function attachContext_(target: object, texture_id): number;
 export function updateSurfaceImage_(target: object): number;
 
 export function destroyNativeImage_(target: object): void;
+
+//Atomic
+export function createAtomicBool_(target: object, init: boolean): void;
+
+export function getAtomicBoolValue_(target: object): boolean;
+
+export function setAtomicBoolValue_(target: object, value: boolean): void;
+
+export function createAtomicInt_(target: object, value: number): void;
+
+export function subAtomicIntValue_(target: object, value: number): void;
+
+export function getAtomicIntValue_(target: object);
+
+
