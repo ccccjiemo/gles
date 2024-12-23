@@ -103,7 +103,9 @@ let fragmentShaderSource =
 
 ##### 使用封装方法
 
+
 ```typescript
+//Buffer2 VertexArray2 Program2等支持sendable
 let buffer = new gles.Buffer(gles.GL_ARRAY_BUFFER);
 buffer.setData(vertex_list, gles.GL_STATIC_DRAW);
 
