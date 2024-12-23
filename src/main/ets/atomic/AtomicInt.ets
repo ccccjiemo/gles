@@ -1,5 +1,6 @@
 import { createAtomicInt_, getAtomicIntValue_, subAtomicIntValue_ } from "libgles.so";
 
+@Sendable
 export class AtomicInt {
   constructor(init?: number) {
     createAtomicInt_(this, init ?? 0);

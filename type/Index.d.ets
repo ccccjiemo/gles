@@ -1,3 +1,5 @@
+import { collections } from "@kit.ArkTS";
+
 export namespace gles {
   export type GLboolean = 0 | 1;
 
@@ -810,9 +812,9 @@ export namespace gles {
   export function glBlendFuncSeparatei(buffer: number, sfactorRGB: BlendingFactors, dfactorRGB: BlendingFactors,
     sfactorAlpha: BlendingFactors, dfactorAlpha: BlendingFactors): void;
 
-  export function glBufferData(target: BufferType, data: ArrayBufferLike, usage: BufferUsage): void;
+  export function glBufferData(target: BufferType, data: ArrayLike<number>, usage: BufferUsage): void;
 
-  export function glBufferSubData(target: BufferType, offset: number, data: ArrayBufferLike): void;
+  export function glBufferSubData(target: BufferType, offset: number, data: ArrayLike<number>): void;
 
   export function glCheckFramebufferStatus(target: FrameBufferTarget): FrameBufferStatus;
 
@@ -1119,7 +1121,8 @@ export namespace gles {
    * @param type
    * @param relativeoffset
    */
-  export function glVertexAttribIFormat(attribindex: number, size: number, type: IndicesType, relativeoffset: number)
+  export function glVertexAttribIFormat(attribindex: number, size: number, type: IndicesType,
+    relativeoffset: number): void
 
   /**
    * @since 0.2.0
@@ -3177,6 +3180,40 @@ export namespace gles {
     delete(): void
   }
 
+
+  /**
+   * @since 0.2.4
+   */
+  @Sendable
+  export class Buffer2 {
+    private _id: number;
+    private _type: number;
+
+    constructor(target?: BufferType)
+
+    get id(): number
+
+    get bufferType(): number
+
+    bind(): void
+
+    unbind(): void
+
+    // map(access?: BufferAccessMode) {
+    // }
+
+    setData(data: ArrayLike<number>, usage: BufferUsage): void
+
+    setSubData(data: ArrayLike<number>, offset: number): void
+
+
+    getParameter(pname: BufferParamName): number
+
+    getParameter64(pname: BufferParamName): number
+
+    delete(): void
+  }
+
   /**
    * @since 0.2.0
    * @description opengl program
@@ -3252,6 +3289,62 @@ export namespace gles {
     delete(): boolean
   }
 
+
+  /**
+   * @since 0.2.4
+   */
+  @Sendable
+  export class Program2 {
+    constructor()
+
+    get id(): number
+
+    get infoLog(): string
+
+    get attachedShader(): number
+
+    get activeAttributes(): number
+
+    get activeUniforms(): number
+
+    get activeAttributeMaxLength(): number
+
+    get activeUniformMaxLength(): number
+
+    bind(): void
+
+    unbind(): void
+
+    attach(...args: Shader2[]): boolean
+
+    detach(...args: Shader2[]): void
+
+    setUniformf<T extends vec>(name: string, vec: T): void
+
+    setUniformf(name: string, v0: number): void
+
+    setUniformf(name: string, v0: number, v1: number): void
+
+    setUniformf(name: string, v0: number, v1: number, v2: number): void
+
+    setUniformf(name: string, v0: number, v1: number, v2: number, v3: number): void
+
+    setUniformi<T extends ivec>(name: string, ivec: T): void
+
+    setUniformi(name: string, v0: number): void
+
+    setUniformi(name: string, v0: number, v1: number): void
+
+    setUniformi(name: string, v0: number, v1: number, v2: number): void
+
+    setUniformi(name: string, v0: number, v1: number, v2: number, v3: number): void
+
+
+    getUniformLocation(name: string): number
+
+    delete(): boolean
+  }
+
   /**
    * @since 0.2.0
    * opengl shader封装
@@ -3294,6 +3387,34 @@ export namespace gles {
      */
     delete(): boolean
   }
+
+
+  /**
+   * @since 0.2.4
+   */
+  @Sendable
+  export class Shader2 {
+    constructor(type: ShaderType)
+
+    static fromUri(type: ShaderType, uri: string, encoding?: string): Shader2
+
+    static fromString(type: ShaderType, source: string): Shader2
+
+    get id(): number
+
+    get infoLog(): string
+
+    get shaderType(): ShaderType
+
+    get isCompiled(): boolean
+
+    setShaderSource(source: string): void
+
+    compile(): boolean
+
+    delete(): boolean
+  }
+
 
   interface vec {}
 
@@ -3371,7 +3492,7 @@ export namespace gles {
 
     image2D(option?: Image2DOption): void;
 
-    updateImage2D(option: UpdateImage2DOption)
+    updateImage2D(option: UpdateImage2DOption): void
 
 
     generateMipMap(): void
@@ -3384,31 +3505,86 @@ export namespace gles {
   }
 
 
+  /**
+   * @since 0.2.4
+   */
+  @Sendable
+  export class Texture2 {
+    constructor(type?: TextureTarget)
+
+    get id(): number
+
+    get textureType(): TextureTarget
+
+    setParameter(name: TexParamName, value: number): Texture2
+
+    image2D(option?: Image2DOption): void
+
+    updateImage2D(option: UpdateImage2DOption): void
+
+    bind(): void
+
+    unbind(): void
+
+    generateMipMap(): void
+
+    bindActive(target?: number): void
+
+    delete(): void
+  }
+
+
   export class VertexArray {
     constructor()
 
     get id(): number
 
-    bind()
+    bind(): void
 
-    unbind()
+    unbind(): void
 
-    enable(attributeIndex: number)
+    enable(attributeIndex: number): void
 
-    disable(attributeIndex: number)
+    disable(attributeIndex: number): void
 
-    drawArrays(mode: DrawMode, first: number, count: number)
+    drawArrays(mode: DrawMode, first: number, count: number): void
 
-    drawElements(mode: DrawMode, count: number, indices: Uint8Array | Uint16Array | Uint32Array)
+    drawElements(mode: DrawMode, count: number, indices: Uint8Array | Uint16Array | Uint32Array): void
 
     setBuffer(buffer: Buffer, index: number, size: number, type: IndicesType, normalized: boolean, stride: number,
-      pointer: number)
+      pointer: number): void
 
     /**
      * @deprecated
      * VertexArrayBinding
      */
-    binding(vertexIndex: number)
+    binding(vertexIndex: number): void
+
+    delete(): void
+  }
+
+
+  @Sendable
+  export class VertexArray2 {
+    constructor()
+
+    get id(): number
+
+    bind(): void
+
+    unbind(): void
+
+    enable(attributeIndex: number): void
+
+    disable(attributeIndex: number): void
+
+    drawArrays(mode: DrawMode, first: number, count: number): void
+
+    drawElements(mode: DrawMode, count: number,
+      indices: collections.Uint8Array | collections.Uint16Array | collections.Uint32Array): void
+
+    setBuffer(buffer: Buffer2, index: number, size: number, type: IndicesType, normalized: boolean, stride: number,
+      pointer: number): void
 
     delete(): void
   }
@@ -3416,6 +3592,7 @@ export namespace gles {
   /**
    * @since 0.2.2
    * */
+  @Sendable
   export class NativeImage {
     constructor()
 
@@ -3487,6 +3664,410 @@ export namespace gles {
     NATIVE_ERROR_EGL_API_FAILED = 60002000,
   }
 
+}
+
+
+@Sendable
+export class GL {
+  glActiveShaderProgram(pipeline: number, program: number): void
+
+  glActiveTexture(texture: gles.GLTexture): void
+
+  glAttachShader(program: number, ...shader: number[]): void
+
+  glBeginQuery(target: gles.QueryTarget, id: number): void
+
+  glEndQuery(target: gles.QueryTarget): void
+
+  glBeginTransformFeedback(primitiveMode: gles.PrimitiveMode): void
+
+  glEndTransformFeedback(): void
+
+  glBindAttribLocation(program: number, index: number, name: string): void
+
+  glBindBuffer(target: gles.BufferType, buffer: number): void
+
+  glBindFramebuffer(target: gles.FrameBufferTarget, framebuffer: number): void
+
+  /***
+   * @param target must be GL_RENDERBUFFER.
+   */
+  glBindRenderbuffer(target: gles.RenderBufferTarget, renderbuffer: number): void
+
+  glBindTexture(target: gles.TextureTarget, texture: number): void
+
+  glBlendColor(red: number, green: number, blue: number, alpha: number): void
+
+  glBlendEquation(mode: BlendMode): void
+
+  glBlendEquationi(buffer: number, mode: BlendMode): void
+
+  glBlendEquationSeparate(modeRGB: BlendMode, modeAlpha: BlendMode): void
+
+  glBlendFunc(sfactor: gles.BlendingFactors, dfactor: gles.BlendingFactors): void
+
+  glBlendFuncSeparate(sfactorRGB: gles.BlendingFactors, dfactorRGB: gles.BlendingFactors,
+    sfactorAlpha: gles.BlendingFactors,
+    dfactorAlpha: gles.BlendingFactors): void
+
+  glBlendFuncSeparatei(buffer: number, sfactorRGB: gles.BlendingFactors, dfactorRGB: gles.BlendingFactors,
+    sfactorAlpha: gles.BlendingFactors,
+    dfactorAlpha: gles.BlendingFactors): void
+
+  glBufferData(target: gles.BufferType, data: ArrayLike<number>, usage: gles.BufferUsage): void
+
+  glBufferSubData(target: gles.BufferType, offset: number, data: ArrayLike<number>): void
+
+  glCheckFramebufferStatus(target: gles.FrameBufferTarget): gles.FrameBufferStatus
+
+  glClear(mask: gles.GLbitfield): void
+
+  glClearColor(red: number, green: number, blue: number, aplha: number): void
+
+  glClearDepthf(d: number): void
+
+  glClearStencil(s: number): void
+
+  glColorMask(red: boolean, green: boolean, blue: boolean, alpha: boolean): void
+
+  glCompileShader(shader: number): void
+
+  glCompressedTexImage2D(target: gles.TexImage2DTarget, level: number,
+    internalformat: gles.CompressedInternalFormat,
+    width: number, height: number, border: number, data: ArrayLike<number>): void
+
+  glCopyTexImage2D(target: gles.TexImage2DTarget, level: number, internalformat: gles.InternalFormat,
+    x: number, y: number, width: number, height: number, border: number): void
+
+  glCopyTexSubImage2D(target: gles.TexImage2DTarget, level: number, xoffset: number, yoffset: number,
+    x: number, y: number, width: number, height: number): void
+
+  glCreateProgram(): number
+
+  glCreateShader(type: gles.ShaderType): number
+
+  glCullFace(mode: gles.FaceMode): void
+
+  glDeleteBuffers(...buffers: number[]): void
+
+  glDeleteVertexArrays(...arrays: number[]): void
+
+  glDeleteFramebuffers(...buffers: number[]): void
+
+  glDeleteProgram(program: number): void
+
+  glDeleteRenderbuffers(...buffers: number[]): void
+
+  glDeleteShader(shader: number): void
+
+  glDeleteTextures(...textures: number[]): void
+
+  glDepthFunc(func: gles.Func): void
+
+  glDepthMask(flag: boolean): void
+
+  glDepthRangef(n: number, f: number): void
+
+  glDetachShader(program: number, shader: number): void
+
+  glDisable(cap: gles.GLCapability): void
+
+  glDisableVertexAttribArray(index: number): void
+
+  glDrawArrays(mode: gles.DrawMode, first: number, count: number): void
+
+  glDrawElements(mode: gles.DrawMode, count: number, type: gles.IndicesType, indices: ArrayLike<number>): void
+
+  glEnable(cap: gles.GLCapability): void
+
+  glEnableVertexAttribArray(index: number): void
+
+  glFinish(): void
+
+  glFlush(): void
+
+  glFramebufferRenderbuffer(target: gles.FrameBufferTarget, attachment: gles.FrameBufferAttachment,
+    renderbuffertarget: gles.RenderBufferTarget, renderbuffer: number): void
+
+  glFramebufferTexture2D(target: gles.FrameBufferTarget, attachment: gles.FrameBufferAttachment,
+    textarget: gles.TextureTarget,
+    texture: number,
+    level: number): void
+
+  glFrontFace(mode: gles.FrontFaceMode): void
+
+  glGenBuffers(n: number): Uint32Array
+
+  glGenVertexArrays(n: number): Uint32Array
+
+  /***
+   * @param target not accept GL_TEXTURE_BUFFE,GL_TEXTURE_2D_MULTISAMPLE,GL_TEXTURE_2D_MULTISAMPLE_ARRAY
+   */
+  glGenerateMipmap(target: gles.MipmapTarget): void
+
+  glGenFramebuffers(n: number): Uint32Array
+
+  glGenRenderbuffers(n: number): Uint32Array
+
+  glGenTextures(n: number): Uint32Array
+
+  glGetActiveAttrib(program: number, index: number): gles.GLActiveAttrib
+
+  glGetActiveUniform(program: number, index: number): gles.GLActiveAttrib
+
+  glGetAttachedShaders(program: number): Uint32Array
+
+  glGetAttribLocation(program: number, name: string): number
+
+  glGetBufferParameteriv(target: gles.BufferType, pname: gles.BufferParamName): number
+
+  glGetBufferParameteri64v(target: gles.BufferType, pname: gles.BufferParamName): number
+
+  glGetError(): gles.GLError
+
+  /***
+   * @param pname enum ParamName
+   * @param size buffer size
+   */
+  glGetFloatv(pname: gles.ParamName, size: number): Float32Array
+
+  /***
+   * @param pname enum ParamName
+   * @param size buffer size
+   */
+  glGetBooleanv(pname: gles.ParamName, size: number): Uint8Array
+
+  /***
+   * @param pname enum ParamName
+   * @param size buffer size
+   */
+  glGetIntegerv(pname: gles.ParamName, size: number): Int32Array
+
+  /***
+   * @param pname enum ParamName
+   * @param size buffer size
+   */
+  glGetInteger64v(pname: gles.ParamName, size: number): BigInt64Array
+
+  glGetFramebufferAttachmentParameteriv(target: gles.FrameBufferTarget, attachment: gles.FrameBufferAttachment,
+    pname: gles.FrameBufferAttachmentParamName): number
+
+  glGetProgramiv(program: number, pname: gles.ProgramParamName): number
+
+  glGetProgramInfoLog(program: number): string
+
+  glGetRenderbufferParameteriv(target: gles.RenderBufferTarget, pname: gles.RenderBufferParamName): number
+
+  glGetShaderiv(shader: number, pname: gles.ShaderParamName): number
+
+  glGetShaderInfoLog(shader: number): string
+
+  /***
+   * shaderType must be GL_VERTEX_SHADER or GL_FRAGMENT_SHADER.
+   */
+  glGetShaderPrecisionFormat(shadertype: gles.ShaderType, precisiontype: gles.PrecisionType): gles.GLPrecision
+
+  glGetShaderSource(shader: number): string
+
+  glGetString(name: gles.GetStringName): string
+
+
+  glGetTexParameterfv(target: gles.TextureTarget, pname: gles.TexParamName): number
+
+  glGetTexParameteriv(target: gles.TextureTarget, pname: gles.TexParamName): number
+
+  glGetUniformfv(program: number, location: number): number
+
+  glGetUniformiv(program: number, location: number): number
+
+  glGetUniformLocation(program: number, name: string): number
+
+  glGetVertexAttribfv(index: number, pname: gles.VertexAttribParamName): Float32Array
+
+  glGetVertexAttribiv(index: number, pname: gles.VertexAttribParamName): Int32Array
+
+  /***
+   * @deprecated 方法未实现
+   */
+  glGetVertexAttribPointerv(): void
+
+
+  glHint(target: gles.HintTarget, mode: gles.HintMode): void
+
+
+  glIsBuffer(buffer: number): boolean
+
+  glIsEnabled(cap: gles.GLCapability): boolean
+
+  glIsFramebuffer(framebuffer: number): boolean
+
+  glIsRenderbuffer(renderbuffer: number): boolean
+
+  glIsShader(shader: number): boolean
+
+  glIsTexture(texture: number): boolean
+
+  glLineWidth(width: number): void
+
+
+  glLinkProgram(program: number): void
+
+
+  glPixelStorei(pname: gles.PixelStorageMode, param: number): void
+
+
+  glPolygonOffset(factor: number, units: number): void
+
+
+  glReadPixels(x: number, y: number, width: number, height: number, format: gles.PixelFormat,
+    type: gles.IndicesType): ArrayBuffer
+
+  glReleaseShaderCompiler(): void
+
+
+  glRenderbufferStorage(target: gles.RenderBufferTarget, internalformat: gles.InternalFormat, width: number,
+    height: number): void
+
+  glSampleCoverage(value: number, invert: boolean): void
+
+
+  glScissor(x: number, y: number, width: number, height: number): void
+
+
+  /***
+   * @deprecated 方法未实现
+   */
+  glShaderBinary(): void
+
+
+  glShaderSource(shader: number, source: string): void
+
+
+  glStencilFunc(func: gles.Func, ref: number, mask: number): void
+
+
+  glStencilFuncSeparate(face: gles.FaceMode, func: gles.Func, ref: number, mask: number): void
+
+  glStencilMask(mask: number): void
+
+
+  glStencilMaskSeparate(face: gles.FaceMode, mask: number): void
+
+
+  glStencilOp(fail: gles.TestFail, zfail: gles.TestFail, zpass: gles.TestFail): void
+
+
+  glStencilOpSeparate(face: gles.FaceMode, sfail: gles.TestFail, dpfail: gles.TestFail, dppass: gles.TestFail): void
+
+  glTexImage2D(target: gles.TextureTarget, level: number, internalformat: number, width: number,
+    height: number,
+    border: number, format: gles.InternalFormat, type: gles.IndicesType, pixels?: ArrayLike<number>): void
+
+
+  glTexParameterf(target: gles.TextureTarget, pname: gles.TexParamName, param: number): void
+
+  glTexParameterfv(target: gles.TextureTarget, pname: gles.TexParamName, params: number[]): void
+
+  glTexParameteri(target: gles.TextureTarget, pname: gles.TexParamName, param: number): void
+
+  glTexParameteriv(target: gles.TextureTarget, pname: gles.TexParamName, params: number[]): void
+
+  glTexSubImage2D(target: gles.TextureTarget, level: number, xoffset: number, yoffset: number, width: number,
+    height: number, format: gles.InternalFormat, type: gles.IndicesType, pixels?: ArrayLike<number>): void
+
+  glUniform1f(location: number, v0: number): void
+
+
+  glUniform1fv(location: number, values: number[]): void
+
+  glUniform1i(location: number, v0: number): void
+
+
+  glUniform1iv(location: number, values: number[]): void
+
+  glUniform2f(location: number, v0: number, v1: number): void
+
+
+  glUniform2fv(location: number, values: number[]): void
+
+  glUniform2i(location: number, v0: number, v1: number): void
+
+
+  glUniform2iv(location: number, values: number[]): void
+
+  glUniform3f(location: number, v0: number, v1: number, v2: number): void
+
+
+  glUniform3fv(location: number, values: number[]): void
+
+  glUniform3i(location: number, v0: number, v1: number, v2: number): void
+
+
+  glUniform3iv(location: number, values: number[]): void
+
+  glUniform4f(location: number, v0: number, v1: number, v2: number, v3: number): void
+
+  glUniform4fv(location: number, values: number[]): void
+
+  glUniform4i(location: number, v0: number, v1: number, v2: number, v3: number): void
+
+  glUniform4iv(location: number, values: number[]): void
+
+  glViewport(x: number, y: number, width: number, height: number): void
+
+
+  glVertexAttribPointer(index: number, size: number, type: gles.IndicesType, normalized: boolean,
+    stride: number,
+    pointer: number): void
+
+
+  glUniformMatrix2fv(location: number, count: number, transpose: boolean,
+    value: number[]): void
+
+  glUniformMatrix3fv(location: number, count: number, transpose: boolean,
+    value: number[]): void
+
+  glUniformMatrix4fv(location: number, count: number, transpose: boolean,
+    value: number[]): void
+
+  glUseProgram(program: number): void
+
+
+  glValidateProgram(program: number): void
+
+
+  glVertexAttrib1f(index: number, x: number): void
+
+
+  glVertexAttrib2f(index: number, x: number, y: number): void
+
+
+  glVertexAttrib3f(index: number, x: number, y: number, z: number): void
+
+
+  glVertexAttrib4f(index: number, x: number, y: number, z: number, w: number): void
+
+  glVertexAttrib1fv(index: number, v: number[]): void
+
+  glVertexAttrib2fv(index: number, v: number[]): void
+
+  glVertexAttrib3fv(index: number, v: number[]): void
+
+  glVertexAttrib4fv(index: number, v: number[]): void
+
+  glBindVertexArray(array: number): void
+
+
+  glBindVertexBuffer(bindingindex: number, buffer: number, offset: number, stride: number): void
+
+  glVertexAttribFormat(attribindex: number, size: number, type: gles.IndicesType, normalized: boolean,
+    relativeoffset: number): void
+
+
+  glVertexAttribIFormat(attribindex: number, size: number, type: gles.IndicesType,
+    relativeoffset: number): void
+
+  glVertexAttribBinding(attribindex: number, bindingindex: number): void
 }
 
 

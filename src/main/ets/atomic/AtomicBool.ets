@@ -1,5 +1,6 @@
 import { createAtomicBool_, getAtomicBoolValue_, setAtomicBoolValue_ } from "libgles.so";
 
+@Sendable
 export class AtomicBool {
   constructor(init?: boolean) {
     createAtomicBool_(this, init ?? false);

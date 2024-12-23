@@ -1,11 +1,11 @@
-export { Buffer } from './Buffer'
+export { Buffer, Buffer2 } from './Buffer'
 
-export { Program } from './Program'
+export { Program, Program2 } from './Program'
 
-export { Shader } from './Shader'
+export { Shader, Shader2 } from './Shader'
 
-export { Texture } from './Texture'
+export { Texture, Texture2 } from './Texture'
 
-export { VertexArray } from './VertexArray'
+export { VertexArray, VertexArray2 } from './VertexArray'
 
 export { VertexAttributeBinding } from './VertexAttributeBinding'

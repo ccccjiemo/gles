@@ -1,17 +1,17 @@
 import { DrawMode, IndicesType } from "../constant/Index";
+import { collections, HashMap } from "@kit.ArkTS";
+import { VertexAttributeBinding } from "./VertexAttributeBinding";
+import { Buffer, Buffer2 } from './Buffer'
 import {
   glBindVertexArray,
+  glDeleteVertexArrays,
   glDisableVertexAttribArray,
-  glEnableVertexAttribArray,
-  glGenVertexArrays,
   glDrawArrays,
   glDrawElements,
-  glVertexAttribPointer,
-  glDeleteVertexArrays
-} from "../GLES";
-import { HashMap } from "@kit.ArkTS";
-import { VertexAttributeBinding } from "./VertexAttributeBinding";
-import { Buffer } from './Buffer'
+  glEnableVertexAttribArray,
+  glGenVertexArrays,
+  glVertexAttribPointer
+} from "libgles.so";
 
 
 export class VertexArray {
@@ -71,7 +71,7 @@ export class VertexArray {
   }
 
   delete() {
-    glDeleteVertexArrays(this._id)
+    glDeleteVertexArrays(new Uint32Array([this._id]));
   }
 }
 
@@ -97,4 +97,76 @@ function getIndicesType(buffer: ArrayLike<number>) {
   }
 
   return IndicesType.GL_UNSIGNED_BYTE;
+}
+
+@Sendable
+export class VertexArray2 {
+  private _id: number;
+
+  // private _bindings: collections.Map<number, VertexAttributeBinding>;
+
+  constructor() {
+    this._id = glGenVertexArrays(1)[0];
+    // this._bindings = new HashMap();
+  }
+
+  get id(): number {
+    return this._id;
+  }
+
+  bind() {
+    glBindVertexArray(this._id);
+  }
+
+  unbind() {
+    glBindVertexArray(0);
+  }
+
+  enable(attributeIndex: number) {
+    glEnableVertexAttribArray(attributeIndex);
+  }
+
+  disable(attributeIndex: number) {
+    glDisableVertexAttribArray(attributeIndex);
+  }
+
+  drawArrays(mode: DrawMode, first: number, count: number) {
+    this.bind();
+    glDrawArrays(mode, first, count);
+  }
+
+  drawElements(mode: DrawMode, count: number,
+    indices: collections.Uint8Array | collections.Uint16Array | collections.Uint32Array) {
+    this.bind();
+    let type = 0;
+    if (indices instanceof Uint8Array) {
+      type = IndicesType.GL_UNSIGNED_BYTE;
+    } else if (indices instanceof Uint16Array) {
+      type = IndicesType.GL_UNSIGNED_SHORT;
+    } else {
+      type = IndicesType.GL_UNSIGNED_INT;
+    }
+    glDrawElements(mode, count, type, indices);
+  }
+
+  setBuffer(buffer: Buffer2, index: number, size: number, type: IndicesType, normalized: boolean, stride: number,
+    pointer: number) {
+    this.bind();
+    buffer.bind();
+    glVertexAttribPointer(index, size, type, normalized ? 1 : 0, stride, pointer);
+  }
+
+  // binding(vertexIndex: number) {
+  //   if (this._bindings.hasKey(vertexIndex)) {
+  //     return this._bindings.get(vertexIndex);
+  //   }
+  //
+  //   let binding = new VertexAttributeBinding(this, vertexIndex);
+  //   this._bindings.set(vertexIndex, binding);
+  //   return binding;
+  // }
+
+  delete() {
+    glDeleteVertexArrays(new Uint32Array([this._id]));
+  }
 }

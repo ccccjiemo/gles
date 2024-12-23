@@ -1,14 +1,29 @@
+## [0.2.4] 2024-12-24
+
+- NativeImage增加Sendable装饰器，可以在多线程中操作
+- 封装方法增加Sendable支持
+- 增加GLES构造函数（方便后续glview中的GLRender中传递，移除@jemoc/gles直接暴露）
+- 修复部分入参问题
+
+---
+
 ## [0.2.3] 2024-12-18
+
 - NativeImage可用帧改用原子操作
 - NativeImage增加destroy方法
 
 ---
+
 ## [0.2.2] 2024-12-17
+
 - 新增NativeImage实现同层渲染
 - 增加GL_TEXTURE_EXTERNAL_OES常量
 - Program中增加ivec支持，支持glUniformi*方法
+
 ---
+
 ## [0.2.1] 2024-12-12
+
 - 修复glShaderSource写入错误
 - 更改glAttachShader (program: number, shader: number) => void 改成 (program: number, ...shader: number[]) => void;
 

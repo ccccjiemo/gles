@@ -55,8 +55,6 @@ export interface GLPrecision {
 }
 
 
-
-
 export const glActiveShaderProgram: (pipeline: number, program: number) => void = GLESBase.glActiveShaderProgram;
 
 export const glActiveTexture: (texture: GLTexture) => void = GLESBase.glActiveTexture;
@@ -72,7 +70,7 @@ export const glBeginTransformFeedback: (primitiveMode: PrimitiveMode) => void =
 
 export const glEndTransformFeedback: () => void = GLESBase.glEndTransformFeedback;
 
-export const glBindAttribLocation: (program: number, index: number, name: number) => void =
+export const glBindAttribLocation: (program: number, index: number, name: string) => void =
   GLESBase.glBindAttribLocation;
 
 export const glBindBuffer: (target: BufferType, buffer: number) => void = GLESBase.glBindBuffer;
@@ -130,7 +128,7 @@ export const glCompileShader: (shader: number) => void = GLESBase.glCompileShade
 
 export const glCompressedTexImage2D: (target: TexImage2DTarget, level: number,
   internalformat: CompressedInternalFormat,
-  width: number, height: number, border: number, data: ArrayBufferLike) => void = GLESBase.glCompressedTexImage2D;
+  width: number, height: number, border: number, data: ArrayLike<number>) => void = GLESBase.glCompressedTexImage2D;
 
 export const glCompressedTexSubImage2D: (target: TexImage2DTarget, level: number, xoffset: number, yoffset: number,
   width: number, height: number, format: CompressedInternalFormat, data: ArrayBufferLike) => void =
@@ -372,7 +370,8 @@ export const glStencilOpSeparate: (face: FaceMode, sfail: TestFail, dpfail: Test
 
 export const glTexImage2D: (target: TextureTarget, level: number, internalformat: number, width: number,
   height: number,
-  border: number, format: InternalFormat, type: IndicesType, pixels?: ArrayLike<number>) => void = GLESBase.glTexImage2D;
+  border: number, format: InternalFormat, type: IndicesType, pixels?: ArrayLike<number>) => void =
+  GLESBase.glTexImage2D;
 
 export const glTexParameterf: (target: TextureTarget, pname: TexParamName, param: number) => void =
   GLESBase.glTexParameterf;

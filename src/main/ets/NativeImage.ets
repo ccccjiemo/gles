@@ -2,6 +2,7 @@ import { attachContext_, bindNativeImage_, destroyNativeImage_, detachContext_, 
 import { AtomicInt } from './atomic/AtomicInt';
 import { Texture } from './globjects/Texture';
 
+@Sendable
 export class NativeImage {
   private _flag: AtomicInt;
   private _surfaceId: string;

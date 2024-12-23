@@ -62,7 +62,7 @@ static GLchar *getGLchar(napi_env env, napi_value value) {
     size_t size = 0;
     napi_get_value_string_utf8(env, value, nullptr, size, &size);
 
-    char *str = new char[size + 1];
+    char *str = new char[size + 1]{'\0'};
     napi_get_value_string_utf8(env, value, str, size + 1, &size);
 
     return str;
@@ -110,8 +110,6 @@ static void createGLuintArray(napi_env env, napi_value *array_buffer, void **dat
     napi_create_typedarray(env, napi_uint32_array, len, buffers, 0, array_buffer);
 }
 
-static void transformData(napi_env env, napi_value value, GLenum type, int size) {
-    
-}
+static void transformData(napi_env env, napi_value value, GLenum type, int size) {}
 
 #endif // GLTEST_UTILS_H

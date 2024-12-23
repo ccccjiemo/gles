@@ -28,7 +28,7 @@ export function glBeginTransformFeedback(primitiveMode: GLenum): void;
 
 export function glEndTransformFeedback(): void;
 
-export function glBindAttribLocation(program: number, index: number, name: number): void;
+export function glBindAttribLocation(program: number, index: number, name: string): void;
 
 export function glBindBuffer(target: GLenum, buffer: number): void;
 
@@ -58,9 +58,9 @@ export function glBufferData(target: GLenum, data: ArrayLike<number>, usage: GLe
 
 export function glBufferSubData(target: GLenum, offset: number, data: ArrayLike<number>): void;
 
-export function glCheckFramebufferStatus(target: GLenum): void;
+export function glCheckFramebufferStatus(target: GLenum): number;
 
-export function glCheckFramebufferStatus(target: GLenum): GLenum;
+// export function glCheckFramebufferStatus(target: GLenum): GLenum;
 
 export function glClear(mask: number): void;
 
@@ -75,7 +75,7 @@ export function glColorMask(red: GLboolean, green: GLboolean, blue: GLboolean, a
 export function glCompileShader(shader: number): void;
 
 export function glCompressedTexImage2D(target: GLenum, level: number, internalformat: GLenum, width: number,
-  height: number, border: number, data: ArrayBuffer): void;
+  height: number, border: number, data: ArrayLike<number>): void;
 
 export function glCompressedTexSubImage2D(target: GLenum, level: number, xoffset: number, yoffset: number,
   width: number,
@@ -369,6 +369,12 @@ export function attachContext_(target: object, texture_id): number;
 export function updateSurfaceImage_(target: object): number;
 
 export function destroyNativeImage_(target: object): void;
+
+//extends
+export function createShaderWithSource_(type: number, source: string): { handle: number, status: number, log: string }
+
+export function glTexParameteriGroup_(texture: number, target: number,
+  group: Array<{ pname: number, param: number }>): void;
 
 //Atomic
 export function createAtomicBool_(target: object, init: boolean): void;

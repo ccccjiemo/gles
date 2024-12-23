@@ -1,5 +1,6 @@
 #include "atomic/Atomic.h"
 #include "gles/GLES.h"
+#include "gles/GLESExtends.h"
 #include "nativeimage/NativeImage.h"
 #include "napi/native_api.h"
 
@@ -219,6 +220,13 @@ static napi_value Init(napi_env env, napi_value exports) {
         {"attachContext_", nullptr, NativeImage::NapiAttachContext, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"detachContext_", nullptr, NativeImage::NapiDetachContext, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"destroyNativeImage_", nullptr, NativeImage::NapiDestroyNativeImage, nullptr, nullptr, nullptr, napi_default, nullptr},
+        
+        //extends
+        // extend
+        {"createShaderWithSource_", nullptr, GLESExtends::NapiCreateShaderWidthSource, nullptr, nullptr, nullptr,
+         napi_default, nullptr},
+        {"glTexParameteriGroup_", nullptr, GLESExtends::NapiGLTexParameteriGroup, nullptr, nullptr, nullptr, napi_default,
+         nullptr},
         
           // Atomic
         {"createAtomicBool_", nullptr, Atomic::NapiCreateAtomicBool, nullptr, nullptr, nullptr, napi_default, nullptr},
