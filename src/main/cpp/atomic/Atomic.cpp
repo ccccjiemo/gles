@@ -58,51 +58,63 @@ std::atomic_bool *GetAtomicBool(napi_env env, napi_value value) {
 }
 
 napi_value NapiCreateAtomicInt(napi_env env, napi_callback_info info) {
-    size_t argc = 2;
-    napi_value argv[2];
-    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-    bool init = false;
-    napi_get_value_bool(env, argv[1], &init);
+//     size_t argc = 2;
+//     napi_value argv[2];
+//     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+//     bool init = false;
+//     napi_get_value_bool(env, argv[1], &init);
+//     std::atomic_int *at_int = new std::atomic_int(init);
+//
+//     napi_wrap_sendable(
+//         env, argv[0], at_int,
+//         [](napi_env env, void *data, void *init) {
+//             std::atomic_int *flag = (std::atomic_int *)data;
+//             delete flag;
+//             flag = nullptr;
+//         },
+//         nullptr);
+//     return nullptr;
+    size_t argc = 1;
+    napi_value argv[1]{nullptr};
+    napi_value _this = nullptr;
+    napi_get_cb_info(env, info, &argc, argv, &_this, nullptr);
+    int init = false;
+    napi_get_value_int32(env, argv[0], &init);
     std::atomic_int *at_int = new std::atomic_int(init);
-
-    napi_wrap(
-        env, argv[0], at_int,
+    napi_wrap_sendable(
+        env, _this, static_cast<void *>(at_int),
         [](napi_env env, void *data, void *init) {
             std::atomic_int *flag = (std::atomic_int *)data;
             delete flag;
             flag = nullptr;
         },
-        nullptr, nullptr);
-    return nullptr;
+        nullptr);
+    return _this;
 }
 
 napi_value NapiAtomicIntSub(napi_env env, napi_callback_info info) {
-    size_t argc = 2;
-    napi_value argv[2];
-    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-    void *t = nullptr;
-    napi_unwrap(env, argv[0], &t);
-    std::atomic_int *flag = (std::atomic_int *)t;
+    size_t argc = 1;
+    napi_value argv[1];
+    napi_value _this = nullptr;
+    napi_get_cb_info(env, info, &argc, argv, &_this, nullptr);
+    std::atomic_int *flag = GetAtomicInt(env, _this);
     int value = 0;
-    napi_get_value_int32(env, argv[1], &value);
+    napi_get_value_int32(env, argv[0], &value);
     flag->fetch_sub(value);
     return nullptr;
 }
 
 
 napi_value NapiGetIntValue(napi_env env, napi_callback_info info) {
-    size_t argc = 1;
-    napi_value argv[1];
-    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-    void *t = nullptr;
-    napi_unwrap(env, argv[0], &t);
-    std::atomic_int *flag = (std::atomic_int *)t;
+    napi_value _this = nullptr;
+    napi_get_cb_info(env, info, nullptr, nullptr, &_this, nullptr);
+    std::atomic_int *flag = GetAtomicInt(env, _this);
     int result = flag->load();
     return createNapiInt32(env, result);
 }
 std::atomic_int *GetAtomicInt(napi_env env, napi_value value) {
     void *result = nullptr;
-    napi_unwrap(env, value, &result);
+    napi_unwrap_sendable(env, value, &result);
     return (std::atomic_int *)result;
 }
 } // namespace Atomic

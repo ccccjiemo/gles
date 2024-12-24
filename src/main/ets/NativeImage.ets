@@ -1,68 +1,75 @@
-import { attachContext_, bindNativeImage_, destroyNativeImage_, detachContext_, updateSurfaceImage_ } from 'libgles.so';
-import { AtomicInt } from './atomic/AtomicInt';
-import { Texture } from './globjects/Texture';
+// import {
+//   AtomicInt,
+//   attachContext_,
+//   bindNativeImage_,
+//   destroyNativeImage_,
+//   detachContext_,
+//   updateSurfaceImage_
+// } from 'libgles.so';
+// import { Texture } from './globjects/Texture';
+//
+// @Sendable
+// export class NativeImage {
+//   private _flag: AtomicInt = new AtomicInt(0);
+//   private _surfaceId: string;
+//   private _texture_id: number;
+//
+//   constructor()
+//
+//   constructor(texture: Texture)
+//
+//   constructor(texture_id: number)
+//
+//   constructor(value?: number | Texture) {
+//     if (typeof value == 'undefined') {
+//       this._texture_id = -1;
+//     } else {
+//       this._texture_id = typeof value == 'number' ? value : value.id;
+//     }
+//     this._surfaceId = bindNativeImage_(this, this._texture_id, this._flag);
+//     if (!this._surfaceId) {
+//       throw Error('create NativeImage failed')
+//     }
+//   }
+//
+//   get surfaceId(): string {
+//     return this._surfaceId
+//   }
+//
+//   get isAvailable(): boolean {
+//     return this._flag.value != 0;
+//   }
+//
+//   get textureId(): number {
+//     return this._texture_id;
+//   }
+//
+//   attachContext(texture_id: number): OHNativeErrorCode {
+//     this._texture_id = texture_id;
+//     return attachContext_(this, texture_id);
+//   }
+//
+//   detachContext(): OHNativeErrorCode {
+//     return detachContext_(this);
+//   }
+//
+//   updateSurfaceImage(): OHNativeErrorCode {
+//     this._flag.sub(1);
+//     let error = updateSurfaceImage_(this);
+//     return error;
+//   }
+//
+//   destroy(): void {
+//     if (this._surfaceId == '') {
+//       return;
+//     }
+//     destroyNativeImage_(this);
+//     this._surfaceId = '';
+//     this._texture_id = -1;
+//   }
+// }
 
-@Sendable
-export class NativeImage {
-  private _flag: AtomicInt;
-  private _surfaceId: string;
-  private _texture_id: number;
-
-  constructor()
-
-  constructor(texture: Texture)
-
-  constructor(texture_id: number)
-
-  constructor(value?: number | Texture) {
-    this._flag = new AtomicInt(0);
-    if (typeof value == 'undefined') {
-      this._texture_id = -1;
-    } else {
-      this._texture_id = typeof value == 'number' ? value : value.id;
-    }
-    this._surfaceId = bindNativeImage_(this, this._texture_id, this._flag);
-    if (!this._surfaceId) {
-      throw Error('create NativeImage failed')
-    }
-  }
-
-  get surfaceId(): string {
-    return this._surfaceId
-  }
-
-  get isAvailable(): boolean {
-    return this._flag.value != 0;
-  }
-
-  get textureId(): number {
-    return this._texture_id;
-  }
-
-  attachContext(texture_id: number): OHNativeErrorCode {
-    this._texture_id = texture_id;
-    return attachContext_(this, texture_id);
-  }
-
-  detachContext(): OHNativeErrorCode {
-    return detachContext_(this);
-  }
-
-  updateSurfaceImage(): OHNativeErrorCode {
-    this._flag.sub(1);
-    let error = updateSurfaceImage_(this);
-    return error;
-  }
-
-  destroy(): void {
-    if (this._surfaceId == '') {
-      return;
-    }
-    destroyNativeImage_(this);
-    this._surfaceId = '';
-    this._texture_id = -1;
-  }
-}
+export { NativeImage } from 'libgles.so'
 
 export enum OHNativeErrorCode {
   /** @error succeed */

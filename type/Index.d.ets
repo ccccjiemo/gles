@@ -3594,30 +3594,20 @@ export namespace gles {
    * */
   @Sendable
   export class NativeImage {
-    constructor()
-
-    constructor(texture: Texture)
-
-    constructor(texture_id: number)
+    constructor(texture?: number)
 
     get surfaceId(): string
 
-    /**是否有可用帧*/
-    get isAvailable(): boolean
-
-    get textureId(): number
+    get isAvailable(): number
 
     /**将NativeImage实例附加到当前OpenGL ES上下文, 且该OpenGL ES纹理会绑定到
      GL_TEXTURE_EXTERNAL_OES, 并通过NativeImage进行更新*/
-    attachContext(texture_id: number): OHNativeErrorCode
+    attachContext(texture: number): number
 
     /**NativeImage实例从当前OpenGL ES上下文分离*/
-    detachContext(): OHNativeErrorCode
+    detachContext(): number
 
-    /**
-     * 更新纹理
-     */
-    updateSurfaceImage(): OHNativeErrorCode
+    updateSurfaceImage(): number
 
     destroy(): void
   }

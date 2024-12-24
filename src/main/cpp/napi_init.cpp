@@ -12,6 +12,42 @@ static napi_value Init(napi_env env, napi_value exports) {
             { "add", nullptr, Add, nullptr, nullptr, nullptr, napi_default, nullptr }
         };
         napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc);*/
+
+    /***
+     * defined AtomicInt
+     */
+    napi_property_descriptor atomicDesc[] = {
+        {"sub", nullptr, Atomic::NapiAtomicIntSub, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"value", nullptr, nullptr, Atomic::NapiGetIntValue, nullptr, nullptr, napi_default, nullptr},
+    };
+    napi_value atomicIntCons = nullptr;
+    napi_define_sendable_class(env, "AtomicInt", NAPI_AUTO_LENGTH, Atomic::NapiCreateAtomicInt, nullptr,
+                               sizeof(atomicDesc) / sizeof(atomicDesc[0]), atomicDesc, nullptr, &atomicIntCons);
+    napi_set_named_property(env, exports, "AtomicInt", atomicIntCons);
+
+    /***
+     * defined NativeImage
+     */
+
+    napi_property_descriptor nativeImageDesc[] = {
+        {"surfaceId", nullptr, nullptr, NativeImage::NapiGetSurfaceId, nullptr, nullptr, napi_default, nullptr},
+        {"isAvailable", nullptr, nullptr, NativeImage::NapiGetIsAvailable, nullptr, nullptr, napi_default, nullptr},
+        {"attachContext", nullptr, NativeImage::NapiAttachContext, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"detachContext", nullptr, NativeImage::NapiDetachContext, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"updateSurfaceImage", nullptr, NativeImage::NapiUpdateSurfaceImage, nullptr, nullptr, nullptr, napi_default,
+         nullptr},
+        {"destroy", nullptr, NativeImage::NapiDestroyNativeImage, nullptr, nullptr, nullptr, napi_default, nullptr},
+    };
+    napi_value nativeImageCons = nullptr;
+    napi_define_sendable_class(env, "NativeImage", NAPI_AUTO_LENGTH, NativeImage::NapiBindNativeImage, nullptr,
+                               sizeof(nativeImageDesc) / sizeof(nativeImageDesc[0]), nativeImageDesc, nullptr,
+                               &nativeImageCons);
+    napi_set_named_property(env, exports, "NativeImage", nativeImageCons);
+
+
+    /***
+     * defined property
+     */
     napi_property_descriptor desc[] = {
         {"glActiveShaderProgram", nullptr, GLES::NapiGLActiveShaderProgram, nullptr, nullptr, nullptr, napi_default,
          nullptr},
@@ -213,29 +249,31 @@ static napi_value Init(napi_env env, napi_value exports) {
         {"glVertexAttribBinding", nullptr, GLES::NapiGLVertexAttribBinding, nullptr, nullptr, nullptr, napi_default,
          nullptr},
 
-            {"bindNativeImage_", nullptr, NativeImage::NapiBindNativeImage, nullptr, nullptr, nullptr, napi_default,
+        {"bindNativeImage_", nullptr, NativeImage::NapiBindNativeImage, nullptr, nullptr, nullptr, napi_default,
          nullptr},
         {"updateSurfaceImage_", nullptr, NativeImage::NapiUpdateSurfaceImage, nullptr, nullptr, nullptr, napi_default,
          nullptr},
         {"attachContext_", nullptr, NativeImage::NapiAttachContext, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"detachContext_", nullptr, NativeImage::NapiDetachContext, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"destroyNativeImage_", nullptr, NativeImage::NapiDestroyNativeImage, nullptr, nullptr, nullptr, napi_default, nullptr},
-        
-        //extends
-        // extend
+        {"destroyNativeImage_", nullptr, NativeImage::NapiDestroyNativeImage, nullptr, nullptr, nullptr, napi_default,
+         nullptr},
+
+        // extends
+        //  extend
         {"createShaderWithSource_", nullptr, GLESExtends::NapiCreateShaderWidthSource, nullptr, nullptr, nullptr,
          napi_default, nullptr},
-        {"glTexParameteriGroup_", nullptr, GLESExtends::NapiGLTexParameteriGroup, nullptr, nullptr, nullptr, napi_default,
-         nullptr},
-        
-          // Atomic
-        {"createAtomicBool_", nullptr, Atomic::NapiCreateAtomicBool, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"getAtomicBoolValue_", nullptr, Atomic::NapiGetBoolValue, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"setAtomicBoolValue_", nullptr, Atomic::NapiSetBoolValue, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"glTexParameteriGroup_", nullptr, GLESExtends::NapiGLTexParameteriGroup, nullptr, nullptr, nullptr,
+         napi_default, nullptr},
 
-        {"createAtomicInt_", nullptr, Atomic::NapiCreateAtomicInt, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"subAtomicIntValue_", nullptr, Atomic::NapiAtomicIntSub, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"getAtomicIntValue_", nullptr, Atomic::NapiGetIntValue, nullptr, nullptr, nullptr, napi_default, nullptr},
+        // Atomic
+//         {"createAtomicBool_", nullptr, Atomic::NapiCreateAtomicBool, nullptr, nullptr, nullptr, napi_default,
+//         nullptr},
+//         {"getAtomicBoolValue_", nullptr, Atomic::NapiGetBoolValue, nullptr, nullptr, nullptr, napi_default, nullptr},
+//         {"setAtomicBoolValue_", nullptr, Atomic::NapiSetBoolValue, nullptr, nullptr, nullptr, napi_default, nullptr},
+//
+//         {"createAtomicInt_", nullptr, Atomic::NapiCreateAtomicInt, nullptr, nullptr, nullptr, napi_default, nullptr},
+//         {"subAtomicIntValue_", nullptr, Atomic::NapiAtomicIntSub, nullptr, nullptr, nullptr, napi_default, nullptr},
+//         {"getAtomicIntValue_", nullptr, Atomic::NapiGetIntValue, nullptr, nullptr, nullptr, napi_default, nullptr},
 
     };
 

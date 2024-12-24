@@ -356,7 +356,7 @@ export function glDeleteVertexArrays(arrays: Uint32Array): void;
 export function glVertexAttribFormat(attribindex: number, size: number, type: number, normalized: number,
   relativeoffset: number): void;
 
-export function glVertexAttribIFormat(attribindex: number, size: number, type: number, relativeoffset: number)
+export function glVertexAttribIFormat(attribindex: number, size: number, type: number, relativeoffset: number): void
 
 export function glVertexAttribBinding(attribindex: number, bindingindex: number): void;
 
@@ -364,29 +364,65 @@ export function bindNativeImage_(target: object, texture_id: number, flag: objec
 
 export function detachContext_(target: object): number;
 
-export function attachContext_(target: object, texture_id): number;
+export function attachContext_(target: object, texture_id: number): number;
 
 export function updateSurfaceImage_(target: object): number;
 
 export function destroyNativeImage_(target: object): void;
 
 //extends
-export function createShaderWithSource_(type: number, source: string): { handle: number, status: number, log: string }
+interface GeneratedTypeLiteralInterface_1 {
+  handle: number;
+  status: number;
+  log: string;
+}
+
+export function createShaderWithSource_(type: number, source: string): GeneratedTypeLiteralInterface_1
+
+interface GeneratedTypeLiteralInterface_2 {
+  pname: number;
+  param: number;
+}
 
 export function glTexParameteriGroup_(texture: number, target: number,
-  group: Array<{ pname: number, param: number }>): void;
+  group: Array<GeneratedTypeLiteralInterface_2>): void;
 
-//Atomic
-export function createAtomicBool_(target: object, init: boolean): void;
+// //Atomic
+// export function createAtomicBool_(target: object, init: boolean): void;
+//
+// export function getAtomicBoolValue_(target: object): boolean;
+//
+// export function setAtomicBoolValue_(target: object, value: boolean): void;
+//
+// export function createAtomicInt_(target: object, value: number): void;
+//
+// export function subAtomicIntValue_(target: object, value: number): void;
+//
+// export function getAtomicIntValue_(target: object): number;
+@Sendable
+export class AtomicInt {
+  constructor(value: number)
 
-export function getAtomicBoolValue_(target: object): boolean;
+  get value(): number
 
-export function setAtomicBoolValue_(target: object, value: boolean): void;
+  sub(value: number): void
+}
 
-export function createAtomicInt_(target: object, value: number): void;
 
-export function subAtomicIntValue_(target: object, value: number): void;
+@Sendable
+export class NativeImage {
+  constructor(texture?: number)
 
-export function getAtomicIntValue_(target: object);
+  get surfaceId(): string
 
+  get isAvailable(): number
+
+  attachContext(texture: number): number
+
+  detachContext(): number
+
+  updateSurfaceImage(): number
+
+  destroy(): void
+}
 
