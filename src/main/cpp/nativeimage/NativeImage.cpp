@@ -81,7 +81,7 @@ napi_value NapiBindNativeImage(napi_env env, napi_callback_info info) {
     listener.context = flag;
     listener.onFrameAvailable = [](void *context) {
         std::atomic_int *flag = (std::atomic_int *)context;
-        flag->fetch_add(1);
+        (*flag)++;
     };
 
     int error = OH_NativeImage_SetOnFrameAvailableListener(image, listener);
@@ -117,6 +117,10 @@ napi_value NapiUpdateSurfaceImage(napi_env env, napi_callback_info info) {
         return nullptr;
     }
 
+    auto it = atomic_ints.find(image);
+    if (it == atomic_ints.end())
+        napi_throw_error(env, "NativeImage", "Unknown problem");
+    (*(it->second))--;
     int error = OH_NativeImage_UpdateSurfaceImage((OH_NativeImage *)image);
     return createNapiInt32(env, error);
 }
