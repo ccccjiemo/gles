@@ -6,4 +6,8 @@ export * from './glm/Index'
 
 export * from './globjects/Index'
 
-export { NativeImage, OHNativeErrorCode } from './NativeImage'
+export { OHNativeErrorCode } from './NativeImage'
+
+export { NativeImage } from 'libgles.so'
+
+
