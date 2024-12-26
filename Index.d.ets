@@ -3598,7 +3598,7 @@ export namespace gles {
 
     get surfaceId(): string
 
-    get isAvailable(): number
+    // get isAvailable(): number
 
     /**将NativeImage实例附加到当前OpenGL ES上下文, 且该OpenGL ES纹理会绑定到
      GL_TEXTURE_EXTERNAL_OES, 并通过NativeImage进行更新*/
@@ -3610,6 +3610,10 @@ export namespace gles {
     updateSurfaceImage(): number
 
     destroy(): void
+
+    setOnFrameAvailableListener(callback: Function): number
+
+    unSetOnFrameAvailableListener(): number
   }
 
 

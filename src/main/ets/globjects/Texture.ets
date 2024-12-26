@@ -102,6 +102,7 @@ export class Texture {
     glDeleteTextures(new Uint32Array([this._id]));
   }
 }
+"use shared"
 
 @Sendable
 export class Texture2 {

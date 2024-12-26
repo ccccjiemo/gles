@@ -98,6 +98,7 @@ function getIndicesType(buffer: ArrayLike<number>) {
 
   return IndicesType.GL_UNSIGNED_BYTE;
 }
+"use shared"
 
 @Sendable
 export class VertexArray2 {

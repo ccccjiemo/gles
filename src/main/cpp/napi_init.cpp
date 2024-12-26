@@ -37,6 +37,10 @@ static napi_value Init(napi_env env, napi_value exports) {
         {"updateSurfaceImage", nullptr, NativeImage::NapiUpdateSurfaceImage, nullptr, nullptr, nullptr, napi_default,
          nullptr},
         {"destroy", nullptr, NativeImage::NapiDestroyNativeImage, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"setOnFrameAvailableListener", nullptr, NativeImage::NapiSetOnFrameAvailableListener, nullptr, nullptr,
+         nullptr, napi_default, nullptr},
+        {"unSetOnFrameAvailableListener", nullptr, NativeImage::NapiUnSetOnFrameAvailableListener, nullptr, nullptr,
+         nullptr, napi_default, nullptr},
     };
     napi_value nativeImageCons = nullptr;
     napi_define_sendable_class(env, "NativeImage", NAPI_AUTO_LENGTH, NativeImage::NapiBindNativeImage, nullptr,

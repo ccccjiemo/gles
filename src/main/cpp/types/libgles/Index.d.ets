@@ -415,7 +415,7 @@ export class NativeImage {
 
   get surfaceId(): string
 
-  get isAvailable(): number
+  // get isAvailable(): number
 
   attachContext(texture: number): number
 
@@ -424,5 +424,9 @@ export class NativeImage {
   updateSurfaceImage(): number
 
   destroy(): void
+
+  setOnFrameAvailableListener(callback: Function): number
+
+  unSetOnFrameAvailableListener(): number
 }
 

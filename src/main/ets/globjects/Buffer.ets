@@ -63,6 +63,8 @@ export class Buffer {
   }
 }
 
+"use shared"
+
 @Sendable
 export class Buffer2 {
   private _id: number;

@@ -1,39 +1,4 @@
-import { NativeImage } from 'libgles.so'
-
-@Sendable
-export class NativeImageSendable {
-  private _image?: NativeImage;
-
-  constructor(texture?: number) {
-    this._image = new NativeImage(texture);
-  }
-
-  get surfaceId(): string {
-    return this._image?.surfaceId ?? "";
-  }
-
-  get isAvailable(): number {
-    return this._image?.isAvailable ?? 0;
-  }
-
-  attachContext(texture: number): number {
-    return this._image?.attachContext(texture) ?? 0;
-  }
-
-  detachContext(): number {
-    return this._image?.detachContext() ?? 0;
-  }
-
-  updateSurfaceImage(): number {
-    return this._image?.updateSurfaceImage() ?? 0;
-  }
-
-  destroy(): void {
-    this._image?.destroy();
-    this._image = undefined;
-  }
-}
-
+export {NativeImage} from 'libgles.so'
 export enum OHNativeErrorCode {
   /** @error succeed */
   NATIVE_ERROR_OK = 0,
