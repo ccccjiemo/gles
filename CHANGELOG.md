@@ -1,6 +1,23 @@
-## [0.2.6] 2024-12-25
-- 原来这type文件一直没打包进去啊！！！！
+## [0.2.8] 2024-12-26
+
+- 更新README中关于NativeImages说明
+
 ---
+
+## [0.2.7] 2024-12-26
+
+- 移除NativeImage的isAvailable，改成
+  setOnFrameAvailableListener(callback: Function): number
+  /unSetOnFrameAvailableListener(): number
+
+---
+
+## [0.2.6] 2024-12-25
+
+- 原来这type文件一直没打包进去啊！！！！
+
+---
+
 ## [0.2.5] 2024-12-24
 
 - 修复NativeImage无法创建

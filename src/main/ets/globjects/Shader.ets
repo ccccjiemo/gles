@@ -73,6 +73,7 @@ export class Shader {
     return glGetShaderiv(this._id, ShaderParamName.GL_DELETE_STATUS) == GL_TRUE;
   }
 }
+"use shared"
 
 @Sendable
 export class Shader2 {

@@ -188,6 +188,8 @@ export class Program {
   }
 }
 
+"use shared"
+
 @Sendable
 export class Program2 {
   private _programId: number;
