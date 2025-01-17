@@ -1,6 +1,6 @@
 import { fileIo as fs } from "@kit.CoreFileKit";
 import { ShaderParamName, ShaderType, GL_TRUE } from "../constant/Index";
-import { createShaderWithSource_, glCompileShader, glCreateShader,
+import { createShaderWithSource, glCompileShader, glCreateShader,
   glDeleteShader,
   glGetError,
   glGetShaderInfoLog,
@@ -31,7 +31,7 @@ export class Shader {
 
   static fromString(type: ShaderType, source: string): Shader {
     let shader = new Shader(type, true);
-    let result = createShaderWithSource_(type, source);
+    let result = createShaderWithSource(type, source);
     shader._id = result.handle;
     shader._isCompiled = result.status == GL_TRUE;
     shader._infoLog = result.log;
@@ -100,7 +100,7 @@ export class Shader2 {
 
   static fromString(type: ShaderType, source: string): Shader2 {
     let shader = new Shader2(type, true);
-    let result = createShaderWithSource_(type, source);
+    let result = createShaderWithSource(type, source);
     shader._id = result.handle;
     shader._isCompiled = result.status == GL_TRUE;
     shader._infoLog = result.log;

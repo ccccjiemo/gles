@@ -360,15 +360,10 @@ export function glVertexAttribIFormat(attribindex: number, size: number, type: n
 
 export function glVertexAttribBinding(attribindex: number, bindingindex: number): void;
 
-export function bindNativeImage_(target: object, texture_id: number, flag: object): string;
+export function glMapBufferRange(target: number, offset: number, length: number, access: number): ArrayBuffer;
 
-export function detachContext_(target: object): number;
+export function glUnmapBuffer(target: number): boolean;
 
-export function attachContext_(target: object, texture_id: number): number;
-
-export function updateSurfaceImage_(target: object): number;
-
-export function destroyNativeImage_(target: object): void;
 
 //extends
 interface GeneratedTypeLiteralInterface_1 {
@@ -377,36 +372,15 @@ interface GeneratedTypeLiteralInterface_1 {
   log: string;
 }
 
-export function createShaderWithSource_(type: number, source: string): GeneratedTypeLiteralInterface_1
+export function createShaderWithSource(type: number, source: string): GeneratedTypeLiteralInterface_1
 
 interface GeneratedTypeLiteralInterface_2 {
   pname: number;
   param: number;
 }
 
-export function glTexParameteriGroup_(texture: number, target: number,
+export function glTexParameteriGroup(texture: number, target: number,
   group: Array<GeneratedTypeLiteralInterface_2>): void;
-
-// //Atomic
-// export function createAtomicBool_(target: object, init: boolean): void;
-//
-// export function getAtomicBoolValue_(target: object): boolean;
-//
-// export function setAtomicBoolValue_(target: object, value: boolean): void;
-//
-// export function createAtomicInt_(target: object, value: number): void;
-//
-// export function subAtomicIntValue_(target: object, value: number): void;
-//
-// export function getAtomicIntValue_(target: object): number;
-@Sendable
-export class AtomicInt {
-  constructor(value: number)
-
-  get value(): number
-
-  sub(value: number): void
-}
 
 
 @Sendable

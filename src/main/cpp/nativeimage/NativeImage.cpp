@@ -10,7 +10,6 @@
 #include <cstdio>
 #include <native_image/native_image.h>
 #include "NativeImage.h"
-#include "atomic/Atomic.h"
 #include "common/utils.h"
 #include <hilog/log.h>
 
@@ -78,17 +77,6 @@ napi_value NapiBindNativeImage(napi_env env, napi_callback_info info) {
 
     if (image == nullptr)
         napi_throw_error(env, "NativeImage", "Create NativeImage Failed");
-
-//     OH_OnFrameAvailableListener listener;
-//     listener.context = flag;
-//     listener.onFrameAvailable = [](void *context) {
-//         std::atomic_int *flag = (std::atomic_int *)context;
-//         (*flag)++;
-//     };
-
-//     int error = OH_NativeImage_SetOnFrameAvailableListener(image, listener);
-//     if (error != 0)
-//         napi_throw_error(env, "NativeImage", "Set FrameAvailableListener Failed");
 
     napi_wrap_sendable(env, _this, static_cast<void *>(image), NapiDispose, nullptr);
 

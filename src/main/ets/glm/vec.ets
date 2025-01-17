@@ -17,6 +17,7 @@ export class vec2 implements vec {
   private _x: number;
   private _y: number;
 
+
   constructor(scalar: number);
 
   constructor(x: number, y: number);

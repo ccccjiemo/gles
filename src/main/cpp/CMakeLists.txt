@@ -9,7 +9,8 @@ if(DEFINED PACKAGE_FIND_FILE)
 endif()
 
 include_directories(${NATIVERENDER_ROOT_PATH}
-                    ${NATIVERENDER_ROOT_PATH}/include)
+                    ${NATIVERENDER_ROOT_PATH}/include
+                    ${NATIVERENDER_ROOT_PATH}/glm)
 
-add_library(gles SHARED napi_init.cpp gles/GLES.cpp nativeimage/NativeImage.cpp atomic/Atomic.cpp gles/GLESExtends.cpp)
+add_library(gles SHARED napi_init.cpp gles/GLES.cpp nativeimage/NativeImage.cpp  gles/GLESExtends.cpp)
 target_link_libraries(gles PUBLIC libace_napi.z.so libGLESv3.so libnative_image.so )

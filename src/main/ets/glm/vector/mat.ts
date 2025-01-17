@@ -1,16 +1,33 @@
 import { float, valuetype } from './nvec'
-type row = 2 | 3 | 4;
-type column = 2 | 3 | 4;
 
-interface mat<TType extends valuetype, TRow extends row, TColumn extends column> {
-  element: TType;
-  row: TRow;
-  column: TColumn;
+
+interface mat<T extends valuetype, R extends number, C extends number> {
+  elements: T;
+  rows: R;
+  cols: C;
 }
 
-class mat2 implements mat<float, 2, 2> {
-  element: Float32Array;
-  row: 2;
-  column: 2;
+class BaseMat<T extends valuetype, R extends number, C extends number> implements mat<T, R, C> {
+  elements: T;
+  rows: R;
+  cols: C;
+  constructor(row: R, col: C, data: number[], type: { new(size: number | number[]): T }) {
+    this.rows = row;
+    this.cols = col;
+    const size = row * col;
+    this.elements = new type(data.length ? data : size);
+  }
 
 }
+
+class matn<R extends number, C extends number> extends BaseMat<float, R, C> {
+  constructor(row: R, col: C, ...args: number[]) {
+    super(row, col, args, Float32Array);
+  }
+}
+
+// namespace glm {
+//   export function mat2(...args: number[]): mat<float, 2,2> {
+//     return new matn(2, 2,...args);
+//   }
+// }

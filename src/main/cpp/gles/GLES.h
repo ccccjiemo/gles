@@ -165,11 +165,11 @@ napi_value NapiGLVertexAttribPointer(napi_env env, napi_callback_info info);
 napi_value NapiGLViewport(napi_env env, napi_callback_info info);
 napi_value NapiGLBindVertexArray(napi_env env, napi_callback_info info);
 napi_value NapiGLBindVertexBuffer(napi_env env, napi_callback_info info);
-// napi_value NapiGLMapBufferRange(napi_env env, napi_callback_info info);
+napi_value NapiGLMapBufferRange(napi_env env, napi_callback_info info);
 napi_value NapiGLVertexAttribFormat(napi_env env, napi_callback_info info);
 napi_value NapiGLVertexAttribIFormat(napi_env env, napi_callback_info info);
 napi_value NapiGLVertexAttribBinding(napi_env env, napi_callback_info info);
-
+napi_value NapiGLUnmapBuffer(napi_env env, napi_callback_info info);
 
 } // namespace GLES
 
