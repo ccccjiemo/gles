@@ -3,7 +3,7 @@
 #include "gles/GLESExtends.h"
 #include "nativeimage/NativeImage.h"
 #include "napi/native_api.h"
-#include "glm.hpp"
+
 
 EXTERN_C_START
 static napi_value Init(napi_env env, napi_value exports) {
@@ -204,6 +204,7 @@ static napi_value Init(napi_env env, napi_value exports) {
     };
     napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc);
     return exports;
+
 }
 EXTERN_C_END
 

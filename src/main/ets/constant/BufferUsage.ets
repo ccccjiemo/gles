@@ -9,3 +9,4 @@ export enum BufferUsage {
   GL_DYNAMIC_READ = 0x88E9,
   GL_DYNAMIC_COPY = 0x88EA
 }
+
