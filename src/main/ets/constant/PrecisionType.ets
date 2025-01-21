@@ -1,8 +1,0 @@
-export enum PrecisionType {
-  GL_LOW_FLOAT = 0x8DF0,
-  GL_MEDIUM_FLOAT = 0x8DF1,
-  GL_HIGH_FLOAT = 0x8DF2,
-  GL_LOW_INT = 0x8DF3,
-  GL_MEDIUM_INT = 0x8DF4,
-  GL_HIGH_INT = 0x8DF5,
-}

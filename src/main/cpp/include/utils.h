@@ -8,6 +8,8 @@
 #define GLTEST_UTILS_H
 
 #include <GLES3/gl3.h>
+#include <GLES3/gl3platform.h>
+#include <GLES2/gl2ext.h>
 #include <cstdint>
 #include <js_native_api.h>
 
@@ -24,15 +26,20 @@
     NAPI_CALL(env, napi_get_cb_info(env, info, &argc, argv, &that, &data))
 
 #define DEFINE_NAPI_FUNCTION(name, func, getter, setter, value)                                                        \
-    { name, nullptr, func, getter, setter, value, napi_default, nullptr }
+    { name, nullptr, func, getter, setter, value, napi_static, nullptr }
 
-#define DEFINE_SENDABLE_CLASS(env, exports, className, constructor, property)                                          \
-    do {                                                                                                               \
+#define DEFINE_NAPI_CONSTANTS(name, value)                                                                             \
+    { name, nullptr, nullptr, nullptr, nullptr, createNapiInt32(env, value), napi_static, nullptr }
+
+#define DEFINE_SENDABLE_CLASS(env, exports, name, constructor, desc)                                                          \
+   do {                                                                                                                \
         napi_value cons = nullptr;                                                                                     \
-        napi_define_sendable_class(env, className, NAPI_AUTO_LENGTH, constructor, nullptr,                             \
-                                   sizeof(property) / sizeof(property[0]), property, nullptr, &cons);                  \
-        napi_set_named_property(env, exports, className, cons);                                                        \
-    } while (0);
+        NAPI_CALL(env, napi_define_sendable_class(env, name, NAPI_AUTO_LENGTH, constructor, nullptr,sizeof(desc) / sizeof(desc[0]),   \
+                                                  desc, nullptr, &cons))                                               \
+        NAPI_CALL(env, napi_set_named_property(env, exports, name, cons))                                              \
+    }                                                                                                                  \
+    while (0);                                                                                                          \
+        
 
 
 static bool type_equal(napi_env env, napi_value value, napi_valuetype type) {
@@ -144,10 +151,87 @@ static napi_value createNapiFloat(napi_env env, float value) {
 
 static void createGLuintArray(napi_env env, napi_value *array_buffer, void **data, size_t len) {
     napi_value buffers = nullptr;
-    napi_create_arraybuffer(env, sizeof(GLuint) * len, data, &buffers);
-    napi_create_typedarray(env, napi_uint32_array, len, buffers, 0, array_buffer);
+    NAPI_CALL(env, napi_create_arraybuffer(env, sizeof(GLuint) * len, data, &buffers))
+    NAPI_CALL(env, napi_create_typedarray(env, napi_uint32_array, len, buffers, 0, array_buffer))
+}
+
+static void getBuffer(napi_env env, napi_value value, void **data, size_t *length) {
+    bool isTargetBuffer = false;
+    NAPI_CALL(env, napi_is_arraybuffer(env, value, &isTargetBuffer))
+    if (isTargetBuffer) {
+        NAPI_CALL(env, napi_get_arraybuffer_info(env, value, data, length))
+        return;
+    }
+    NAPI_CALL(env, napi_is_typedarray(env, value, &isTargetBuffer))
+    if (isTargetBuffer) {
+        NAPI_CALL(env, napi_get_typedarray_info(env, value, nullptr, length, data, nullptr, nullptr))
+        return;
+    }
+    *data = nullptr;
+    *length = 0;
 }
 
 static void transformData(napi_env env, napi_value value, GLenum type, int size) {}
+
+#include <node_api.h>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+
+
+// 辅助模板函数，将枚举成员添加到对象中
+template <typename EnumType>
+void AddEnumMembersToObject(napi_env env, napi_value obj, const std::string& prefix = "") {
+    std::unordered_map<EnumType, std::string> enumMap;
+    // 你需要在这里根据具体的枚举类型添加映射，可使用宏或其他方式填充 enumMap
+    // 示例：对于一个具体的枚举，你可以添加类似 enumMap[EnumType::VALUE] = "VALUE";
+
+
+    for (const auto& [value, name] : enumMap) {
+        napi_value valueObj;
+        napi_status status = napi_create_int32(env, static_cast<int32_t>(value), &valueObj);
+        if (status!= napi_ok) {
+            napi_throw_error(env, nullptr, "Failed to create enum value");
+            return;
+        }
+        std::string fullName = prefix + name;
+        status = napi_set_named_property(env, obj, fullName.c_str(), valueObj);
+        if (status!= napi_ok) {
+            napi_throw_error(env, nullptr, "Failed to set enum property");
+            return;
+        }
+    }
+}
+
+
+// 模板函数，用于初始化枚举导出
+template <typename EnumType>
+napi_value InitEnum(napi_env env, napi_value exports, const std::string& name) {
+    napi_status status;
+    napi_value enumObj;
+
+
+    status = napi_create_object(env, &enumObj);
+    if (status!= napi_ok) {
+        napi_throw_error(env, nullptr, "Failed to create object");
+        return nullptr;
+    }
+
+
+    AddEnumMembersToObject<EnumType>(env, enumObj);
+
+
+    status = napi_set_named_property(env, exports, name.c_str(), enumObj);
+    if (status!= napi_ok) {
+        napi_throw_error(env, nullptr, "Failed to set named property");
+        return nullptr;
+    }
+
+
+    return exports;
+}
+
+
+
 
 #endif // GLTEST_UTILS_H
