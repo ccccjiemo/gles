@@ -1,6 +1,945 @@
-export { glm } from './src/main/ets/glm/index'
+import { vec as Vec } from './src/main/ets/glm/vec'
+import { mat as Mat } from './src/main/ets/glm/mat'
+import {
+  GOE,
+  Tuple,
+  TupleByMul,
+  TupleBySub,
+  TypeConstructor,
+  Range as range,
+  TupleUnionBySize as tubs
+} from './src/main/ets/glm/common'
+import { lang } from '@kit.ArkTS';
 
-export { globjects, gles } from './src/main/ets/Index'
+declare namespace glm {
+
+  export type float = Float32Array;
+
+  export type int = Int32Array;
+
+  export type double = Float64Array;
+
+  export type uint = Uint32Array;
+
+  export type valuetype = float | int | double | uint;
+
+  export type VecSize = 1 | 2 | 3 | 4;
+
+  export type Rows = 2 | 3 | 4;
+
+  export type Cols = 2 | 3 | 4;
+
+  export type vec<T extends valuetype, TSize extends VecSize> = Vec<T, TSize>;
+
+  export type mat<T extends valuetype, R extends Rows, C extends Cols> = Mat<T, R, C>;
+
+  export type Range<T extends number, U extends number = 2> = range<T, U>;
+
+  export type TupleUnionBySize<T extends VecSize> = tubs<T>;
+
+  /**
+   * 角度转弧度
+   * @param degrees
+   * @returns
+   */
+  export function radians(degrees: number): number;
+
+  export function radians<T extends valuetype, S extends VecSize>(vec: vec<T, S>): vec<T, S>;
+
+  /**
+   * 弧度转角度
+   * @param radian
+   * @returns
+   */
+  export function degrees(degrees: number): number;
+
+  export function degrees<T extends valuetype, S extends VecSize>(vec: vec<T, S>): vec<T, S>;
+
+  /**
+   * 矩阵平移
+   * @param m
+   * @param v
+   * @returns
+   */
+  export function translate<T extends valuetype>(m: mat<T, 4, 4>, v: vec<T, 3>): mat<T, 4, 4>;
+
+  /**
+   * 矩阵缩放
+   * @param m
+   * @param v
+   * @returns
+   */
+  export function scale<T extends valuetype>(m: mat<T, 4, 4>, v: vec<T, 3>): mat<T, 4, 4>;
+
+  /**
+   * 归一化
+   * @param v
+   * @returns
+   */
+  export function normalize<T extends valuetype, S extends VecSize>(v: vec<T, S>): vec<T, S>;
+
+  /**
+   * 逆矩阵
+   * @param m
+   * @returns
+   */
+  export function inverse<T extends valuetype, R extends Rows, C extends Cols>(m: mat<T, R, C>): mat<T, R, C>;
+
+  /**
+   * 旋转
+   * @param m
+   * @param angle
+   * @param axis
+   * @returns
+   */
+  export function rotate<T extends valuetype>(m: mat<T, 4, 4>, angle: number, axis: vec<T, 3>): mat<T, 4, 4>;
+
+  /**
+   * 正交投影
+   * @param constructor
+   * @param left
+   * @param right
+   * @param bottom
+   * @param top
+   * @param near
+   * @param far
+   * @returns
+   */
+  export function ortho<T extends valuetype>(constructor: TypeConstructor<T>, left: number, right: number,
+    bottom: number, top: number, near: number, far: number): mat<T, 4, 4>;
+
+  /**
+   * 透视投影
+   * @param constructor
+   * @param fovy
+   * @param aspect
+   * @param near
+   * @param far
+   * @returns
+   */
+  export function perspective<T extends valuetype>(constructor: TypeConstructor<T>, fovy: number, aspect: number,
+    near: number, far: number): mat<T, 4, 4>;
+
+  /**
+   * 点积
+   * @param v0
+   * @param v1
+   * @returns
+   */
+  export function dot<T extends valuetype, TSize extends VecSize>(v0: vec<T, TSize>, v1: vec<T, TSize>): number;
+
+  /**
+   * 叉积
+   * @param v0
+   * @param v1
+   * @returns
+   */
+  export function cross<T extends valuetype>(v0: vec<T, 3>, v1: vec<T, 3>): vec<T, 3>;
+
+  /**
+   * 向量长度
+   * @param v
+   * @returns
+   */
+  export function length(v: vec<valuetype, VecSize>): number;
+
+  /**
+   * 字面意思
+   * @param v
+   * @returns
+   */
+  export function abs<T extends valuetype, S extends VecSize>(v: vec<T, S>): vec<T, S>;
+
+  /**
+   * 矩阵转置
+   * @param m
+   * @returns
+   */
+  export function transpose<T extends valuetype, R extends Rows, C extends Cols>(m: mat<T, R, C>): mat<T, C, R>;
+
+  /**
+   * glm::vec2()
+   */
+  export function Vec<TSize extends VecSize, TType extends valuetype>(size: TSize,
+    constructor: TypeConstructor<TType>): vec<TType, TSize>;
+
+  /**
+   * glm::vec2(1)
+   */
+  export function Vec<TSize extends VecSize, TType extends valuetype>(size: TSize, constructor: TypeConstructor<TType>,
+    scalar: number): vec<TType, TSize>;
+
+  /**
+   * glm::vec1 vec1
+   *
+   * glm::vec2(vec1, 1)
+   */
+  export function Vec<TSize extends VecSize, TType extends valuetype, VS extends VecSize>(size: TSize,
+    constructor: TypeConstructor<TType>, v0: vec<TType, GOE<TSize, VS>>,
+    ...args: TupleBySub<TSize, VS>): vec<TType, TSize>;
+
+  /**
+   * glm::vec2([1,2])
+   */
+  export function Vec<TSize extends VecSize, TType extends valuetype>(size: TSize, constructor: TypeConstructor<TType>,
+    values: Tuple<number, TSize>): vec<TType, TSize>;
+
+  /**
+   * glm::vec2(1,2)
+   */
+  export function Vec<TSize extends VecSize, TType extends valuetype>(size: TSize, constructor: TypeConstructor<TType>,
+    ...args: Tuple<number, TSize>): vec<TType, TSize>;
+
+
+  export function vec1(): vec<float, 1>;
+
+  export function vec1(scalar: number): vec<float, 1>;
+
+  export function vec2(): vec<float, 2>;
+
+  export function vec2(scalar: number): vec<float, 2>;
+
+  export function vec2(init: Tuple<number, 2>): vec<float, 2>;
+
+  export function vec2(...args: Tuple<number, 2>): vec<float, 2>;
+
+  export function vec2<TSize extends VecSize>(v0: vec<float, GOE<2, TSize>>,
+    ...args: TupleBySub<2, TSize>): vec<float, 2>;
+
+  export function vec3(): vec<float, 3>;
+
+  export function vec3(scalar: number): vec<float, 3>;
+
+  export function vec3(init: Tuple<number, 3>): vec<float, 3>;
+
+  export function vec3<TSize extends VecSize>(v0: vec<float, GOE<3, TSize>>,
+    ...args: TupleBySub<3, TSize>): vec<float, 3>;
+
+  export function vec3(...args: Tuple<number, 3>): vec<float, 3>;
+
+  export function vec4(): vec<float, 4>;
+
+  export function vec4(scalar: number): vec<float, 4>;
+
+  export function vec4(init: Tuple<number, 4>): vec<float, 4>;
+
+  export function vec4(...args: Tuple<number, 4>): vec<float, 4>;
+
+  export function vec4<TSize extends VecSize>(v0: vec<float, GOE<4, TSize>>,
+    ...args: TupleBySub<4, TSize>): vec<float, 4>;
+
+  export function ivec1(): vec<int, 1>;
+
+  export function ivec1(scalar: number): vec<int, 1>;
+
+  export function ivec2(): vec<int, 2>;
+
+  export function ivec2(scalar: number): vec<int, 2>;
+
+  export function ivec2(init: Tuple<number, 2>): vec<int, 2>;
+
+  export function ivec2<TSize extends VecSize>(v0: vec<int, GOE<2, TSize>>,
+    ...args: TupleBySub<2, TSize>): vec<int, 2>;
+
+  export function ivec2(...args: Tuple<number, 2>): vec<int, 2>;
+
+  export function ivec3(): vec<int, 3>;
+
+  export function ivec3(scalar: number): vec<int, 3>;
+
+  export function ivec3(init: Tuple<number, 3>): vec<int, 3>;
+
+  export function ivec3<TSize extends VecSize>(v0: vec<int, GOE<3, TSize>>,
+    ...args: TupleBySub<3, TSize>): vec<int, 3>;
+
+  export function ivec3(...args: Tuple<number, 3>): vec<int, 3>;
+
+  export function ivec4(): vec<int, 4>;
+
+  export function ivec4(scalar: number): vec<int, 4>;
+
+  export function ivec4(init: Tuple<number, 4>): vec<int, 4>;
+
+  export function ivec4<TSize extends VecSize>(v0: vec<int, GOE<4, TSize>>,
+    ...args: TupleBySub<4, TSize>): vec<int, 4>;
+
+  export function ivec4(...args: Tuple<number, 4>): vec<int, 4>;
+
+  export function uvec1(): vec<uint, 1>;
+
+  export function uvec1(scalar: number): vec<uint, 1>;
+
+  export function uvec1(init: Tuple<number, 1>): vec<uint, 1>;
+
+  export function uvec1(...args: Tuple<number, 1>): vec<uint, 1>;
+
+  export function uvec2(): vec<uint, 2>;
+
+  export function uvec2(scalar: number): vec<uint, 2>;
+
+  export function uvec2(init: Tuple<number, 2>): vec<uint, 2>;
+
+  export function uvec2(v0: vec<uint, 1>, v1: number): vec<uint, 2>;
+
+  export function uvec2(...args: Tuple<number, 2>): vec<uint, 2>;
+
+  export function uvec3(): vec<uint, 3>;
+
+  export function uvec3(scalar: number): vec<uint, 3>;
+
+  export function uvec3(init: Tuple<number, 3>): vec<uint, 3>;
+
+  export function uvec3<TSize extends VecSize>(v0: vec<uint, GOE<3, TSize>>,
+    ...args: TupleBySub<3, TSize>): vec<uint, 3>;
+
+  export function uvec3(...args: Tuple<number, 3>): vec<uint, 3>;
+
+  export function uvec4(): vec<uint, 4>;
+
+  export function uvec4(scalar: number): vec<uint, 4>;
+
+  export function uvec4(init: Tuple<number, 4>): vec<uint, 4>;
+
+  export function uvec4<TSize extends VecSize>(v0: vec<uint, GOE<4, TSize>>,
+    ...args: TupleBySub<4, TSize>): vec<uint, 4>;
+
+  export function uvec4(...args: Tuple<number, 4>): vec<uint, 4>;
+
+  export function dvec1(): vec<double, 1>;
+
+  export function dvec1(scalar: number): vec<double, 1>;
+
+  export function dvec2(): vec<double, 2>;
+
+  export function dvec2(scalar: number): vec<double, 2>;
+
+  export function dvec2(init: Tuple<number, 2>): vec<double, 2>;
+
+  export function dvec2(v0: vec<double, 1>, v1: number): vec<double, 2>;
+
+  export function dvec2(...args: Tuple<number, 2>): vec<double, 2>;
+
+  export function dvec3(): vec<double, 3>;
+
+  export function dvec3(scalar: number): vec<double, 3>;
+
+  export function dvec3(init: Tuple<number, 3>): vec<double, 3>;
+
+  export function dvec3<TSize extends VecSize>(v0: vec<double, GOE<3, TSize>>,
+    ...args: TupleBySub<3, TSize>): vec<double, 3>;
+
+  export function dvec3(...args: Tuple<number, 3>): vec<double, 3>;
+
+  export function dvec4(): vec<double, 4>;
+
+  export function dvec4(scalar: number): vec<double, 4>;
+
+  export function dvec4(init: Tuple<number, 4>): vec<double, 4>;
+
+  export function dvec4<TSize extends VecSize>(v0: vec<double, GOE<4, TSize>>,
+    ...args: TupleBySub<4, TSize>): vec<double, 4>;
+
+  export function dvec4(...args: Tuple<number, 4>): vec<double, 4>;
+
+  /**
+   * Mat(3,3) //mat3x3()
+   */
+  export function Mat<R extends Rows, C extends Cols>(row: R, col: C): mat<float, R, C>;
+
+  /**
+   * Mat(3,3, 1.0) //mat3x3(1.0f)
+   */
+  export function Mat<R extends Rows, C extends Cols>(row: R, col: C, scalar: number): mat<float, R, C>;
+
+  /**
+   * Mat(2,2, 1,1,1,1) //mat2x2(1,1,1,1)
+   */
+  export function Mat<R extends Rows, C extends Cols>(row: R, col: C,
+    ...args: TupleByMul<R, C>): mat<float, R, C>;
+
+  /**
+   * Mat(2,2, mat3x3) //mat2x2(mat3x3)
+   */
+  export function Mat<R extends Rows, C extends Cols>(row: R, col: C, v0: mat<float, Rows, Cols>): mat<float, R, C>;
+
+  /**
+   * Mat(2,2, vec2, vec2) //mat2x2(vec2, vec2)
+   */
+  export function Mat<R extends Rows, C extends Cols>(row: R, col: C,
+    ...args: Tuple<vec<float, C>, R>): mat<float, R, C>;
+
+
+  /**
+   * Mat(3,3) //mat3x3()
+   */
+  export function dMat<R extends Rows, C extends Cols>(row: R, col: C): mat<double, R, C>;
+
+  /**
+   * Mat(3,3, 1.0) //mat3x3(1.0f)
+   */
+  export function dMat<R extends Rows, C extends Cols>(row: R, col: C, scalar: number): mat<double, R, C>;
+
+  /**
+   * Mat(2,2, 1,1,1,1) //mat2x2(1,1,1,1)
+   */
+  export function dMat<R extends Rows, C extends Cols>(row: R, col: C,
+    ...args: TupleByMul<R, C>): mat<double, R, C>;
+
+  /**
+   * Mat(2,2, mat3x3) //mat2x2(mat3x3)
+   */
+  export function dMat<R extends Rows, C extends Cols>(row: R, col: C, v0: mat<double, Rows, Cols>): mat<double, R, C>;
+
+  /**
+   * Mat(2,2, vec2, vec2) //mat2x2(vec2, vec2)
+   */
+  export function dMat<R extends Rows, C extends Cols>(row: R, col: C,
+    ...args: Tuple<vec<float, C>, R>): mat<double, R, C>;
+
+
+  /**
+   * Mat(3,3) //mat3x3()
+   */
+  export function iMat<R extends Rows, C extends Cols>(row: R, col: C): mat<int, R, C>;
+
+  /**
+   * Mat(3,3, 1.0) //mat3x3(1.0f)
+   */
+  export function iMat<R extends Rows, C extends Cols>(row: R, col: C, scalar: number): mat<int, R, C>;
+
+  /**
+   * Mat(2,2, 1,1,1,1) //mat2x2(1,1,1,1)
+   */
+  export function iMat<R extends Rows, C extends Cols>(row: R, col: C,
+    ...args: TupleByMul<R, C>): mat<int, R, C>;
+
+  /**
+   * Mat(2,2, mat3x3) //mat2x2(mat3x3)
+   */
+  export function iMat<R extends Rows, C extends Cols>(row: R, col: C, v0: mat<int, Rows, Cols>): mat<int, R, C>;
+
+  /**
+   * Mat(2,2, vec2, vec2) //mat2x2(vec2, vec2)
+   */
+  export function iMat<R extends Rows, C extends Cols>(row: R, col: C, ...args: Tuple<vec<int, C>, R>): mat<int, R, C>;
+
+
+  /**
+   * Mat(3,3) //mat3x3()
+   */
+  export function uMat<R extends Rows, C extends Cols>(row: R, col: C): mat<uint, R, C>;
+
+  /**
+   * Mat(3,3, 1.0) //mat3x3(1.0f)
+   */
+  export function uMat<R extends Rows, C extends Cols>(row: R, col: C, scalar: number): mat<uint, R, C>;
+
+  /**
+   * Mat(2,2, 1,1,1,1) //mat2x2(1,1,1,1)
+   */
+  export function uMat<R extends Rows, C extends Cols>(row: R, col: C,
+    ...args: TupleByMul<R, C>): mat<uint, R, C>;
+
+  /**
+   * Mat(2,2, mat3x3) //mat2x2(mat3x3)
+   */
+  export function uMat<R extends Rows, C extends Cols>(row: R, col: C, v0: mat<uint, Rows, Cols>): mat<uint, R, C>;
+
+  /**
+   * @deprecated danger
+   */
+
+  /**
+   * Mat(2,2, vec2, vec2) //mat2x2(vec2, vec2)
+   */
+  export function uMat<R extends Rows, C extends Cols>(row: R, col: C,
+    ...args: Tuple<vec<uint, C>, R>): mat<uint, R, C>;
+
+
+  /**
+   * 2x2 matrix
+   * @returns
+   */
+  export function mat2(): mat<float, 2, 2>;
+
+  export function mat2(scalar: number): mat<float, 2, 2>;
+
+  export function mat2(...args: TupleByMul<2, 2>): mat<float, 2, 2>;
+
+  export function mat2(v0: mat<float, Rows, Cols>): mat<float, 2, 2>;
+
+  export function mat2(...args: Tuple<vec<float, 2>, 2>): mat<float, 2, 2>;
+
+  export function mat2x2(): mat<float, 2, 2>;
+
+  export function mat2x2(scalar: number): mat<float, 2, 2>;
+
+  export function mat2x2(...args: TupleByMul<2, 2>): mat<float, 2, 2>;
+
+  export function mat2x2(v0: mat<float, Rows, Cols>): mat<float, 2, 2>;
+
+  export function mat2x2(...args: Tuple<vec<float, 2>, 2>): mat<float, 2, 2>;
+
+  export function mat2x3(): mat<float, 2, 3>;
+
+  export function mat2x3(scalar: number): mat<float, 2, 3>;
+
+  export function mat2x3(...args: TupleByMul<2, 3>): mat<float, 2, 3>;
+
+  export function mat2x3(v0: mat<float, Rows, Cols>): mat<float, 2, 3>;
+
+  export function mat2x3(...args: Tuple<vec<float, 3>, 2>): mat<float, 2, 3>;
+
+  export function mat2x4(): mat<float, 2, 4>;
+
+  export function mat2x4(scalar: number): mat<float, 2, 4>;
+
+  export function mat2x4(...args: TupleByMul<2, 4>): mat<float, 2, 4>;
+
+  export function mat2x4(v0: mat<float, Rows, Cols>): mat<float, 2, 4>;
+
+  export function mat2x4(...args: Tuple<vec<float, 3>, 2>): mat<float, 2, 4>;
+
+  export function mat3(): mat<float, 3, 3>;
+
+  export function mat3(scalar: number): mat<float, 3, 3>;
+
+  export function mat3(...args: TupleByMul<3, 3>): mat<float, 3, 3>;
+
+  export function mat3(v0: mat<float, Rows, Cols>): mat<float, 3, 3>;
+
+  export function mat3(...args: Tuple<vec<float, 3>, 3>): mat<float, 3, 3>;
+
+  export function mat3x3(): mat<float, 3, 3>;
+
+  export function mat3x3(scalar: number): mat<float, 3, 3>;
+
+  export function mat3x3(...args: TupleByMul<3, 3>): mat<float, 3, 3>;
+
+  export function mat3x3(v0: mat<float, Rows, Cols>): mat<float, 3, 3>;
+
+  export function mat3x3(...args: Tuple<vec<float, 3>, 3>): mat<float, 3, 3>;
+
+  export function mat3x2(): mat<float, 3, 2>;
+
+  export function mat3x2(scalar: number): mat<float, 3, 2>;
+
+  export function mat3x2(...args: TupleByMul<3, 2>): mat<float, 3, 2>;
+
+  export function mat3x2(v0: mat<float, Rows, Cols>): mat<float, 3, 2>;
+
+  export function mat3x2(...args: Tuple<vec<float, 2>, 3>): mat<float, 3, 2>;
+
+  export function mat3x4(): mat<float, 3, 4>;
+
+  export function mat3x4(scalar: number): mat<float, 3, 4>;
+
+  export function mat3x4(...args: TupleByMul<3, 4>): mat<float, 3, 4>;
+
+  export function mat3x4(v0: mat<float, Rows, Cols>): mat<float, 3, 4>;
+
+  export function mat3x4(...args: Tuple<vec<float, 4>, 3>): mat<float, 3, 4>;
+
+  export function mat4(): mat<float, 4, 4>;
+
+  export function mat4(scalar: number): mat<float, 4, 4>;
+
+  export function mat4(...args: TupleByMul<4, 4>): mat<float, 4, 4>;
+
+  export function mat4(v0: mat<float, Rows, Cols>): mat<float, 4, 4>;
+
+  export function mat4(...args: Tuple<vec<float, 4>, 4>): mat<float, 4, 4>;
+
+  export function mat4x4(): mat<float, 4, 4>;
+
+  export function mat4x4(scalar: number): mat<float, 4, 4>;
+
+  export function mat4x4(...args: TupleByMul<4, 4>): mat<float, 4, 4>;
+
+  export function mat4x4(v0: mat<float, Rows, Cols>): mat<float, 4, 4>;
+
+  export function mat4x4(...args: Tuple<vec<float, 4>, 4>): mat<float, 4, 4>;
+
+  export function mat4x3(): mat<float, 4, 3>;
+
+  export function mat4x3(scalar: number): mat<float, 4, 3>;
+
+  export function mat4x3(...args: TupleByMul<4, 3>): mat<float, 4, 3>;
+
+  export function mat4x3(v0: mat<float, Rows, Cols>): mat<float, 4, 3>;
+
+  export function mat4x3(...args: Tuple<vec<float, 3>, 4>): mat<float, 4, 3>;
+
+  export function mat4x2(): mat<float, 4, 2>;
+
+  export function mat4x2(scalar: number): mat<float, 4, 2>;
+
+  export function mat4x2(...args: TupleByMul<4, 2>): mat<float, 4, 2>;
+
+  export function mat4x2(v0: mat<float, Rows, Cols>): mat<float, 4, 2>;
+
+  export function mat4x2(...args: Tuple<vec<float, 2>, 4>): mat<float, 4, 2>;
+
+  export function imat2(): mat<int, 2, 2>;
+
+  export function imat2(scalar: number): mat<int, 2, 2>;
+
+  export function imat2(...args: TupleByMul<2, 2>): mat<int, 2, 2>;
+
+  export function imat2(v0: mat<int, Rows, Cols>): mat<int, 2, 2>;
+
+  export function imat2(...args: Tuple<vec<int, 2>, 2>): mat<int, 2, 2>;
+
+  export function imat2x2(): mat<int, 2, 2>;
+
+  export function imat2x2(scalar: number): mat<int, 2, 2>;
+
+  export function imat2x2(...args: TupleByMul<2, 2>): mat<int, 2, 2>;
+
+  export function imat2x2(v0: mat<int, Rows, Cols>): mat<int, 2, 2>;
+
+  export function imat2x2(...args: Tuple<vec<int, 2>, 2>): mat<int, 2, 2>;
+
+  export function imat2x3(): mat<int, 2, 3>;
+
+  export function imat2x3(scalar: number): mat<int, 2, 3>;
+
+  export function imat2x3(...args: TupleByMul<2, 3>): mat<int, 2, 3>;
+
+  export function imat2x3(v0: mat<int, Rows, Cols>): mat<int, 2, 3>;
+
+  export function imat2x3(...args: Tuple<vec<int, 3>, 2>): mat<int, 2, 3>;
+
+  export function imat2x4(): mat<int, 2, 4>;
+
+  export function imat2x4(scalar: number): mat<int, 2, 4>;
+
+  export function imat2x4(...args: TupleByMul<2, 4>): mat<int, 2, 4>;
+
+  export function imat2x4(v0: mat<int, Rows, Cols>): mat<int, 2, 4>;
+
+  export function imat2x4(...args: Tuple<vec<int, 3>, 2>): mat<int, 2, 4>;
+
+  export function imat3(): mat<int, 3, 3>;
+
+  export function imat3(scalar: number): mat<int, 3, 3>;
+
+  export function imat3(...args: TupleByMul<3, 3>): mat<int, 3, 3>;
+
+  export function imat3(v0: mat<int, Rows, Cols>): mat<int, 3, 3>;
+
+  export function imat3(...args: Tuple<vec<int, 3>, 3>): mat<int, 3, 3>;
+
+  export function imat3x3(): mat<int, 3, 3>;
+
+  export function imat3x3(scalar: number): mat<int, 3, 3>;
+
+  export function imat3x3(...args: TupleByMul<3, 3>): mat<int, 3, 3>;
+
+  export function imat3x3(v0: mat<int, Rows, Cols>): mat<int, 3, 3>;
+
+  export function imat3x3(...args: Tuple<vec<int, 3>, 3>): mat<int, 3, 3>;
+
+  export function imat3x2(): mat<int, 3, 2>;
+
+  export function imat3x2(scalar: number): mat<int, 3, 2>;
+
+  export function imat3x2(...args: TupleByMul<3, 2>): mat<int, 3, 2>;
+
+  export function imat3x2(v0: mat<int, Rows, Cols>): mat<int, 3, 2>;
+
+  export function imat3x2(...args: Tuple<vec<int, 2>, 3>): mat<int, 3, 2>;
+
+  export function imat3x4(): mat<int, 3, 4>;
+
+  export function imat3x4(scalar: number): mat<int, 3, 4>;
+
+  export function imat3x4(...args: TupleByMul<3, 4>): mat<int, 3, 4>;
+
+  export function imat3x4(v0: mat<int, Rows, Cols>): mat<int, 3, 4>;
+
+  export function imat3x4(...args: Tuple<vec<int, 4>, 3>): mat<int, 3, 4>;
+
+  export function imat4(): mat<int, 4, 4>;
+
+  export function imat4(scalar: number): mat<int, 4, 4>;
+
+  export function imat4(...args: TupleByMul<4, 4>): mat<int, 4, 4>;
+
+  export function imat4(v0: mat<int, Rows, Cols>): mat<int, 4, 4>;
+
+  export function imat4(...args: Tuple<vec<int, 4>, 4>): mat<int, 4, 4>;
+
+  export function imat4x4(): mat<int, 4, 4>;
+
+  export function imat4x4(scalar: number): mat<int, 4, 4>;
+
+  export function imat4x4(...args: TupleByMul<4, 4>): mat<int, 4, 4>;
+
+  export function imat4x4(v0: mat<int, Rows, Cols>): mat<int, 4, 4>;
+
+  export function imat4x4(...args: Tuple<vec<int, 4>, 4>): mat<int, 4, 4>;
+
+  export function imat4x3(): mat<int, 4, 3>;
+
+  export function imat4x3(scalar: number): mat<int, 4, 3>;
+
+  export function imat4x3(...args: TupleByMul<4, 3>): mat<int, 4, 3>;
+
+  export function imat4x3(v0: mat<int, Rows, Cols>): mat<int, 4, 3>;
+
+  export function imat4x3(...args: Tuple<vec<int, 3>, 4>): mat<int, 4, 3>;
+
+  export function imat4x2(): mat<int, 4, 2>;
+
+  export function imat4x2(scalar: number): mat<int, 4, 2>;
+
+  export function imat4x2(...args: TupleByMul<4, 2>): mat<int, 4, 2>;
+
+  export function imat4x2(v0: mat<int, Rows, Cols>): mat<int, 4, 2>;
+
+  export function imat4x2(...args: Tuple<vec<int, 2>, 4>): mat<int, 4, 2>;
+
+  export function umat2(): mat<uint, 2, 2>;
+
+  export function umat2(scalar: number): mat<uint, 2, 2>;
+
+  export function umat2(...args: TupleByMul<2, 2>): mat<uint, 2, 2>;
+
+  export function umat2(v0: mat<uint, Rows, Cols>): mat<uint, 2, 2>;
+
+  export function umat2(...args: Tuple<vec<uint, 2>, 2>): mat<uint, 2, 2>;
+
+  export function umat2x2(): mat<uint, 2, 2>;
+
+  export function umat2x2(scalar: number): mat<uint, 2, 2>;
+
+  export function umat2x2(...args: TupleByMul<2, 2>): mat<uint, 2, 2>;
+
+  export function umat2x2(v0: mat<uint, Rows, Cols>): mat<uint, 2, 2>;
+
+  export function umat2x2(...args: Tuple<vec<uint, 2>, 2>): mat<uint, 2, 2>;
+
+  export function umat2x3(): mat<uint, 2, 3>;
+
+  export function umat2x3(scalar: number): mat<uint, 2, 3>;
+
+  export function umat2x3(...args: TupleByMul<2, 3>): mat<uint, 2, 3>;
+
+  export function umat2x3(v0: mat<uint, Rows, Cols>): mat<uint, 2, 3>;
+
+  export function umat2x3(...args: Tuple<vec<uint, 3>, 2>): mat<uint, 2, 3>;
+
+  export function umat2x4(): mat<uint, 2, 4>;
+
+  export function umat2x4(scalar: number): mat<uint, 2, 4>;
+
+  export function umat2x4(...args: TupleByMul<2, 4>): mat<uint, 2, 4>;
+
+  export function umat2x4(v0: mat<uint, Rows, Cols>): mat<uint, 2, 4>;
+
+  export function umat2x4(...args: Tuple<vec<uint, 3>, 2>): mat<uint, 2, 4>;
+
+  export function umat3(): mat<uint, 3, 3>;
+
+  export function umat3(scalar: number): mat<uint, 3, 3>;
+
+  export function umat3(...args: TupleByMul<3, 3>): mat<uint, 3, 3>;
+
+  export function umat3(v0: mat<uint, Rows, Cols>): mat<uint, 3, 3>;
+
+  export function umat3(...args: Tuple<vec<uint, 3>, 3>): mat<uint, 3, 3>;
+
+  export function umat3x3(): mat<uint, 3, 3>;
+
+  export function umat3x3(scalar: number): mat<uint, 3, 3>;
+
+  export function umat3x3(...args: TupleByMul<3, 3>): mat<uint, 3, 3>;
+
+  export function umat3x3(v0: mat<uint, Rows, Cols>): mat<uint, 3, 3>;
+
+  export function umat3x3(...args: Tuple<vec<uint, 3>, 3>): mat<uint, 3, 3>;
+
+  export function umat3x2(): mat<uint, 3, 2>;
+
+  export function umat3x2(scalar: number): mat<uint, 3, 2>;
+
+  export function umat3x2(...args: TupleByMul<3, 2>): mat<uint, 3, 2>;
+
+  export function umat3x2(v0: mat<uint, Rows, Cols>): mat<uint, 3, 2>;
+
+  export function umat3x2(...args: Tuple<vec<uint, 2>, 3>): mat<uint, 3, 2>;
+
+  export function umat3x4(): mat<uint, 3, 4>;
+
+  export function umat3x4(scalar: number): mat<uint, 3, 4>;
+
+  export function umat3x4(...args: TupleByMul<3, 4>): mat<uint, 3, 4>;
+
+  export function umat3x4(v0: mat<uint, Rows, Cols>): mat<uint, 3, 4>;
+
+  export function umat3x4(...args: Tuple<vec<uint, 4>, 3>): mat<uint, 3, 4>;
+
+  export function umat4(): mat<uint, 4, 4>;
+
+  export function umat4(scalar: number): mat<uint, 4, 4>;
+
+  export function umat4(...args: TupleByMul<4, 4>): mat<uint, 4, 4>;
+
+  export function umat4(v0: mat<uint, Rows, Cols>): mat<uint, 4, 4>;
+
+  export function umat4(...args: Tuple<vec<uint, 4>, 4>): mat<uint, 4, 4>;
+
+  export function umat4x4(): mat<uint, 4, 4>;
+
+  export function umat4x4(scalar: number): mat<uint, 4, 4>;
+
+  export function umat4x4(...args: TupleByMul<4, 4>): mat<uint, 4, 4>;
+
+  export function umat4x4(v0: mat<uint, Rows, Cols>): mat<uint, 4, 4>;
+
+  export function umat4x4(...args: Tuple<vec<uint, 4>, 4>): mat<uint, 4, 4>;
+
+  export function umat4x3(): mat<uint, 4, 3>;
+
+  export function umat4x3(scalar: number): mat<uint, 4, 3>;
+
+  export function umat4x3(...args: TupleByMul<4, 3>): mat<uint, 4, 3>;
+
+  export function umat4x3(v0: mat<uint, Rows, Cols>): mat<uint, 4, 3>;
+
+  export function umat4x3(...args: Tuple<vec<uint, 3>, 4>): mat<uint, 4, 3>;
+
+  export function umat4x2(): mat<uint, 4, 2>;
+
+  export function umat4x2(scalar: number): mat<uint, 4, 2>;
+
+  export function umat4x2(...args: TupleByMul<4, 2>): mat<uint, 4, 2>;
+
+  export function umat4x2(v0: mat<uint, Rows, Cols>): mat<uint, 4, 2>;
+
+  export function umat4x2(...args: Tuple<vec<uint, 2>, 4>): mat<uint, 4, 2>;
+
+  export function dmat2(): mat<double, 2, 2>;
+
+  export function dmat2(scalar: number): mat<double, 2, 2>;
+
+  export function dmat2(...args: TupleByMul<2, 2>): mat<double, 2, 2>;
+
+  export function dmat2(v0: mat<double, Rows, Cols>): mat<double, 2, 2>;
+
+  export function dmat2(...args: Tuple<vec<double, 2>, 2>): mat<double, 2, 2>;
+
+  export function dmat2x2(): mat<double, 2, 2>;
+
+  export function dmat2x2(scalar: number): mat<double, 2, 2>;
+
+  export function dmat2x2(...args: TupleByMul<2, 2>): mat<double, 2, 2>;
+
+  export function dmat2x2(v0: mat<double, Rows, Cols>): mat<double, 2, 2>;
+
+  export function dmat2x2(...args: Tuple<vec<double, 2>, 2>): mat<double, 2, 2>;
+
+  export function dmat2x3(): mat<double, 2, 3>;
+
+  export function dmat2x3(scalar: number): mat<double, 2, 3>;
+
+  export function dmat2x3(...args: TupleByMul<2, 3>): mat<double, 2, 3>;
+
+  export function dmat2x3(v0: mat<double, Rows, Cols>): mat<double, 2, 3>;
+
+  export function dmat2x3(...args: Tuple<vec<double, 3>, 2>): mat<double, 2, 3>;
+
+  export function dmat2x4(): mat<double, 2, 4>;
+
+  export function dmat2x4(scalar: number): mat<double, 2, 4>;
+
+  export function dmat2x4(...args: TupleByMul<2, 4>): mat<double, 2, 4>;
+
+  export function dmat2x4(v0: mat<double, Rows, Cols>): mat<double, 2, 4>;
+
+  export function dmat2x4(...args: Tuple<vec<double, 3>, 2>): mat<double, 2, 4>;
+
+  export function dmat3(): mat<double, 3, 3>;
+
+  export function dmat3(scalar: number): mat<double, 3, 3>;
+
+  export function dmat3(...args: TupleByMul<3, 3>): mat<double, 3, 3>;
+
+  export function dmat3(v0: mat<double, Rows, Cols>): mat<double, 3, 3>;
+
+  export function dmat3(...args: Tuple<vec<double, 3>, 3>): mat<double, 3, 3>;
+
+  export function dmat3x3(): mat<double, 3, 3>;
+
+  export function dmat3x3(scalar: number): mat<double, 3, 3>;
+
+  export function dmat3x3(...args: TupleByMul<3, 3>): mat<double, 3, 3>;
+
+  export function dmat3x3(v0: mat<double, Rows, Cols>): mat<double, 3, 3>;
+
+  export function dmat3x3(...args: Tuple<vec<double, 3>, 3>): mat<double, 3, 3>;
+
+  export function dmat3x2(): mat<double, 3, 2>;
+
+  export function dmat3x2(scalar: number): mat<double, 3, 2>;
+
+  export function dmat3x2(...args: TupleByMul<3, 2>): mat<double, 3, 2>;
+
+  export function dmat3x2(v0: mat<double, Rows, Cols>): mat<double, 3, 2>;
+
+  export function dmat3x2(...args: Tuple<vec<double, 2>, 3>): mat<double, 3, 2>;
+
+  export function dmat3x4(): mat<double, 3, 4>;
+
+  export function dmat3x4(scalar: number): mat<double, 3, 4>;
+
+  export function dmat3x4(...args: TupleByMul<3, 4>): mat<double, 3, 4>;
+
+  export function dmat3x4(v0: mat<double, Rows, Cols>): mat<double, 3, 4>;
+
+  export function dmat3x4(...args: Tuple<vec<double, 4>, 3>): mat<double, 3, 4>;
+
+  export function dmat4(): mat<double, 4, 4>;
+
+  export function dmat4(scalar: number): mat<double, 4, 4>;
+
+  export function dmat4(...args: TupleByMul<4, 4>): mat<double, 4, 4>;
+
+  export function dmat4(v0: mat<double, Rows, Cols>): mat<double, 4, 4>;
+
+  export function dmat4(...args: Tuple<vec<double, 4>, 4>): mat<double, 4, 4>;
+
+  export function dmat4x4(): mat<double, 4, 4>;
+
+  export function dmat4x4(scalar: number): mat<double, 4, 4>;
+
+  export function dmat4x4(...args: TupleByMul<4, 4>): mat<double, 4, 4>;
+
+  export function dmat4x4(v0: mat<double, Rows, Cols>): mat<double, 4, 4>;
+
+  export function dmat4x4(...args: Tuple<vec<double, 4>, 4>): mat<double, 4, 4>;
+
+  export function dmat4x3(): mat<double, 4, 3>;
+
+  export function dmat4x3(scalar: number): mat<double, 4, 3>;
+
+  export function dmat4x3(...args: TupleByMul<4, 3>): mat<double, 4, 3>;
+
+  export function dmat4x3(v0: mat<double, Rows, Cols>): mat<double, 4, 3>;
+
+  export function dmat4x3(...args: Tuple<vec<double, 3>, 4>): mat<double, 4, 3>;
+
+  export function dmat4x2(): mat<double, 4, 2>;
+
+  export function dmat4x2(scalar: number): mat<double, 4, 2>;
+
+  export function dmat4x2(...args: TupleByMul<4, 2>): mat<double, 4, 2>;
+
+  export function dmat4x2(v0: mat<double, Rows, Cols>): mat<double, 4, 2>;
+
+  export function dmat4x2(...args: Tuple<vec<double, 2>, 4>): mat<double, 4, 2>;
+}
 
 declare namespace gles {
   export type GLboolean = 0 | 1
@@ -3270,8 +4209,239 @@ declare namespace gles {
     GL_VERTEX_ATTRIB_ARRAY_DIVISOR = 0x88FE,
     GL_VERTEX_ATTRIB_BINDING = 0x82D4,
   }
+}
+
+declare namespace globjects {
+  export interface GLObject extends lang.ISendable {
+    readonly handle: number;
+
+    bind(): void;
+
+    unbind(): void;
+
+    delete(): void;
+  }
+
+  @Sendable
+  export class Buffer implements GLObject {
+    readonly handle: number;
+    readonly type: number;
+
+    constructor(type?: gles.BufferType | number);
+
+    bind(): void;
+
+    unbind(): void;
+
+    delete(): void;
+
+    setData(data: glm.valuetype, usage?: gles.BufferUsage): void;
+
+    setSubData(data: glm.valuetype, offset?: number): void;
+
+    /**
+     *
+     * @param offset
+     * @param length
+     * @param access GL_MAP_READ_BIT / GL_MAP_WRITE_BIT
+     * @returns
+     */
+    mapBufferRange(offset: number, length: number, access: number): ArrayBuffer;
+
+    unMapBuffer(): boolean;
+  }
+
+  @Sendable
+  export class FrameBuffer implements GLObject {
+    readonly handle: number;
+    readonly type: number;
+
+    /**
+     * GL_FRAMEBUFFER/GL_READ_FRAMEBUFFER/GL_WRITE_FRAMEBUFFER
+     * @param type
+     */
+    constructor(type?: number);
+
+    get isComplete(): boolean;
+
+    bind(): void;
+
+    unbind(): void;
+
+    delete(): void;
+
+    attachTexture(attachment: number, texture: Texture): void;
+
+    attachRenderBuffer(attachment: number, renderbuffer: RenderBuffer): void;
+  }
+
+  @Sendable
+  export class Program implements GLObject {
+    readonly handle: number;
+
+    constructor();
+
+    get log(): string;
+
+    attach(...args: Shader[] | number[]): boolean;
+
+    detach(...args: Shader[] | number[]): void;
+
+    getUniformLocation(name: string): number;
+
+    get attachedShader(): number;
+
+    get activeAttributes(): number;
+
+    get activeUniforms(): number;
+
+    get activeAttributeMaxLength(): number;
+
+    get activeUniformMaxLength(): number;
+
+    setUniformf(name: string, v: glm.vec<glm.float, glm.Range<4, 1>>): void;
+
+    setUniformf(name: string, v: Float32Array): void;
+
+    setUniformf(name: string, ...args: glm.TupleUnionBySize<4>): void;
+
+    setUniformi(name: string, v: glm.vec<glm.int, glm.Range<4, 1>>): void;
+
+    setUniformi(name: string, v: glm.int): void;
+
+    setUniformi(name: string, ...args: glm.TupleUnionBySize<4>): void;
+
+    bind(): void;
+
+    unbind(): void;
+
+    delete(): void;
+  }
+
+  @Sendable
+  export class RenderBuffer implements GLObject {
+    readonly handle: number;
+    readonly type: number;
+
+    constructor(type?: number);
+
+    bind(): void;
+
+    unbind(): void;
+
+    delete(): void;
+
+    storage(format: gles.InternalFormat | number, width: number, height: number): void;
+  }
+
+  @Sendable
+  export class Shader implements GLObject {
+    readonly handle: number;
+    readonly isCompiled: boolean;
+    readonly log: string;
+    readonly type: number;
+
+    constructor(type: gles.ShaderType | number, shaderSource: string);
+
+    static fromUri(type: gles.ShaderType | number, uri: string, encoding?: string): Shader;
+
+    bind(): void;
+
+    unbind(): void;
+
+    delete(): void;
+  }
+
+  interface Image2DOption {
+    level?: number;
+    internalFormat?: gles.InternalFormat | number;
+    width?: number;
+    height?: number;
+    border?: number;
+    format?: gles.InternalFormat | number;
+    type?: gles.IndicesType | number;
+    data?: Uint8Array;
+  }
+
+  interface UpdateImage2DOption extends Image2DOption {
+    xoffset?: number;
+    yoffset?: number;
+  }
+
+  @Sendable
+  export class Texture implements GLObject {
+    readonly handle: number;
+    readonly type: number;
+
+    constructor(type?: gles.TextureTarget | number);
+
+    setParameter(name: gles.TexParamName | number, value: number): Texture;
+
+    image2D(option?: Image2DOption): void;
+
+    updateImage2D(option: UpdateImage2DOption): void;
+
+    bind(): void;
+
+    unbind(): void;
+
+    generateMipMap(): void;
+
+    bindActive(target?: number): void;
+
+    delete(): void;
+  }
+
+  @Sendable
+  export class VertexArray implements GLObject {
+    readonly handle: number;
+
+    constructor();
+
+    bind(): void;
+
+    unbind(): void;
+
+    delete(): void;
+
+    enable(attributeIndex: number): void;
+
+    disable(attributeIndex: number): void;
+
+    drawArrays(mode: gles.DrawMode | number, first: number, count: number): void;
+
+    /**
+     *
+     * @param mode { DrawMode }
+     * @param count
+     * @param format {IndicesType}
+     * @param indices accept TypedArray
+     */
+    drawElements(mode: gles.DrawMode | number, count: number, format: gles.IndicesType | number,
+      indices: ArrayLike<number>): void;
+
+    setBuffer(buffer: Buffer, index: number, size: number, type: gles.IndicesType | number, normalized: boolean,
+      stride: number, pointer: number): void;
+
+    binding(bindingIndex: number): VertexAttributeBinding;
+  }
 
 
+  @Sendable
+  export class VertexAttributeBinding {
+    readonly bindingIndex: number;
+    readonly vao: VertexArray;
+
+    constructor(vao: VertexArray, index: number);
+
+    get attributeIndex(): number;
+
+    setAttribute(attributeIndex: number): void;
+
+    setFormat(size: number, format: gles.IndicesType | number, normalize: boolean, offset: number): void;
+
+    setBuffer(buffer: Buffer, offset: number, stride: number): void;
+  }
 
 
 }

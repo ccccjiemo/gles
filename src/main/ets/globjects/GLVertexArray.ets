@@ -2,42 +2,54 @@ import { GLObject } from './GLObject';
 import { Buffer } from './GLBuffer'
 import { collections } from '@kit.ArkTS';
 import { VertexAttributeBinding } from './GLVertexAttributeBinding';
-import gles from 'libgles.so';
+import {
+  glGenVertexArrays,
+  glBindVertexArray,
+  glDeleteVertexArrays,
+  glEnableVertexAttribArray,
+  glDisableVertexAttribArray,
+  DrawMode,
+  glDrawArrays,
+  IndicesType,
+  glDrawElements,
+  glVertexAttribPointer
+} from 'libgles.so';
+
 "use shared"
 
 @Sendable
 export class VertexArray implements GLObject {
-  handle: number;
+  readonly handle: number;
   private _bindings: collections.Map<number, VertexAttributeBinding>
 
   constructor() {
-    this.handle = gles.glGenVertexArrays(1)[0];
+    this.handle = glGenVertexArrays(1)[0];
     this._bindings = new collections.Map();
   }
 
   bind(): void {
-    gles.glBindVertexArray(this.handle);
+    glBindVertexArray(this.handle);
   }
 
   unbind(): void {
-    gles.glBindVertexArray(0);
+    glBindVertexArray(0);
   }
 
   delete(): void {
-    gles.glDeleteVertexArrays(this.handle);
+    glDeleteVertexArrays(this.handle);
   }
 
   enable(attributeIndex: number) {
-    gles.glEnableVertexAttribArray(attributeIndex);
+    glEnableVertexAttribArray(attributeIndex);
   }
 
   disable(attributeIndex: number) {
-    gles.glDisableVertexAttribArray(attributeIndex);
+    glDisableVertexAttribArray(attributeIndex);
   }
 
-  drawArrays(mode: gles.DrawMode | number, first: number, count: number) {
+  drawArrays(mode: DrawMode | number, first: number, count: number) {
     this.bind();
-    gles.glDrawArrays(mode, first, count);
+    glDrawArrays(mode, first, count);
   }
 
   /**
@@ -47,18 +59,18 @@ export class VertexArray implements GLObject {
    * @param format {IndicesType}
    * @param indices accept TypedArray
    */
-  drawElements(mode: gles.DrawMode | number, count: number, format: gles.IndicesType | number,
+  drawElements(mode: DrawMode | number, count: number, format: IndicesType | number,
     indices: ArrayLike<number>) {
     this.bind();
-    gles.glDrawElements(mode, count, format, indices);
+    glDrawElements(mode, count, format, indices);
   }
 
-  setBuffer(buffer: Buffer, index: number, size: number, type: gles.IndicesType | number, normalized: boolean,
+  setBuffer(buffer: Buffer, index: number, size: number, type: IndicesType | number, normalized: boolean,
     stride: number,
     pointer: number) {
     this.bind();
     buffer.bind();
-    gles.glVertexAttribPointer(index, size, type, normalized ? 1 : 0, stride, pointer);
+    glVertexAttribPointer(index, size, type, normalized ? 1 : 0, stride, pointer);
   }
 
   binding(bindingIndex: number): VertexAttributeBinding {

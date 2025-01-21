@@ -3,6 +3,7 @@
   "version": "0.3.0",
   "description": "基于api12, opengl es封装",
   "main": "Index.ets",
+  "types": "Index.d.ets",
   "keywords": [
     "opengl",
     "gles32"
@@ -14,7 +15,5 @@
   "packageType": "InterfaceHar",
   "dependencies": {
     "libgles.so": "file:./src/main/cpp/types/libgles",
-    "@jemoc/glm": "file:../glm"
-
   }
 }

@@ -1,6 +1,16 @@
 import { GLObject } from './GLObject';
-import gles from 'libgles.so';
-import { glm } from '@jemoc/glm';
+import { glm } from '../glm/index';
+import {
+  glBindBuffer,
+  glDeleteBuffers,
+  BufferUsage,
+  glBufferData,
+  glBufferSubData,
+  glMapBufferRange,
+  glUnmapBuffer,
+  glGenBuffers,
+  BufferType
+} from 'libgles.so';
 
 "use shared"
 
@@ -9,31 +19,31 @@ export class Buffer implements GLObject {
   readonly handle: number;
   readonly type: number;
 
-  constructor(type?: gles.BufferType | number) {
-    this.type = type ?? gles.BufferType.GL_ARRAY_BUFFER;
-    this.handle = gles.glGenBuffers(1)[0];
+  constructor(type?: BufferType | number) {
+    this.type = type ?? BufferType.GL_ARRAY_BUFFER;
+    this.handle = glGenBuffers(1)[0];
   }
 
   bind(): void {
-    gles.glBindBuffer(this.handle, this.type);
+    glBindBuffer(this.handle, this.type);
   }
 
   unbind(): void {
-    gles.glBindBuffer(this.type, 0);
+    glBindBuffer(this.type, 0);
   }
 
   delete(): void {
-    gles.glDeleteBuffers(this.handle);
+    glDeleteBuffers(this.handle);
   }
 
-  setData(data: glm.valuetype, usage?: gles.BufferUsage) {
+  setData(data: glm.valuetype, usage?: BufferUsage) {
     this.bind();
-    gles.glBufferData(this.type, data, usage ?? gles.BufferUsage.GL_STATIC_DRAW);
+    glBufferData(this.type, data, usage ?? BufferUsage.GL_STATIC_DRAW);
   }
 
   setSubData(data: glm.valuetype, offset: number = 0) {
     this.bind();
-    gles.glBufferSubData(this.type, offset, data);
+    glBufferSubData(this.type, offset, data);
   }
 
   /**
@@ -45,12 +55,12 @@ export class Buffer implements GLObject {
    */
   mapBufferRange(offset: number, length: number, access: number): ArrayBuffer {
     this.bind();
-    return gles.glMapBufferRange(this.type, offset, length, access);
+    return glMapBufferRange(this.type, offset, length, access);
   }
 
   unMapBuffer(): boolean {
     this.bind();
-    return gles.glUnmapBuffer(this.type);
+    return glUnmapBuffer(this.type);
   }
 }
 

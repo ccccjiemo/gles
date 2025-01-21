@@ -1,8 +1,33 @@
 import { GLObject } from "./GLObject";
 import { collections } from "@kit.ArkTS";
-import gles from "libgles.so";
 import { Shader } from "./GLShader";
-import { glm } from "@jemoc/glm";
+import { glm } from '../glm/index'
+import {
+  glCreateProgram,
+  glAttachShader,
+  glLinkProgram,
+  GL_TRUE,
+  glGetProgramiv,
+  GL_LINK_STATUS,
+  glGetProgramInfoLog,
+  glDetachShader,
+  glGetUniformLocation,
+  GL_ATTACHED_SHADERS,
+  GL_ACTIVE_ATTRIBUTES,
+  GL_ACTIVE_UNIFORMS,
+  ProgramParamName,
+  glUniform1fv,
+  glUniform2fv,
+  glUniform3fv,
+  glUniform4fv,
+  glUniform1iv,
+  glUniform2iv,
+  glUniform3iv,
+  glUniform4iv,
+  glUseProgram,
+  glDeleteProgram
+} from "libgles.so";
+
 "use shared"
 
 @Sendable
@@ -12,7 +37,7 @@ export class Program implements GLObject {
   private _uniformCache: collections.Map<string, number>;
 
   constructor() {
-    this.handle = gles.glCreateProgram();
+    this.handle = glCreateProgram();
     this._uniformCache = new collections.Map();
     this._log = '';
   }
@@ -22,17 +47,16 @@ export class Program implements GLObject {
   }
 
   attach(...args: Shader[] | number[]): boolean {
-    collections.Array
-    gles.glAttachShader(this.handle, ...args.map((it: Shader | number) => {
+    glAttachShader(this.handle, ...args.map((it: Shader | number) => {
       if (typeof it === 'number') {
         return it;
       } else {
         return it.handle;
       }
     }));
-    gles.glLinkProgram(this.handle);
-    if (gles.GL_TRUE != gles.glGetProgramiv(this.handle, gles.GL_LINK_STATUS)) {
-      this._log = gles.glGetProgramInfoLog(this.handle);
+    glLinkProgram(this.handle);
+    if (GL_TRUE != glGetProgramiv(this.handle, GL_LINK_STATUS)) {
+      this._log = glGetProgramInfoLog(this.handle);
       return false;
     }
     return true;
@@ -41,7 +65,7 @@ export class Program implements GLObject {
   detach(...args: Shader[] | number[]): void {
     for (let i = 0; i < args.length; i++) {
       let value = args[i];
-      gles.glDetachShader(this.handle, typeof value === 'number' ? value : value.handle);
+      glDetachShader(this.handle, typeof value === 'number' ? value : value.handle);
     }
   }
 
@@ -50,7 +74,7 @@ export class Program implements GLObject {
       return this._uniformCache.get(name)!;
     }
 
-    let uniform = gles.glGetUniformLocation(this.handle, name);
+    let uniform = glGetUniformLocation(this.handle, name);
     if (uniform < 0) {
       return uniform;
     }
@@ -59,23 +83,23 @@ export class Program implements GLObject {
   }
 
   get attachedShader(): number {
-    return gles.glGetProgramiv(this.handle, gles.GL_ATTACHED_SHADERS);
+    return glGetProgramiv(this.handle, GL_ATTACHED_SHADERS);
   }
 
   get activeAttributes(): number {
-    return gles.glGetProgramiv(this.handle, gles.GL_ACTIVE_ATTRIBUTES);
+    return glGetProgramiv(this.handle, GL_ACTIVE_ATTRIBUTES);
   }
 
   get activeUniforms(): number {
-    return gles.glGetProgramiv(this.handle, gles.GL_ACTIVE_UNIFORMS);
+    return glGetProgramiv(this.handle, GL_ACTIVE_UNIFORMS);
   }
 
   get activeAttributeMaxLength(): number {
-    return gles.glGetProgramiv(this.handle, gles.ProgramParamName.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH);
+    return glGetProgramiv(this.handle, ProgramParamName.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH);
   }
 
   get activeUniformMaxLength(): number {
-    return gles.glGetProgramiv(this.handle, gles.ProgramParamName.GL_ACTIVE_UNIFORM_MAX_LENGTH);
+    return glGetProgramiv(this.handle, ProgramParamName.GL_ACTIVE_UNIFORM_MAX_LENGTH);
   }
 
   setUniformf(name: string, v: glm.vec<glm.float, glm.Range<4, 1>>)
@@ -101,16 +125,16 @@ export class Program implements GLObject {
 
     switch (size) {
       case 1:
-        gles.glUniform1fv(location, buffer);
+        glUniform1fv(location, buffer);
         break;
       case 2:
-        gles.glUniform2fv(location, buffer);
+        glUniform2fv(location, buffer);
         break;
       case 3:
-        gles.glUniform3fv(location, buffer);
+        glUniform3fv(location, buffer);
         break;
       case 4:
-        gles.glUniform4fv(location, buffer);
+        glUniform4fv(location, buffer);
         break;
       default:
         throw Error('invalid argument');
@@ -141,16 +165,16 @@ export class Program implements GLObject {
 
     switch (size) {
       case 1:
-        gles.glUniform1iv(location, buffer);
+        glUniform1iv(location, buffer);
         break;
       case 2:
-        gles.glUniform2iv(location, buffer);
+        glUniform2iv(location, buffer);
         break;
       case 3:
-        gles.glUniform3iv(location, buffer);
+        glUniform3iv(location, buffer);
         break;
       case 4:
-        gles.glUniform4iv(location, buffer);
+        glUniform4iv(location, buffer);
         break;
       default:
         throw Error('invalid argument');
@@ -158,15 +182,15 @@ export class Program implements GLObject {
   }
 
   bind(): void {
-    gles.glUseProgram(this.handle);
+    glUseProgram(this.handle);
   }
 
   unbind(): void {
-    gles.glUseProgram(0);
+    glUseProgram(0);
   }
 
   delete(): void {
-    gles.glDeleteProgram(this.handle);
+    glDeleteProgram(this.handle);
     this._uniformCache.clear();
   }
 }

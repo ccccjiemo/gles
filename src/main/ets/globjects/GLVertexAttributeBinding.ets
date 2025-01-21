@@ -1,17 +1,19 @@
-import gles from 'libgles.so';
+import { glVertexAttribBinding, IndicesType, glVertexAttribFormat, glBindVertexBuffer } from 'libgles.so';
 import { Buffer } from './GLBuffer';
 import { VertexArray } from './GLVertexArray';
+
 "use shared"
 
 @Sendable
 export class VertexAttributeBinding {
   readonly bindingIndex: number
-  private _attributeIndex: number = 0;
+  private _attributeIndex: number;
   readonly vao: VertexArray;
 
   constructor(vao: VertexArray, index: number) {
     this.bindingIndex = index;
     this.vao = vao;
+    this._attributeIndex = 0;
   }
 
   get attributeIndex(): number {
@@ -21,14 +23,14 @@ export class VertexAttributeBinding {
   setAttribute(attributeIndex: number) {
     this._attributeIndex = attributeIndex;
     this.vao.bind();
-    gles.glVertexAttribBinding(this._attributeIndex, this.bindingIndex);
+    glVertexAttribBinding(this._attributeIndex, this.bindingIndex);
   }
 
-  setFormat(size: number, format: gles.IndicesType | number, normalize: boolean, offset: number) {
-    gles.glVertexAttribFormat(this.bindingIndex, size, format, normalize ? 1 : 0, offset);
+  setFormat(size: number, format: IndicesType | number, normalize: boolean, offset: number) {
+    glVertexAttribFormat(this.bindingIndex, size, format, normalize ? 1 : 0, offset);
   }
 
   setBuffer(buffer: Buffer, offset: number, stride: number) {
-    gles.glBindVertexBuffer(this.bindingIndex, buffer.handle, offset, stride);
+    glBindVertexBuffer(this.bindingIndex, buffer.handle, offset, stride);
   }
 }
