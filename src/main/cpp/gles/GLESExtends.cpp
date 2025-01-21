@@ -5,7 +5,7 @@
 // please include "napi/native_api.h".
 
 #include "GLESExtends.h"
-#include "common/utils.h"
+#include "utils.h"
 #include <GLES3/gl3.h>
 
 namespace GLESExtends {

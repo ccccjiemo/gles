@@ -5,10 +5,22 @@
 // please include "napi/native_api.h".
 
 #include "GLES.h"
-#include "common/utils.h"
-#include <GLES3/gl32.h>
-#include <GLES2/gl2ext.h>
+#include "utils.h"
 #include <napi/native_api.h>
+
+#define GET_NAPI_INFO_ARGS_NUMBERS(func)                                                                               \
+    size_t argc = 0;                                                                                                   \
+    NAPI_CALL(env, napi_get_cb_info(env, info, &argc, nullptr, nullptr, nullptr))                                      \
+    napi_value *argv = new napi_value[argc];                                                                           \
+    NAPI_CALL(env, napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr))                                         \
+    GLuint *array = new GLuint[argc];                                                                                  \
+    for (int i = 0; i < argc; i++) {                                                                                   \
+        NAPI_CALL(env, napi_get_value_uint32(env, argv[i], &array[i]))                                                 \
+    }                                                                                                                  \
+    func;                                                                                                              \
+    delete[] argv;                                                                                                     \
+    delete[] array;
+
 
 namespace GLES {
 
@@ -17,6 +29,7 @@ napi_value NapiGLActiveShaderProgram(napi_env env, napi_callback_info info) {
     GLuint pipeline = getGLuint(env, argv[0]);
     GLuint program = getGLuint(env, argv[1]);
     glActiveShaderProgram(pipeline, program);
+
     return nullptr;
 }
 
@@ -43,6 +56,8 @@ napi_value NapiGLAttachShader(napi_env env, napi_callback_info info) {
         GLuint shader = getGLuint(env, argv[i]);
         glAttachShader(program, shader);
     }
+
+    delete[] argv;
 
     return nullptr;
 }
@@ -378,34 +393,43 @@ napi_value NapiGLCullFace(napi_env env, napi_callback_info info) {
 }
 
 napi_value NapiGLDeleteBuffers(napi_env env, napi_callback_info info) {
-    GET_NAPI_INFO(env, info, argc, 1, argv, that, _data)
-
-    void *data = nullptr;
-    size_t size = 0;
-    getArray(env, argv[0], &data, &size);
-    glDeleteBuffers(size / sizeof(GLuint), (GLuint *)data);
+//     GET_NAPI_INFO(env, info, argc, 1, argv, that, _data)
+//     size_t argc = 0;
+//     napi_get_cb_info(env, info, &argc, nullptr, nullptr, nullptr);
+//     napi_value *argv = new napi_value[argc];
+//     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+//     GLuint *buffers = new GLuint[argc];
+//     for (int i = 0; i < argc; i++) {
+//         NAPI_CALL(env, napi_get_value_uint32(env, argv[i], &buffers[i]))
+//     }
+//
+//     glDeleteBuffers(argc, buffers);
+//     delete[] argv;
+//     delete[] buffers;
+    GET_NAPI_INFO_ARGS_NUMBERS(glDeleteBuffers(argc, array))
 
     return nullptr;
 }
 
 napi_value NapiGLDeleteVertexArrays(napi_env env, napi_callback_info info) {
-    GET_NAPI_INFO(env, info, argc, 1, argv, that, _data)
-
-    void *data = nullptr;
-    size_t size = 0;
-    getArray(env, argv[0], &data, &size);
-    glDeleteVertexArrays(size / sizeof(GLuint), (GLuint *)data);
-
+//     GET_NAPI_INFO(env, info, argc, 1, argv, that, _data)
+//
+//     void *data = nullptr;
+//     size_t size = 0;
+//     getArray(env, argv[0], &data, &size);
+//     glDeleteVertexArrays(size / sizeof(GLuint), (GLuint *)data);
+    GET_NAPI_INFO_ARGS_NUMBERS(glDeleteVertexArrays(argc, array))
     return nullptr;
 }
 
 napi_value NapiGLDeleteFramebuffers(napi_env env, napi_callback_info info) {
-    GET_NAPI_INFO(env, info, argc, 1, argv, that, _data)
-
-    void *data = nullptr;
-    size_t size = 0;
-    getArray(env, argv[0], &data, &size);
-    glDeleteFramebuffers(size / sizeof(GLuint), (GLuint *)data);
+//     GET_NAPI_INFO(env, info, argc, 1, argv, that, _data)
+//
+//     void *data = nullptr;
+//     size_t size = 0;
+//     getArray(env, argv[0], &data, &size);
+//     glDeleteFramebuffers(size / sizeof(GLuint), (GLuint *)data);
+    GET_NAPI_INFO_ARGS_NUMBERS(glDeleteFramebuffers(argc, array))
 
     return nullptr;
 }
@@ -420,13 +444,13 @@ napi_value NapiGLDeleteProgram(napi_env env, napi_callback_info info) {
 }
 
 napi_value NapiGLDeleteRenderbuffers(napi_env env, napi_callback_info info) {
-    GET_NAPI_INFO(env, info, argc, 1, argv, that, _data)
-
-    void *data = nullptr;
-    size_t size = 0;
-    getArray(env, argv[0], &data, &size);
-    glDeleteRenderbuffers(size / sizeof(GLuint), (GLuint *)data);
-
+//     GET_NAPI_INFO(env, info, argc, 1, argv, that, _data)
+//
+//     void *data = nullptr;
+//     size_t size = 0;
+//     getArray(env, argv[0], &data, &size);
+//     glDeleteRenderbuffers(size / sizeof(GLuint), (GLuint *)data);
+    GET_NAPI_INFO_ARGS_NUMBERS(glDeleteRenderbuffers(argc, array))
     return nullptr;
 }
 
@@ -439,12 +463,14 @@ napi_value NapiGLDeleteShader(napi_env env, napi_callback_info info) {
 }
 
 napi_value NapiGLDeleteTextures(napi_env env, napi_callback_info info) {
-    GET_NAPI_INFO(env, info, argc, 1, argv, that, _data)
+//     GET_NAPI_INFO(env, info, argc, 1, argv, that, _data)
+//
+//     void *data = nullptr;
+//     size_t size = 0;
+//     getArray(env, argv[0], &data, &size);
+//     glDeleteTextures(size / sizeof(GLuint), (GLuint *)data);
+    GET_NAPI_INFO_ARGS_NUMBERS(glDeleteTextures(argc, array))
 
-    void *data = nullptr;
-    size_t size = 0;
-    getArray(env, argv[0], &data, &size);
-    glDeleteTextures(size / sizeof(GLuint), (GLuint *)data);
     return nullptr;
 }
 
@@ -1023,8 +1049,17 @@ napi_value NapiGLGetVertexAttribiv(napi_env env, napi_callback_info info) {
     return result;
 }
 napi_value NapiGLGetVertexAttribPointerv(napi_env env, napi_callback_info info) {
-    // glGetVertexAttribPointerv(GLuint index, GLenum pname, void **pointer)
-    return nullptr;
+    GET_NAPI_INFO(env, info, argc, 1, argv, that, _data)
+    GLuint index = getUint32(env, argv[0]);
+    void *pointer = nullptr;
+    glGetVertexAttribPointerv(index, GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING, &pointer);
+    uintptr_t ptrValue = reinterpret_cast<uintptr_t>(pointer);
+    char buffer[50]{'\0'}; // 足够存储指针的十六进制表示
+    // 使用 sprintf 或 snprintf 将指针转换为十六进制字符串
+    snprintf(buffer, sizeof(buffer), "0x%lx", static_cast<unsigned long>(ptrValue));
+    napi_value result = nullptr;
+    napi_create_string_utf8(env, buffer, NAPI_AUTO_LENGTH, &result);
+    return result;
 }
 napi_value NapiGLHint(napi_env env, napi_callback_info info) {
     GET_NAPI_INFO(env, info, argc, 2, argv, that, _data)
@@ -1245,8 +1280,16 @@ napi_value NapiGLScissor(napi_env env, napi_callback_info info) {
     glScissor(x, y, width, height);
     return nullptr;
 }
-napi_value NapiGLShaderBinary(napi_env env, napi_callback_info info) { 
-//     glShaderBinary(GLsizei count, const GLuint *shaders, GLenum binaryFormat, const void *binary, GLsizei length)
+napi_value NapiGLShaderBinary(napi_env env, napi_callback_info info) {
+    GET_NAPI_INFO(env, info, argc, 3, argv, that, _data)
+    void *shaders = nullptr;
+    size_t count = 0;
+    void *binary = nullptr;
+    size_t length = 0;
+    getArray(env, argv[0], &shaders, &count);
+    GLenum binaryFormat = getGLenum(env, argv[1]);
+    getArray(env, argv[2], &binary, &length);
+    glShaderBinary(count, (GLuint *)shaders, binaryFormat, binary, length);
 
     return nullptr;
 }

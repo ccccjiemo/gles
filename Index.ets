@@ -1,3 +1,5 @@
-export * as gles from './src/main/ets/Index'
 
-export { GL } from './src/main/ets/GL'
+export { glm } from '@jemoc/glm'
+
+export { globjects, gles } from './src/main/ets/Index'
+

@@ -1,0 +1,5 @@
+@Sendable
+class GL {
+
+}
+

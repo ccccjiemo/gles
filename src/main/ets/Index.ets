@@ -1,13 +1,5 @@
-export * from './GLES'
+import gles from 'libgles.so'
 
-export * from './constant/Index'
+import * as globjects from './globjects/Index'
 
-export * from './glm/Index'
-
-export * from './globjects/Index'
-
-export { OHNativeErrorCode } from './NativeImage'
-
-export { NativeImage } from 'libgles.so'
-
-
+export { gles, globjects }

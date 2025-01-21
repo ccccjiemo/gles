@@ -9,7 +9,8 @@
 
 #include <napi/native_api.h>
 #include <native_image/native_image.h>
-#include <unordered_map>
+#include <native_image/graphic_error_code.h>
+
 
 namespace NativeImage {
 

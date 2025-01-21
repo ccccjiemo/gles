@@ -1,3 +1,11 @@
+## [0.3.0] 2025
+- glUniformiv传入类型Uint32Array改正为Int32Array
+- 实现glGetVertexAttribPointerv，现方法会返回0x表示的字符串表示结果指针
+- 实现glShaderBinary
+- 增加glMapBufferRange和glUnMapBuffer
+- 实现部分glm库方法(暂不支持simd加速,后续考虑)
+- 重构GLObject
+
 ## [0.2.9] 2024-12-31
 - 基本api12重新打包
 ---

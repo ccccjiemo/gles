@@ -1,47 +1,39 @@
-import {
-  glBindBuffer,
-  glBufferData,
-  glBufferSubData,
-  glDeleteBuffers,
-  glGenBuffers,
-  glMapBufferRange,
-  glUnmapBuffer
-} from 'libgles.so';
-import { BufferUsage } from '../constant/BufferUsage';
-import { BufferType } from '../constant/BufferType';
 import { GLObject } from './GLObject';
-import { valuetype } from '../glm/common';
+import gles from 'libgles.so';
+import { glm } from '@jemoc/glm';
+
+"use shared"
 
 @Sendable
-class GLBuffer implements GLObject {
+export class Buffer implements GLObject {
   readonly handle: number;
   readonly type: number;
 
-  constructor(type?: BufferType | number) {
-    this.type = type ?? BufferType.GL_ARRAY_BUFFER;
-    this.handle = glGenBuffers(1)[0];
+  constructor(type?: gles.BufferType | number) {
+    this.type = type ?? gles.BufferType.GL_ARRAY_BUFFER;
+    this.handle = gles.glGenBuffers(1)[0];
   }
 
   bind(): void {
-    glBindBuffer(this.handle, this.type);
+    gles.glBindBuffer(this.handle, this.type);
   }
 
   unbind(): void {
-    glBindBuffer(this.type, 0);
+    gles.glBindBuffer(this.type, 0);
   }
 
   delete(): void {
-    glDeleteBuffers(new Uint32Array([this.handle]));
+    gles.glDeleteBuffers(this.handle);
   }
 
-  setData(data: valuetype, usage?: BufferUsage) {
+  setData(data: glm.valuetype, usage?: gles.BufferUsage) {
     this.bind();
-    glBufferData(this.type, data, usage ?? BufferUsage.GL_STATIC_DRAW);
+    gles.glBufferData(this.type, data, usage ?? gles.BufferUsage.GL_STATIC_DRAW);
   }
 
-  setSubData(data: valuetype, offset: number = 0) {
+  setSubData(data: glm.valuetype, offset: number = 0) {
     this.bind();
-    glBufferSubData(this.type, offset, data);
+    gles.glBufferSubData(this.type, offset, data);
   }
 
   /**
@@ -53,11 +45,14 @@ class GLBuffer implements GLObject {
    */
   mapBufferRange(offset: number, length: number, access: number): ArrayBuffer {
     this.bind();
-    return glMapBufferRange(this.type, offset, length, access);
+    return gles.glMapBufferRange(this.type, offset, length, access);
   }
 
   unMapBuffer(): boolean {
     this.bind();
-    return glUnmapBuffer(this.type);
+    return gles.glUnmapBuffer(this.type);
   }
 }
+
+
+

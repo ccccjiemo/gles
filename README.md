@@ -8,6 +8,9 @@
 ohpm install @jemoc/gles
 ```
 
+需要arkTS侧使用egl环境，可以安装[@jemoc/egl](https://ohpm.openharmony.cn/#/cn/detail/@jemoc%2Fegl)
+
+
 ---
 
 ### 基本用法
@@ -29,9 +32,10 @@ gles.GL_COLOR_BUFFER_BIT
 
 ---
 
-#### 0.2.2 新增NativeImage支持
+### 0.2.2 新增NativeImage支持
 
-##### NativeImage需要egl环境支持。可以实现渲染视频帧/同层渲染等需求。复杂NativeWindow操作，需要自己实现napi功能。详细查询[OH_NativeImage](https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V13/_o_h___native_image-V13#oh_nativeimage-1)
+#### NativeImage需要egl环境支持。可以实现渲染视频帧/同层渲染等需求。复杂NativeWindow操作，需要自己实现napi功能。详细查询[OH_NativeImage](https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V13/_o_h___native_image-V13#oh_nativeimage-1)
+
 ```typescript
 let nativeImage = new gles.NativeImage(); //创建NativeImage，可以使用在try catch中执行。创建失败会抛出错误
 let surfaceId = nativeImage.surfaceId; //创建surfaceId成功后可以获取surfaceId  
@@ -64,11 +68,89 @@ FragmentShader中需要加上以下代码
 #extension GL_OES_EGL_image_external : require
 ```
 
-需要arkTS侧使用egl，可以安装@jemoc/egl
+---
+
+### 0.3.0版本改动
+
+#### gles库改动
+
+- 新增glGetVertexAttribPointerv、glShaderBinary、glMapBufferRange和glUnMapBuffer方法
+- 修正glUniformiv类方法签名错误
+
+#### 自0.2.0版本新增的opengl封装类从gles中拆分，现归档在globjects模块中
+
+```typescript
+import { globjects } from '@jemoc/gles'
+
+//0.2.0时，对象资源值是通过id获取的，0.3.0改为handle
+let buffer = new globjects.Buffer()
+//通过handle值获取对象资源，无其他大改动
+gles.glDeleteBuffers(buffer.handle)
+
+```
+
+#### 增加glm模块
+
+- 该库现已实现向量和矩阵对象，提供glm常用方法，底层数据以列主序存放,该库只是模拟c库glm实现暂未实现simd加速(后续考虑)。
+- 现提供以下方法 radians
+  degrees
+  translate
+  scale
+  normalize
+  inverse
+  rotate
+  ortho
+  perspective
+  dot
+  cross
+  length
+  abs
+  transpose
+
+```typescript
+import { glm } from '@jemoc/gles'
+
+/***
+ * 创建向量
+ */
+//向量初始化方式
+let vec1 = glm.vec1() //无参为初始化，0向量, vce是float类型向量
+vec1 = glm.vec1(1.0) //标量初始化
+
+let vec2 = glm.vec2([1, 1]) //数组初始化
+let vec3 = glm.vec3(vec2, 1.0)
+vec3 = glm.vec3(1, 2, 3)
+let ivec = glm.ivec1() //整形向量
+let uvec = glm.uvec1() //无符号整形向量
+let dvec = glm.dvec() //double
+
+let v = glm.Vec(2, Float32Array) //通用向量创建方式，第三参数开始为不定参数
+
+glm.vec2().add(glm.vec2()) //向量相加
+glm.vec2().sub(glm.vec2()) //向量相减
+glm.vec2().mul(glm.vec2()) //向量相乘
+glm.vec2().mul(glm.mat2x3()) //向量与矩阵相乘
+glm.vec2().div(glm.vec2()) //向量相除  
+
+
+/**
+ * 创建矩阵
+ */
+
+let mat = glm.mat2() // 默认为0矩阵
+let mat = glm.mat2(1) //标准向量
+let mat = glm.mat2(1, 1, 1, 1)
+let mat = glm.mat2([1, 1, 1, 1])
+let mat = glm.mat2(glm.vec2(1), glm.vec2(2)) //使用向量初始化
+
+//矩阵也支持加减乘除操作，这里不多做介绍
+
+
+```
 
 ---
 
-#### 绘制三角形
+### 绘制三角形
 
 ##### 定义shader和顶点数组
 
@@ -103,27 +185,23 @@ let fragmentShaderSource =
 
 ##### 使用封装方法
 
-
 ```typescript
-//Buffer2 VertexArray2 Program2等支持sendable
-let buffer = new gles.Buffer(gles.GL_ARRAY_BUFFER);
+let buffer = new globjects.Buffer(gles.GL_ARRAY_BUFFER);
 buffer.setData(vertex_list, gles.GL_STATIC_DRAW);
 
-let vao = new gles.VertexArray();
+let vao = new globjects.VertexArray();
 vao.enable(0);
 vao.setBuffer(vbo, 0, 3, gles.GL_FLOAT, false, 3 * 4, 0);
 
-let program = new gles.Program();
-let vertexShader = gles.Shader.fromString(gles.GL_VERTEX_SHADER, vertexShaderSource);
-let fragmentShader = gles.Shader.fromString(gles.GL_FRAGMENT_SHADER, fragmentShaderSource);
+let program = new globjects.Program();
+let vertexShader = globjects.Shader.fromString(gles.GL_VERTEX_SHADER, vertexShaderSource);
+let fragmentShader = globjects.Shader.fromString(gles.GL_FRAGMENT_SHADER, fragmentShaderSource);
 program.attach(vertexShader, fragmentShader);
 program.bind();
 
 vao.drawArrays(gl.GL_TRIANGLES, 0, 3)
 
 //eglSwapBuffer  
-
-
 
 ```
 
@@ -354,4 +432,6 @@ gles.glDrawArrays(gles.GL_TRIANGLES, 0, 3);
 | glVertexAttribFormat                  |
 | glVertexAttribIFormat                 |
 | glVertexAttribBinding                 |
+| glMapBufferRange                      |
+| glUnMapBuffer                         |
 

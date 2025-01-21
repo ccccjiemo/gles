@@ -1,12 +1,16 @@
+export  { Buffer } from './GLBuffer'
 
-export { Buffer, Buffer2 } from './Buffer'
+export  { FrameBuffer } from './GLFrameBuffer'
 
-export { Program, Program2 } from './Program'
+export  { Program } from './GLProgram'
 
-export { Shader, Shader2 } from './Shader'
+export  { RenderBuffer } from './GLRenderBuffer'
 
-export { Texture, Texture2 } from './Texture'
+export  { Shader } from './GLShader'
 
-export { VertexArray, VertexArray2 } from './VertexArray'
+export  { Texture } from './GLTexture'
 
-export { VertexAttributeBinding } from './VertexAttributeBinding'
+export  { VertexArray } from './GLVertexArray'
+
+export  { VertexAttributeBinding } from './GLVertexAttributeBinding'
+

@@ -1,5 +1,7 @@
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { describe, beforeAll, beforeEach, afterEach, afterAll, it, expect } from '@ohos/hypium';
+import gles from 'libgles.so'
+import { globjects } from '../../../main/ets/Index'
 
 export default function abilityTest() {
   describe('ActsAbilityTest', () => {
@@ -24,6 +26,15 @@ export default function abilityTest() {
     })
     it('assertContain', 0, () => {
       // Defines a test case. This API supports three parameters: test case name, filter parameter, and test case function.
+
+      let buffer1 = new globjects.Buffer();
+
+      let buffer = gles.glGenBuffers(1)[0];
+      let buff = gles.GL_ARRAY_BUFFER;
+      let image = new gles.NativeImage();
+
+      let t = gles.MipmapTarget.GL_TEXTURE_2D;
+
       hilog.info(0x0000, 'testTag', '%{public}s', 'it begin');
       let a = 'abc';
       let b = 'b';

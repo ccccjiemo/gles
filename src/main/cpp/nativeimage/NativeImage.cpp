@@ -10,8 +10,7 @@
 #include <cstdio>
 #include <native_image/native_image.h>
 #include "NativeImage.h"
-#include "common/utils.h"
-#include <hilog/log.h>
+#include "utils.h"
 
 
 namespace NativeImage {
@@ -95,7 +94,7 @@ napi_value NapiUpdateSurfaceImage(napi_env env, napi_callback_info info) {
         napi_throw_error(env, "NativeImage::UpdateSurfaceImage", "invalid operation");
         return nullptr;
     }
-    
+
     int error = OH_NativeImage_UpdateSurfaceImage((OH_NativeImage *)image);
     return createNapiInt32(env, error);
 }
@@ -131,8 +130,6 @@ napi_value NapiGetIsAvailable(napi_env env, napi_callback_info info) {
     OH_NativeImage *image = GetNativeImage(env, _this);
     if (image == nullptr)
         napi_throw_error(env, "NativeImage", "Get Available Failed, NativeImage IS Null");
-
-
 }
 
 OH_NativeImage *GetNativeImage(napi_env env, napi_value value) {
@@ -169,7 +166,8 @@ napi_value NapiSetOnFrameAvailableListener(napi_env env, napi_callback_info info
     napi_threadsafe_function sf = nullptr;
     napi_value resourceName = nullptr;
     napi_create_string_utf8(env, "onFrameCallback", NAPI_AUTO_LENGTH, &resourceName);
-    napi_create_threadsafe_function(env, argv[0], nullptr, resourceName, 0, 1, nullptr, nullptr, nullptr, RaiseFrameAvailable, &sf);
+    napi_create_threadsafe_function(env, argv[0], nullptr, resourceName, 0, 1, nullptr, nullptr, nullptr,
+                                    RaiseFrameAvailable, &sf);
 
 
     OH_OnFrameAvailableListener listener;
