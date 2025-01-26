@@ -14,15 +14,15 @@ static napi_value Init(napi_env env, napi_value exports) {
 
 
     napi_property_descriptor nativeImageDesc[] = {
-        DEFINE_NAPI_FUNCTION("surfaceId", nullptr, NativeImage::NapiGetSurfaceId, nullptr, nullptr),
-        DEFINE_NAPI_FUNCTION("isAvailable", nullptr, NativeImage::NapiGetIsAvailable, nullptr, nullptr),
-        DEFINE_NAPI_FUNCTION("attachContext", NativeImage::NapiAttachContext, nullptr, nullptr, nullptr),
-        DEFINE_NAPI_FUNCTION("detachContext", NativeImage::NapiDetachContext, nullptr, nullptr, nullptr),
-        DEFINE_NAPI_FUNCTION("destroy", NativeImage::NapiDestroyNativeImage, nullptr, nullptr, nullptr),
-        DEFINE_NAPI_FUNCTION("updateSurfaceImage", NativeImage::NapiUpdateSurfaceImage, nullptr, nullptr, nullptr),
-        DEFINE_NAPI_FUNCTION("setOnFrameAvailableListener", NativeImage::NapiSetOnFrameAvailableListener, nullptr,
+        DEFINE_NAPI_FUNCTION_DEFAULT("surfaceId", nullptr, NativeImage::NapiGetSurfaceId, nullptr, nullptr),
+        DEFINE_NAPI_FUNCTION_DEFAULT("isAvailable", nullptr, NativeImage::NapiGetIsAvailable, nullptr, nullptr),
+        DEFINE_NAPI_FUNCTION_DEFAULT("attachContext", NativeImage::NapiAttachContext, nullptr, nullptr, nullptr),
+        DEFINE_NAPI_FUNCTION_DEFAULT("detachContext", NativeImage::NapiDetachContext, nullptr, nullptr, nullptr),
+        DEFINE_NAPI_FUNCTION_DEFAULT("destroy", NativeImage::NapiDestroyNativeImage, nullptr, nullptr, nullptr),
+        DEFINE_NAPI_FUNCTION_DEFAULT("updateSurfaceImage", NativeImage::NapiUpdateSurfaceImage, nullptr, nullptr, nullptr),
+        DEFINE_NAPI_FUNCTION_DEFAULT("setOnFrameAvailableListener", NativeImage::NapiSetOnFrameAvailableListener, nullptr,
                              nullptr, nullptr),
-        DEFINE_NAPI_FUNCTION("unSetOnFrameAvailableListener", NativeImage::NapiUnSetOnFrameAvailableListener, nullptr,
+        DEFINE_NAPI_FUNCTION_DEFAULT("unSetOnFrameAvailableListener", NativeImage::NapiUnSetOnFrameAvailableListener, nullptr,
                              nullptr, nullptr),
     };
     DEFINE_SENDABLE_CLASS(env, exports, "NativeImage", NativeImage::NapiBindNativeImage, nativeImageDesc)

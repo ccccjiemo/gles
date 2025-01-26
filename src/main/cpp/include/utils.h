@@ -30,6 +30,9 @@
 #define DEFINE_NAPI_FUNCTION(name, func, getter, setter, value)                                                        \
     { name, nullptr, func, getter, setter, value, napi_static, nullptr }
 
+#define DEFINE_NAPI_FUNCTION_DEFAULT(name, func, getter, setter, value)                                                        \
+    { name, nullptr, func, getter, setter, value, napi_default, nullptr }
+
 #define DEFINE_NAPI_CONSTANTS(name, value)                                                                             \
     { name, nullptr, nullptr, nullptr, nullptr, createNapiInt32(env, value), napi_static, nullptr }
 

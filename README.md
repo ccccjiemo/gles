@@ -44,12 +44,16 @@ let surfaceId = nativeImage.surfaceId; //创建surfaceId成功后可以获取sur
 //以下在egl上下文环境并执行了eglMakeCurrent
 
 //创建GL_TEXTURE_EXTERNAL_OES纹理
-let texture = new gles.Texture(gles.GL_TEXTURE_EXTERNAL_OES)
-texture
-  .setParameter(gles.GL_TEXTURE_WRAP_S, gles.GL_REPEAT)
-  .setParameter(gles.GL_TEXTURE_WRAP_T, gles.GL_REPEAT)
-  .setParameter(gles.GL_TEXTURE_MIN_FILTER, gles.GL_LINEAR)
-  .setParameter(gles.GL_TEXTURE_MAG_FILTER, gles.GL_LINEAR)
+//以下0.3不适用
+// let texture = new gles.Texture(gles.GL_TEXTURE_EXTERNAL_OES)
+// texture
+//   .setParameter(gles.GL_TEXTURE_WRAP_S, gles.GL_REPEAT)
+//   .setParameter(gles.GL_TEXTURE_WRAP_T, gles.GL_REPEAT)
+//   .setParameter(gles.GL_TEXTURE_MIN_FILTER, gles.GL_LINEAR)
+//   .setParameter(gles.GL_TEXTURE_MAG_FILTER, gles.GL_LINEAR)
+let texture = gles.glGenTextures(1)[0]
+//let texture = new globjects.Texture(); //0.3修改
+
 let error = nativeImage.attachContext(texture.id)
 
 //设置帧可用回调，官方文档说明不允许在回调中调用NativeImage其他方法
@@ -65,7 +69,7 @@ nativeImage.updateSurfaceImage()
 FragmentShader中需要加上以下代码
 
 ```shell
-#extension GL_OES_EGL_image_external : require
+#extension GL_OES_EGL_image_external_essl3 : enable
 ```
 
 ---
@@ -92,7 +96,7 @@ gles.glDeleteBuffers(buffer.handle)
 #### 增加glm模块
 
 - 该库现已实现向量和矩阵对象，提供glm常用方法，底层数据以列主序存放,该库只是模拟c库glm实现暂未实现simd加速(后续考虑)。
-- 现提供以下方法 radians
+- 现提供以下方法(通过glm命名空间调用) radians
   degrees
   translate
   scale
@@ -144,6 +148,7 @@ let mat = glm.mat2([1, 1, 1, 1])
 let mat = glm.mat2(glm.vec2(1), glm.vec2(2)) //使用向量初始化
 
 //矩阵也支持加减乘除操作，这里不多做介绍
+        
 
 
 ```
@@ -194,8 +199,8 @@ vao.enable(0);
 vao.setBuffer(vbo, 0, 3, gles.GL_FLOAT, false, 3 * 4, 0);
 
 let program = new globjects.Program();
-let vertexShader = globjects.Shader.fromString(gles.GL_VERTEX_SHADER, vertexShaderSource);
-let fragmentShader = globjects.Shader.fromString(gles.GL_FRAGMENT_SHADER, fragmentShaderSource);
+let vertexShader = new globjects.Shader(gles.GL_VERTEX_SHADER, vertexShaderSource);
+let fragmentShader = new globjects.Shader(gles.GL_FRAGMENT_SHADER, fragmentShaderSource);
 program.attach(vertexShader, fragmentShader);
 program.bind();
 

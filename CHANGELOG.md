@@ -1,4 +1,10 @@
+## [0.3.1] 2025-01-26
+
+- 修复NativeImage导出错误
+- 更正README文档
+
 ## [0.3.0] 2025-01-22
+
 - glUniformiv传入类型Uint32Array改正为Int32Array
 - 实现glGetVertexAttribPointerv，现方法会返回0x表示的字符串表示结果指针
 - 实现glShaderBinary
@@ -7,8 +13,11 @@
 - 重构GLObject
 
 ## [0.2.9] 2024-12-31
+
 - 基本api12重新打包
+
 ---
+
 ## [0.2.8] 2024-12-26
 
 - 更新README中关于NativeImages说明
