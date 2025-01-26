@@ -25,6 +25,7 @@ export class VertexArray implements GLObject {
   constructor() {
     this.handle = glGenVertexArrays(1)[0];
     this._bindings = new collections.Map();
+    this.bind();
   }
 
   bind(): void {

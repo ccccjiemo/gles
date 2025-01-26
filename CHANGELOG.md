@@ -1,4 +1,4 @@
-## [0.3.0] 2025
+## [0.3.0] 2025-01-22
 - glUniformiv传入类型Uint32Array改正为Int32Array
 - 实现glGetVertexAttribPointerv，现方法会返回0x表示的字符串表示结果指针
 - 实现glShaderBinary
