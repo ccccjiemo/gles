@@ -25,7 +25,7 @@ export class Buffer implements GLObject {
   }
 
   bind(): void {
-    glBindBuffer(this.handle, this.type);
+    glBindBuffer(this.type, this.handle);
   }
 
   unbind(): void {

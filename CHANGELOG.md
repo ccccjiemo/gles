@@ -1,8 +1,11 @@
+## [0.3.2] 2025-02-06
+- 修复globjects.Buffer绑定错误问题
+---
 ## [0.3.1] 2025-01-26
 
 - 修复NativeImage导出错误
 - 更正README文档
-
+---
 ## [0.3.0] 2025-01-22
 
 - glUniformiv传入类型Uint32Array改正为Int32Array
@@ -11,7 +14,7 @@
 - 增加glMapBufferRange和glUnMapBuffer
 - 实现部分glm库方法(暂不支持simd加速,后续考虑)
 - 重构GLObject
-
+---
 ## [0.2.9] 2024-12-31
 
 - 基本api12重新打包

@@ -81,7 +81,7 @@ FragmentShader中需要加上以下代码
 - 新增glGetVertexAttribPointerv、glShaderBinary、glMapBufferRange和glUnMapBuffer方法
 - 修正glUniformiv类方法签名错误
 
-#### 自0.2.0版本新增的opengl封装类从gles中拆分，现归档在globjects模块中
+#### 自0.2.0版本新增的opengl封装类从gles中拆分，现归档在globjects模块中。globjects现属于实验阶段，需要稳定性请使用gles原方法
 
 ```typescript
 import { globjects } from '@jemoc/gles'
@@ -440,3 +440,7 @@ gles.glDrawArrays(gles.GL_TRIANGLES, 0, 3);
 | glMapBufferRange                      |
 | glUnMapBuffer                         |
 
+### 如果遇到问题
+
+---
+#### 使用中遇到问题或发现问题都可以提交 [Issue](https://gitee.com/jiemoccc/gles/issues)
